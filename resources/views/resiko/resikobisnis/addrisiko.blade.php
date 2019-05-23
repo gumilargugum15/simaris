@@ -8,6 +8,7 @@ function pilihdampak(krinama,dampakid,katid,level){
     //alert(dmapakid+'-'+katid+'-'+level+'-'+krinama);
     var peluangid = $("#peluang").val();
     getmatrix(peluangid,dampakid);
+    $("#idkategori").val(katid);
     $("#iddampak").val(dampakid);
     $("#dampak").val(krinama);
     $('#modal-dampakrisiko').modal('toggle');
@@ -119,9 +120,10 @@ function pilihdampak(krinama,dampakid,katid,level){
                         </select>
                         </div>
                         <div class="form-group">
-                        {{-- <label>Dampak</label> --}}
+                        
                         <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-dampakrisiko"><i class="fa fa-search (alias)" title="">&nbsp;Dampak</i></a><br><br>
-                        <input type="hidden" class="form-control" name="iddampak" id="iddampak" value="1" readonly>
+                        <input type="hidden" class="form-control" name="iddampak" id="iddampak" readonly>
+                        <input type="hidden" class="form-control" name="idkategori" id="idkategori" readonly>
                         <input type="text" class="form-control" name="dampak" id="dampak" placeholder="Dampak ..." disabled>
                         </div>
                         <div class="form-group">

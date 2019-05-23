@@ -5,51 +5,7 @@
 
 @section('content')
 <script>
-  function addrisiko(){
-    var no=$('#rowsumber').val();
-    $('#sumberresikobisnis tbody').append(`
-        <tr id="input_${no}">
-        <td><textarea class="form-control" rows="2" name="sumberrisiko[]" id="sumberrisiko[]"></textarea></td>
-        <td><textarea class="form-control" rows="2" name="mitigasi[]" id="mitigasi[]"></textarea></td>
-        <td><input  class="form-control" type="number" name="biaya[]" id="biaya[]"></td>
-        <td><input size="5" type="date" class="form-control" id="startdate[]" name="startdate[]" placeholder="yyyy-m-d"></td>
-        <td><input size="5" type="date" class="form-control" id="enddate[]" name="enddate[]" placeholder="yyyy-m-d"></td>
-        <td><input type="text" class="form-control" name="pic[]" id="pic[]"></td>
-        <td><input type="text" class="form-control" name="status[]" id="status[]"></td>
-        <td><button type="button" class="btn btn-warning" onclick="hapustempsumber(${no})"><i class="fa fa-trash"></i></button></td>
-        </tr>
-             `);
-             no = (no-1) + 2;
-            $('#rowsumber').val(no);
-  }
-  function hapustempsumber(e){
-         if(confirm("Apakah anda yakin ?")){
-          $("#input_"+e).remove();
-    }}
   
-  function pilihdampak(krinama,dampakid,katid,level){
-    //alert(dmapakid+'-'+katid+'-'+level+'-'+krinama);
-    var peluangid = $("#peluang").val();
-    getmatrix(peluangid,dampakid);
-    $("#iddampak").val(dampakid);
-    $("#dampak").val(krinama);
-    $('#modal-dampakrisiko').modal('toggle');
-  }
-  function getmatrix(peluangid,dampakid){
-    $.ajax({
-            url:"{{ url('getmatrixrisiko') }}/"+peluangid+"/"+dampakid,
-            method: 'GET',
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert(xhr.status+" : "+thrownError);
-                $(".loading").hide();
-              },
-            success: function(data) {
-              console.log(data.warna);
-              $("#warna").val(data.warna);
-              $("#buttonwarna").html('<button type="button" class="btn btn-'+data.warna+' btn-sm">'+data.tingkat+'</button>');
-           }
-        });
-  }
   function validriskbisnis(id){
     if (confirm("Apakah anda yakin ?") == true) {
             $.ajax({
@@ -233,7 +189,7 @@
                 @php
                 $no++;
                 @endphp
-              <tr>
+              <tr >
                 {{-- <td>{{ $risikobisnis->periode." ".$risikobisnis->tahun }}</td> --}}
                <td>{{$no}}</td>
                <td>{{ $riskdetail->kpi->nama }}</td>
@@ -254,8 +210,8 @@
                 </td>
                 <td>{{ $riskdetail->indikator }}</td>
                 <td>{{ $riskdetail->nilaiambang }}</td>
-              <td><a href="{{url('edit')}}" class="btn btn-small"><i class="fa fa-edit"></i> Edit</a>
-                <a href="{{url('destroy')}}" class="btn btn-small"><i class="fa fa-trash"></i> Hapus</a>
+              <td><a href="{{url('edit',['id'=>$riskdetail->id])}}" class="btn btn-small"><i class="fa fa-edit"></i></a>
+                <a href="{{url('destroy')}}" class="btn btn-small"><i class="fa fa-trash"></i></a>
               </td>
               </tr>
               @endforeach

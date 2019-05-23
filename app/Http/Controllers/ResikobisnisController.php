@@ -188,6 +188,7 @@ class ResikobisnisController extends Controller
         $klasifikasi    = $request->klasifikasi;
         $peluang        = $request->peluang;
         $iddampak       = $request->iddampak;
+        $idkategori     = $request->idkategori;
         $warna          = $request->warna;
         $sumberrisiko   = $request->sumberrisiko;
         $mitigasi       = $request->mitigasi;
@@ -223,6 +224,7 @@ class ResikobisnisController extends Controller
         $datariskdetail->klasifikasi_id     = $klasifikasi;
         $datariskdetail->peluang_id         = $peluang;
         $datariskdetail->dampak_id          = $iddampak;
+        $datariskdetail->kategori_id        = $idkategori;
         $datariskdetail->warna              = $warna;
         $datariskdetail->indikator          = $indikator;
         $datariskdetail->nilaiambang        = $nilaiambang;
@@ -340,9 +342,9 @@ class ResikobisnisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
-        //
+        dd($id);
     }
 
     /**
@@ -351,9 +353,41 @@ class ResikobisnisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        $riskdetail = Risikobisnisdetail::where('id',$id)->first();
+        $riskbisnis = Risikobisnis::where('id',$riskdetail->risikobisnis_id)->first();
+        $kpi = Kpi::tahunAktif()->get();
+        $klasifikasi = Klasifikasi::get();
+        $peluang = Peluang::get();
+        $kriteria = Kriteria::where('dampak_id',$riskdetail->dampak_id)->where('kategori_id',$riskdetail->kategori_id)->first();
+        $matrik = Matrikrisiko::where('dampak_id',$riskdetail->dampak_id)->where('peluang_id',$riskdetail->peluang_id)->first();
+        $sumberrisiko = Sumberrisiko::where('risikobisnisdetail_id',$riskdetail->id)->get();
+        
+        $dampak = Dampak::orderBy('level', 'DESC')->get();
+        $kategori = Kategori::get();
+        $hsl='';
+        $hsl.='<table class="table table-bordered table-striped">';
+        $hsl.='<tr><td><b>LEVEL</b></td><td><b>DAMPAK</b></td>';
+        foreach($kategori as $rkat){
+            $hsl.='<td><b>'.strtoupper($rkat->nama).'</b></td>';
+        }
+        
+        foreach($dampak as $key=>$value){
+            $hsl.='<tr><td><b>'.$value->level.'</b></td><td><b>'.$value->nama.'</b></td>';
+            
+            foreach($kategori as $keykat=>$valkat){
+                $hsl.='<td>';
+                $hsl.=$this->getkriteria($value->id,$valkat->id,$value->level);
+                $hsl.='</td>';}
+            
+            $hsl.='</tr>';
+        }
+        $hsl.='</tr></table>';
+        $hasildampak = $hsl;
+        
+        return view('resiko.resikobisnis.editrisiko', compact('riskdetail','riskbisnis','kpi','klasifikasi','peluang','kriteria','matrik','hasildampak','sumberrisiko'));
+        
     }
 
     /**

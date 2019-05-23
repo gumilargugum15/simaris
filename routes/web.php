@@ -30,6 +30,7 @@ Route::group(['middleware'=>['role:keyperson']], function () {
     Route::get('/validasibisnis/{id}','ResikobisnisController@validasibisnis');
     Route::get('/batalvalidasibisnis/{id}','ResikobisnisController@batalvalidasibisnis');
     Route::get('/addrisikobisnis','ResikobisnisController@create');
+    Route::get('/edit/{id?}','ResikobisnisController@edit');
 });
 
 Route::group(['middleware'=>['role:verifikatur']], function () {
