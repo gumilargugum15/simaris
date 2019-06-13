@@ -33,7 +33,8 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-
+  <!-- jQuery 3 -->
+ <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -64,7 +65,7 @@
           <!-- Messages: style can be found in dropdown.less-->
          
           <!-- Notifications: style can be found in dropdown.less -->
-          <li class="dropdown notifications-menu">
+          {{-- <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
               <span class="label label-warning">10</span>
@@ -104,7 +105,7 @@
               </li>
               <li class="footer"><a href="#">View all</a></li>
             </ul>
-          </li>
+          </li> --}}
           <!-- Tasks: style can be found in dropdown.less -->
           
           <!-- User Account: style can be found in dropdown.less -->
@@ -213,6 +214,9 @@
         @role('managergcg')
         @include('menu.menumanagergcg')
         @endrole
+        @role('superadmin')
+        @include('menu.menuadmin')
+        @endrole
         
       </ul>
     </section>
@@ -230,7 +234,7 @@
 
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b>Use Laravel Version</b> 5.4
+      <b>Use Laravel Version</b> 5.5
     </div>
     <strong>Copyright &copy; 2019 <a href="https://www.krakatausteel.com">Krakatau Steel</a>.</strong> All rights
     reserved.
@@ -431,8 +435,7 @@
 </div>
 <!-- ./wrapper -->
 
- <!-- jQuery 3 -->
- <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
+ 
  <!-- Bootstrap 3.3.7 -->
  <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
  
@@ -461,6 +464,9 @@
  {{-- <script src="{{ asset('dist/js/pages/dashboard2.js') }}"></script> --}}
  <!-- AdminLTE for demo purposes -->
  <script>
+   function reload(){
+    location.reload();
+  }
    $(function () {
     $('#tblresikobisnis').DataTable()
     $('.select2').select2()
@@ -470,7 +476,8 @@
     $('#enddate').datepicker({
       autoclose: true
     })
-
+    
+    
   })
   function selectAll(source) {
 		checkboxes = document.getElementsByName('kaidah[]');

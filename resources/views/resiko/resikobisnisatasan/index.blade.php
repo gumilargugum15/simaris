@@ -144,7 +144,7 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
-          
+            <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -197,7 +197,7 @@
                 </td>
                 <td>{{ $riskdetail->indikator }}</td>
                 <td>{{ $riskdetail->nilaiambang }}</td>
-                <td>X</td>
+                <td></td>
               </tr>
               @endforeach 
                 @else

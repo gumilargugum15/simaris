@@ -11,6 +11,10 @@ class Kpi extends Model
     public function risikobisnisdetail(){
         return $this->hasMany('App\Risikobisnisdetail','kpi_id');
     }
+    public function unitkerja()
+    {
+        return $this->belongsTo('App\Unitkerja', 'unit_id');
+    }
     
     public function scopeTahunAktif($query){
         $tahunaktif=date("Y");

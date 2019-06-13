@@ -1,4 +1,4 @@
-<li class="treeview">
+{{-- <li class="treeview">
         <a href="#">
           <i class="fa fa-gears (alias)"></i>
           <span>Konfigurasi</span>
@@ -12,7 +12,7 @@
           <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
           <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
         </ul>
-      </li>
+      </li> --}}
       <li class="treeview">
         <a href="#">
           <i class="fa fa-laptop"></i>
@@ -22,11 +22,11 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a href="pages/UI/general.html"><i class="fa fa-circle-o"></i>KPI</a></li>
+          <li><a href="{{ url('kpi') }}"><i class="fa fa-circle-o"></i>KPI</a></li>
           <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i>Periode</a></li>
           <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i>Klasifikasi</a></li>
           <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i>Peluang</a></li>
-          <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i>Unit</a></li>
+          <li><a href="{{ url('unit') }}"><i class="fa fa-circle-o"></i>Unit</a></li>
         </ul>
       </li>
       <li class="treeview">

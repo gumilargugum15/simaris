@@ -10,6 +10,9 @@ class Unitkerja extends Model
     public function risikobisnis(){
         return $this->hasMany('App\Risikobisnis','unit_id');
     }
+    public function kpi(){
+        return $this->hasMany('App\Kpi','unit_id');
+    }
     public function user(){
         return $this->belongsTo('App\User', 'unit_id');
     }

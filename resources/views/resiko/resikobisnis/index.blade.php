@@ -46,6 +46,7 @@
 
   }
   
+  
 </script>
 <section class="content-header">
   <h1>
@@ -159,6 +160,7 @@
           @include('layouts.flash')
           <a class="btn btn-primary" href="{{ url('addrisikobisnis') }}"><i class="fa  fa-plus"
                 title=""> Risiko Baru</i></a>
+                <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -176,7 +178,7 @@
                 <th>Sumber risiko</th>
                 <th>Indikator</th>
                 <th>Nilai ambang</th>
-                <th>Aksi</th>
+                <th width="10%">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -210,8 +212,8 @@
                 </td>
                 <td>{{ $riskdetail->indikator }}</td>
                 <td>{{ $riskdetail->nilaiambang }}</td>
-              <td><a href="{{url('edit',['id'=>$riskdetail->id])}}" class="btn btn-small"><i class="fa fa-edit"></i></a>
-                <a href="{{url('destroy')}}" class="btn btn-small"><i class="fa fa-trash"></i></a>
+              <td><a href="{{url('edit',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                <a href="{{url('destroy',['id'=>$riskdetail->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
               </td>
               </tr>
               @endforeach

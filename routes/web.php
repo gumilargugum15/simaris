@@ -31,6 +31,8 @@ Route::group(['middleware'=>['role:keyperson']], function () {
     Route::get('/batalvalidasibisnis/{id}','ResikobisnisController@batalvalidasibisnis');
     Route::get('/addrisikobisnis','ResikobisnisController@create');
     Route::get('/edit/{id?}','ResikobisnisController@edit');
+    Route::post('/update','ResikobisnisController@update');
+    Route::get('/destroy/{id?}','ResikobisnisController@destroy');
 });
 
 Route::group(['middleware'=>['role:verifikatur']], function () {
@@ -50,4 +52,20 @@ Route::group(['middleware'=>['role:managergcg']], function () {
     Route::get('/validasibisnismanagergcg/{id}','RiskbisnismanagController@validasibisnis');
     Route::get('/batalvalidasibisnismanagergcg/{id}','RiskbisnismanagController@batalvalidasibisnis');
     
+});
+Route::group(['middleware'=>['role:superadmin']], function () {
+    //kpi
+    Route::get('/kpi', 'KpiController@index')->name('kpi.index');
+    Route::get('/addkpi','KpiController@create');
+    Route::post('/storekpi','KpiController@store');
+    Route::get('/editkpi/{id?}','KpiController@edit');
+    Route::post('/updatekpi','KpiController@update');
+    Route::get('/destroykpi/{id?}','KpiController@destroy');
+    //unit
+    Route::get('/unit', 'UnitController@index')->name('unit.index');
+    Route::get('/updateunit','UnitController@updateunit');
+    Route::get('/addunit','UnitController@create');
+    Route::post('/storeunit','UnitController@store');
+    Route::get('/destroyunit/{id?}','UnitController@destroy');
+
 });

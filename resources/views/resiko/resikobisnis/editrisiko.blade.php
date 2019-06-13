@@ -3,31 +3,7 @@
 
 @endsection
 @section('content')
-<script>
-function pilihdampak(krinama,dampakid,katid,level){
-    var peluangid = $("#peluang").val();
-    getmatrix(peluangid,dampakid);
-    $("#idkategori").val(katid);
-    $("#iddampak").val(dampakid);
-    $("#dampak").val(krinama);
-    $('#modal-dampakrisiko').modal('toggle');
-  }
-  function getmatrix(peluangid,dampakid){
-    $.ajax({
-            url:"{{ url('getmatrixrisiko') }}/"+peluangid+"/"+dampakid,
-            method: 'GET',
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert(xhr.status+" : "+thrownError);
-                $(".loading").hide();
-              },
-            success: function(data) {
-              console.log(data.warna);
-              $("#warna").val(data.warna);
-              $("#buttonwarna").html('<button type="button" class="btn btn-'+data.warna+' btn-sm">'+data.tingkat+'</button>');
-           }
-        });
-  }
-</script>
+
 <section class="content-header">
 <h1>
     Data
@@ -42,8 +18,9 @@ function pilihdampak(krinama,dampakid,katid,level){
 <div class="box">
         <div class="box-body">
                 <div class="box box-warning">
-                        <form action="{{ url('ubah') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ url('update') }}" method="post" enctype="multipart/form-data">
                         <input name="_token" value="{{ csrf_token() }}" type="hidden">
+                        <input type="hidden" name="idriskdetail" id="idriskdetail" value="{{ $riskdetail->id }}">
                         <div class="form-group">
                 
                             <label>Periode/tahun</label>
@@ -109,8 +86,8 @@ function pilihdampak(krinama,dampakid,katid,level){
                         </div>
                         <div class="form-group">
                         <label>Warna</label>
-                        <input type="hidden" class="form-control" name="warna" id="warna" value="Hijau" readonly>
-                        <div id="buttonwarna"><button type="button" class="btn btn-{{$matrik->warna}} btn-sm">{{$matrik->tingkat}}</button></div>
+                        <input type="hidden" class="form-control" name="warna" id="warna" value="{{$riskdetail->warna}}" readonly>
+                        <div id="buttonwarna"><button type="button" class="btn btn-{{$riskdetail->warna}} btn-sm">{{$matrik->tingkat}}</button></div>
                         </div>
                         <div class="form-group">
                                 
@@ -130,20 +107,17 @@ function pilihdampak(krinama,dampakid,katid,level){
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($sumberrisiko as $datasumber)
-                                <tr>
-                                    <td>{{$datasumber->namasumber}}</td>
-                                    <td>{{$datasumber->mitigasi}}</td>
-                                    <td>{{$datasumber->biaya}}</td>
-                                    <td>{{$datasumber->start_date}}</td>
-                                    <td>{{$datasumber->end_date}}</td>
-                                    <td>{{$datasumber->pic}}</td>
-                                    <td>{{$datasumber->statussumber}}</td>
-                                    <td></td>
-                                </tr>
-                                @endforeach
+                                
                                 </tbody>
                             </table>
+                            </div>
+                            <div class="form-group">
+                            <label>Indikator</label>
+                            <textarea class="form-control" rows="3" placeholder="Enter ..." name="indikator" id="indikator">{{$riskdetail->indikator}}</textarea>
+                            </div>
+                            <div class="form-group">
+                            <label>Nilai ambang</label>
+                            <input type="text" class="form-control" name="nilaiambang" id="nilaiambang" value="{{$riskdetail->nilaiambang}}">
                             </div>
                     
                     <a type="button" href="{{ url('resikobisnis') }}" class="btn btn-default pull-left">Batal</a>
@@ -155,6 +129,73 @@ function pilihdampak(krinama,dampakid,katid,level){
 </div>
 @include('resiko/resikobisnis/modal/dampakrisiko')
 {{-- @include('resiko/resikobisnis/modal/addsumberrisikobisnis') --}}
+<script>
+    var sumberrisiko = <?=$sumberrisiko?>;
+    console.log(sumberrisiko[0].namasumber);
+    var no=$('#rowsumber').val();
+    for (i = 0; i < sumberrisiko.length; i++) {
+      $("#sumberresikobisnis tbody").append(`<tr id="input_${no}">
+        <td><textarea class="form-control" rows="2" name="sumberrisiko[]" id="sumberrisiko[]">${sumberrisiko[0].namasumber}</textarea></td>
+        <td><textarea class="form-control" rows="2" name="mitigasi[]" id="mitigasi[]">${sumberrisiko[0].mitigasi}</textarea></td>
+        <td><input  class="form-control" type="number" name="biaya[]" id="biaya[]" value="${sumberrisiko[0].biaya}"></td>
+        <td><input size="5" type="date" class="form-control" id="startdate[]" name="startdate[]" placeholder="yyyy-m-d" value="${sumberrisiko[0].start_date}"></td>
+        <td><input size="5" type="date" class="form-control" id="enddate[]" name="enddate[]" placeholder="yyyy-m-d" value="${sumberrisiko[0].end_date}"></td>
+        <td><textarea class="form-control" rows="2" name="pic[]" id="pic[]">${sumberrisiko[0].pic}</textarea></td>
+        <td><textarea class="form-control" rows="2" name="status[]" id="status[]">${sumberrisiko[0].statussumber}</textarea></td>
+        <td><button type="button" class="btn btn-warning" onclick="hapustempsumber(${no})"><i class="fa fa-trash"></i></button></td>
+        </tr>`);
+        no = (no-1) + 2;
+        $('#rowsumber').val(no);
+    }
+        function pilihdampak(krinama,dampakid,katid,level){
+            var peluangid = $("#peluang").val();
+            getmatrix(peluangid,dampakid);
+            $("#idkategori").val(katid);
+            $("#iddampak").val(dampakid);
+            $("#dampak").val(krinama);
+            $('#modal-dampakrisiko').modal('toggle');
+          }
+          function getmatrix(peluangid,dampakid){
+            $.ajax({
+                    url:"{{ url('getmatrixrisiko') }}/"+peluangid+"/"+dampakid,
+                    method: 'GET',
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status+" : "+thrownError);
+                        $(".loading").hide();
+                      },
+                    success: function(data) {
+                      console.log(data.warna);
+                      $("#warna").val(data.warna);
+                      $("#buttonwarna").html('<button type="button" class="btn btn-'+data.warna+' btn-sm">'+data.tingkat+'</button>');
+                   }
+                });
+          }
+          function myFunction(item, index){
+            $("#sumberresikobisnis tbody").append(item);
+                  
+        }
+        function addrisiko(){
+            var no=$('#rowsumber').val();
+            $('#sumberresikobisnis tbody').append(`
+                <tr id="input_${no}">
+                <td><textarea class="form-control" rows="2" name="sumberrisiko[]" id="sumberrisiko[]"></textarea></td>
+                <td><textarea class="form-control" rows="2" name="mitigasi[]" id="mitigasi[]"></textarea></td>
+                <td><input  class="form-control" type="number" name="biaya[]" id="biaya[]"></td>
+                <td><input size="5" type="date" class="form-control" id="startdate[]" name="startdate[]" placeholder="yyyy-m-d"></td>
+                <td><input size="5" type="date" class="form-control" id="enddate[]" name="enddate[]" placeholder="yyyy-m-d"></td>
+                <td><textarea class="form-control" rows="2" name="pic[]" id="pic[]"></textarea></td>
+                <td><textarea class="form-control" rows="2" name="status[]" id="status[]"></textarea></td>
+                <td><button type="button" class="btn btn-warning" onclick="hapustempsumber(${no})"><i class="fa fa-trash"></i></button></td>
+                </tr>
+                    `);
+                    no = (no-1) + 2;
+                    $('#rowsumber').val(no);
+        }
+        function hapustempsumber(e){
+                if(confirm("Apakah anda yakin ?")){
+                $("#input_"+e).remove();
+            }}
+        </script>
 </section>
 
     

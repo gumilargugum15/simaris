@@ -265,12 +265,75 @@ class ResikobisnisController extends Controller
         }
          
        }else{
-        return redirect()
-        ->route('resikobisnis.index')
+           $datarisk = new Risikobisnis();
+           $datarisk->periode            = $periode;
+           $datarisk->tahun              = $tahun;
+           $datarisk->unit_id            = $unitid;
+           $datarisk->statusrisiko_id    = 0;
+           $datarisk->creator            = $user->nik;
+           $datarisk->save();
+
+           $risikobisnis = Risikobisnis::byPeriod($periode)
+            ->byYear($tahun)
+            ->byUnit($unitid)
+            ->first();
+        
+            $datariskdetail = new Risikobisnisdetail();
+            $datariskdetail->risikobisnis_id    = $risikobisnis->id;
+            $datariskdetail->kpi_id             = $kpi;
+            $datariskdetail->risiko             = $risiko;
+            $datariskdetail->akibat             = $akibat;
+            $datariskdetail->klasifikasi_id     = $klasifikasi;
+            $datariskdetail->peluang_id         = $peluang;
+            $datariskdetail->dampak_id          = $iddampak;
+            $datariskdetail->kategori_id        = $idkategori;
+            $datariskdetail->warna              = $warna;
+            $datariskdetail->indikator          = $indikator;
+            $datariskdetail->nilaiambang        = $nilaiambang;
+            $datariskdetail->creator            = $user->nik;
+            $datariskdetail->save();
+            if($datariskdetail){
+            if($risikobisnis->statusrisiko_id=='0'){
+                $risikobisnis = Risikobisnis::where('id',$risikobisnis->id)->update(['statusrisiko_id' => '1']);
+            }
+            
+            if($sumberrisiko!=null){
+                foreach($sumberrisiko as $key =>$value){
+                    $datasumber = new Sumberrisiko();
+                    $datasumber->risikobisnisdetail_id    = $datariskdetail->id;
+                    $datasumber->namasumber               = $value;
+                    $datasumber->mitigasi                 = $mitigasi[$key];
+                    $datasumber->biaya                    = $biaya[$key];
+                    $datasumber->start_date               = $startdate[$key];
+                    $datasumber->end_date                 = $enddate[$key];
+                    $datasumber->pic                      = $pic[$key];
+                    $datasumber->statussumber             = $status[$key];
+                    $datasumber->save();
+                }
+            }
+            return redirect()
+            ->route('resikobisnis.index')
             ->with('flash_notification', [
-                'level' => 'warning',
-                'message' => 'Risiko bisnis belum disetting !'
+                'level' => 'info',
+                'message' => 'Berhasil menyimpan Risiko!'
             ]);
+            }else{
+                return redirect()
+                ->route('resikobisnis.index')
+                ->with('flash_notification', [
+                    'level' => 'warning',
+                    'message' => 'Gagal menyimpan Risiko!'
+                ]);
+            }
+
+
+
+        // return redirect()
+        // ->route('resikobisnis.index')
+        //     ->with('flash_notification', [
+        //         'level' => 'warning',
+        //         'message' => 'Risiko bisnis belum disetting oleh admin gcg!'
+        //     ]);
            
        }
        
@@ -362,6 +425,7 @@ class ResikobisnisController extends Controller
         $peluang = Peluang::get();
         $kriteria = Kriteria::where('dampak_id',$riskdetail->dampak_id)->where('kategori_id',$riskdetail->kategori_id)->first();
         $matrik = Matrikrisiko::where('dampak_id',$riskdetail->dampak_id)->where('peluang_id',$riskdetail->peluang_id)->first();
+        // dd($matrik);
         $sumberrisiko = Sumberrisiko::where('risikobisnisdetail_id',$riskdetail->id)->get();
         
         $dampak = Dampak::orderBy('level', 'DESC')->get();
@@ -397,9 +461,66 @@ class ResikobisnisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $idriskdetail   = $request->idriskdetail;
+        $periode        = $request->periode;
+        $tahun          = $request->tahun;
+        $kpi            = $request->kpi;
+        $risiko         = $request->risiko;
+        $akibat         = $request->akibat;
+        $klasifikasi    = $request->klasifikasi;
+        $peluang        = $request->peluang;
+        $iddampak       = $request->iddampak;
+        $idkategori     = $request->idkategori;
+        $warna          = $request->warna;
+        $sumberrisiko   = $request->sumberrisiko;
+        $mitigasi       = $request->mitigasi;
+        $biaya          = $request->biaya;
+        $startdate      = $request->startdate;
+        $enddate        = $request->enddate;
+        $pic            = $request->pic;
+        $status         = $request->status;
+        $indikator      = $request->indikator;
+        $nilaiambang    = $request->nilaiambang;
+
+        $dataupdate = ['kpi_id'=>$kpi,'risiko'=>$risiko,'akibat'=>$akibat,'klasifikasi_id'=>$klasifikasi,
+        'peluang_id'=>$peluang,'dampak_id'=>$iddampak,'warna'=>$warna,'indikator'=>$indikator,'nilaiambang'=>$nilaiambang
+        ];
+
+        $riskdetail = Risikobisnisdetail::where('id',$idriskdetail)
+        ->update($dataupdate);
+        if($riskdetail){
+            Sumberrisiko::where('risikobisnisdetail_id',$idriskdetail)->delete();
+            if($sumberrisiko!=null){
+                foreach($sumberrisiko as $key =>$value){
+                    $datasumber = new Sumberrisiko();
+                    $datasumber->risikobisnisdetail_id    = $idriskdetail;
+                    $datasumber->namasumber               = $value;
+                    $datasumber->mitigasi                 = $mitigasi[$key];
+                    $datasumber->biaya                    = $biaya[$key];
+                    $datasumber->start_date               = $startdate[$key];
+                    $datasumber->end_date                 = $enddate[$key];
+                    $datasumber->pic                      = $pic[$key];
+                    $datasumber->statussumber             = $status[$key];
+                    $datasumber->save();
+                }
+            }
+            return redirect()
+            ->route('resikobisnis.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil update risiko!'
+            ]);
+        }else{
+            return redirect()
+        ->route('resikobisnis.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'Gagal update risiko !'
+            ]);
+        }
+        
     }
 
     /**
@@ -408,8 +529,24 @@ class ResikobisnisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+       $destroydetail =  Risikobisnisdetail::where('id',$id)->delete();
+       if($destroydetail){
+        Sumberrisiko::where('risikobisnisdetail_id',$id)->delete();
+        return redirect()
+            ->route('resikobisnis.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil hapus risiko!'
+            ]);
+       }else{
+        return redirect()
+        ->route('resikobisnis.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'Gagal hapus risiko !'
+            ]);
+       }
     }
 }

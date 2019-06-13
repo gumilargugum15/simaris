@@ -43,7 +43,7 @@ function pilihdampak(krinama,dampakid,katid,level){
         </tr>
              `);
              no = (no-1) + 2;
-            $('#rowsumber').val(no);
+             $('#rowsumber').val(no);
   }
   function hapustempsumber(e){
          if(confirm("Apakah anda yakin ?")){
@@ -97,15 +97,15 @@ function pilihdampak(krinama,dampakid,katid,level){
                         </div>
                         <div class="form-group">
                         <label>Risiko</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="risiko" id="risiko"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="risiko" id="risiko" required></textarea>
                         </div>
                         <div class="form-group">
                         <label>Akibat</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="akibat" id="akibat"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="akibat" id="akibat" required></textarea>
                         </div>
                         <div class="form-group">
                         <label>Klasifikasi</label>
-                        <select class="form-control select2" style="width: 100%;" name="klasifikasi" id="klasifikasi">
+                        <select class="form-control select2" style="width: 100%;" name="klasifikasi" id="klasifikasi" required>
                             @foreach ($klasifikasi as $rowklasifikasi)
                             <option value="{{$rowklasifikasi->id}}">{{$rowklasifikasi->nama}}</option>
                             @endforeach
@@ -124,7 +124,7 @@ function pilihdampak(krinama,dampakid,katid,level){
                         <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-dampakrisiko"><i class="fa fa-search (alias)" title="">&nbsp;Dampak</i></a><br><br>
                         <input type="hidden" class="form-control" name="iddampak" id="iddampak" readonly>
                         <input type="hidden" class="form-control" name="idkategori" id="idkategori" readonly>
-                        <input type="text" class="form-control" name="dampak" id="dampak" placeholder="Dampak ..." disabled>
+                        <input type="text" class="form-control" name="dampak" id="dampak" placeholder="Dampak ..." readonly required>
                         </div>
                         <div class="form-group">
                         <label>Warna</label>
@@ -155,11 +155,11 @@ function pilihdampak(krinama,dampakid,katid,level){
                         </div>
                     <div class="form-group">
                         <label>Indikator</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="indikator" id="indikator"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="indikator" id="indikator" required></textarea>
                     </div>
                     <div class="form-group">
                     <label>Nilai ambang</label>
-                    <input type="text" class="form-control" name="nilaiambang" id="nilaiambang">
+                    <input type="text" class="form-control" name="nilaiambang" id="nilaiambang" required>
                     </div>
                     <a type="button" href="{{ url('resikobisnis') }}" class="btn btn-default pull-left">Batal</a>
                     <button type="submit" class="btn btn-primary pull-right">Simpan</button>
