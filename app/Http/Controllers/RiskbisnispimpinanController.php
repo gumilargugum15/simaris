@@ -43,7 +43,7 @@ class RiskbisnispimpinanController extends Controller
            $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
             ->byYear($tahunperiod)
             ->byUnit($unitid)
-            ->byStatusrisk('2')
+            //->byStatusrisk('2')
             ->first();
             
         }else{

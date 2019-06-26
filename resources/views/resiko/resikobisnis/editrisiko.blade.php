@@ -119,8 +119,13 @@
                             <label>Nilai ambang</label>
                             <input type="text" class="form-control" name="nilaiambang" id="nilaiambang" value="{{$riskdetail->nilaiambang}}">
                             </div>
+                            @role('keyperson')
+                            <a type="button" href="{{ url('resikobisnis') }}" class="btn btn-default pull-left">Batal</a>
+                            @endrole
+                            @role('pimpinanunit')
+                            <a type="button" href="{{ url('resikobisnispimpinan') }}" class="btn btn-default pull-left">Batal</a>
+                            @endrole
                     
-                    <a type="button" href="{{ url('resikobisnis') }}" class="btn btn-default pull-left">Batal</a>
                     <button type="submit" class="btn btn-primary pull-right">Ubah</button>
                 </form>
                 </div>

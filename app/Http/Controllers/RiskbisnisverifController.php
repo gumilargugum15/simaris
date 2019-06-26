@@ -25,7 +25,13 @@ class RiskbisnisverifController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+     */ public $arrContextOptions=array(
+        "ssl"=>array(
+            "verify_peer"=> false,
+            "verify_peer_name"=> false,
+        ),
+      );
+
     public function index(Request $request)
     {
         $namarisiko ="Risiko Bisnis";
@@ -40,7 +46,7 @@ class RiskbisnisverifController extends Controller
            $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
             ->byYear($tahunperiod)
             ->byUnit($request->unitkerja)
-            ->byStatusrisk('1')
+            // ->byStatusrisk('1')
             ->first();
             
             
@@ -53,7 +59,9 @@ class RiskbisnisverifController extends Controller
         if($risikobisnis){
             $user = Auth::user();
             $retval    = [];
-            $retval    = file_get_contents('http://eos.krakatausteel.com/api/structdisp/'.$user->nik);
+            //$retval    = file_get_contents('http://eos.krakatausteel.com/api/structdisp/'.$user->nik);
+            $retval = file_get_contents('https://portal.krakatausteel.com/eos/api/structdisp/'.$user->nik, false, stream_context_create($this->arrContextOptions));
+        
             $jessval   =json_decode($retval);
             $personnel_no     = $jessval->personnel_no;
             $name             = $jessval->name;
@@ -92,6 +100,34 @@ class RiskbisnisverifController extends Controller
         }
         
         return Redirect::back()->withErrors(['msg', 'Error']);
+    }
+    public function sesuaikaidah(Request $request){
+        $kaidah         = $request->kaidah;
+        foreach($kaidah as $key=>$value){
+            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['kaidah'=>1,'tglkaidah'=>date("Y-m-d H:i:s")]);
+        }
+
+    }
+    public function tidaksesuaikaidah(Request $request){
+        $kaidah         = $request->kaidah;
+        foreach($kaidah as $key=>$value){
+            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['kaidah'=>0,'tglkaidah'=>date("Y-m-d H:i:s")]);
+        }
+
+    }
+    public function highlight(Request $request){
+        $highlight         = $request->kaidah;
+        foreach($highlight as $key=>$value){
+            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['highlight'=>1,'tglhighlight'=>date("Y-m-d H:i:s")]);
+        }
+
+    }
+    public function batalhighlight(Request $request){
+        $highlight         = $request->kaidah;
+        foreach($highlight as $key=>$value){
+            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['highlight'=>0,'tglhighlight'=>date("Y-m-d H:i:s")]);
+        }
+
     }
 
     /**

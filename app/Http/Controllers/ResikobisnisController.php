@@ -26,6 +26,13 @@ class ResikobisnisController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public $arrContextOptions=array(
+        "ssl"=>array(
+            "verify_peer"=> false,
+            "verify_peer_name"=> false,
+        ),
+      );
+    
     public function index(Request $request)
     {
         $namarisiko ="Risiko Bisnis";
@@ -345,7 +352,9 @@ class ResikobisnisController extends Controller
         if($risikobisnis){
             $user = Auth::user();
             $retval    = [];
-            $retval    = file_get_contents('http://eos.krakatausteel.com/api/structdisp/'.$user->nik);
+            //$retval    = file_get_contents('https://portal.krakatausteel.com/eos/api/structdisp/'.$user->nik);
+            $retval = file_get_contents('https://portal.krakatausteel.com/eos/api/structdisp/'.$user->nik, false, stream_context_create($this->arrContextOptions));
+        
             $jessval   =json_decode($retval);
             $personnel_no     = $jessval->personnel_no;
             $name             = $jessval->name;
@@ -385,20 +394,7 @@ class ResikobisnisController extends Controller
         
         return Redirect::back()->withErrors(['msg', 'Error']);
     }
-    public function sesuaikaidah(Request $request){
-        $kaidah         = $request->kaidah;
-        foreach($kaidah as $key=>$value){
-            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['kaidah'=>1,'tglkaidah'=>date("Y-m-d H::s")]);
-        }
-
-    }
-    public function tidaksesuaikaidah(Request $request){
-        $kaidah         = $request->kaidah;
-        foreach($kaidah as $key=>$value){
-            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['kaidah'=>0,'tglkaidah'=>date("Y-m-d H::s")]);
-        }
-
-    }
+    
     /**
      * Display the specified resource.
      *
@@ -463,6 +459,8 @@ class ResikobisnisController extends Controller
      */
     public function update(Request $request)
     {
+        $user = Auth::user();
+        //dd($user->roles[0]->name);
         $idriskdetail   = $request->idriskdetail;
         $periode        = $request->periode;
         $tahun          = $request->tahun;
@@ -485,7 +483,8 @@ class ResikobisnisController extends Controller
         $nilaiambang    = $request->nilaiambang;
 
         $dataupdate = ['kpi_id'=>$kpi,'risiko'=>$risiko,'akibat'=>$akibat,'klasifikasi_id'=>$klasifikasi,
-        'peluang_id'=>$peluang,'dampak_id'=>$iddampak,'warna'=>$warna,'indikator'=>$indikator,'nilaiambang'=>$nilaiambang
+        'peluang_id'=>$peluang,'dampak_id'=>$iddampak,'warna'=>$warna,'indikator'=>$indikator,'nilaiambang'=>$nilaiambang,
+        'modifier'=>$user->nik
         ];
 
         $riskdetail = Risikobisnisdetail::where('id',$idriskdetail)
@@ -506,19 +505,38 @@ class ResikobisnisController extends Controller
                     $datasumber->save();
                 }
             }
-            return redirect()
+            if($user->roles[0]->name=='pimpinanunit'){
+                return redirect()
+            ->route('resikobisnispimpinan.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil update risiko!'
+            ]);
+            }else{
+                return redirect()
             ->route('resikobisnis.index')
             ->with('flash_notification', [
                 'level' => 'info',
                 'message' => 'Berhasil update risiko!'
             ]);
+            }
+            
         }else{
-            return redirect()
-        ->route('resikobisnis.index')
+            if($user->roles[0]->name=='pimpinanunit'){
+                return redirect()
+            ->route('resikobisnispimpinan.index')
             ->with('flash_notification', [
-                'level' => 'warning',
-                'message' => 'Gagal update risiko !'
+                'level' => 'info',
+                'message' => 'Berhasil update risiko!'
             ]);
+            }else{
+                return redirect()
+            ->route('resikobisnis.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil update risiko!'
+            ]);
+            }
         }
         
     }

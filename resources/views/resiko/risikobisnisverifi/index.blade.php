@@ -45,6 +45,34 @@ function batalvalidriskbisnis(id){
         }
 
   }
+  function highlight(){
+    if (confirm("Apakah anda yakin ?") == true) {
+        var data_val = $('#fm-kaidah').serialize();
+        $.ajax({
+                url: "{{ url('highlight') }}",
+                method: 'post',
+                data	: data_val,
+                success: function (data) {
+                    location.reload();
+                }
+            });
+
+    }
+  }
+  function batalhighlight(){
+    if (confirm("Apakah anda yakin ?") == true) {
+        var data_val = $('#fm-kaidah').serialize();
+        $.ajax({
+                url: "{{ url('batalhighlight') }}",
+                method: 'post',
+                data	: data_val,
+                success: function (data) {
+                    location.reload();
+                }
+            });
+
+    }
+  }
   
 </script>
 <section class="content-header">
@@ -149,7 +177,7 @@ function batalvalidriskbisnis(id){
                         <a href="#" class="btn btn-small btn-primary"
                             onclick="validriskbisnisverif({{ $risikobisnis->id }})"><i class="fa fa-check-square"></i>
                             Validasi</a>
-                        @elseif($risikobisnis->statusrisiko_id > '3')
+                        @elseif($risikobisnis->statusrisiko_id > '3'||$risikobisnis->statusrisiko_id < '2')
                         -
                         @else<a href="#" class="btn btn-small btn-warning"
                             onclick="batalvalidriskbisnis({{ $risikobisnis->id }})"><i class="fa fa-undo"></i> Batal
@@ -167,6 +195,7 @@ function batalvalidriskbisnis(id){
             <div class="box">
                 <div class="box-header">
                     <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
+                    
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -202,7 +231,7 @@ function batalvalidriskbisnis(id){
                             <tr>
                                 <td><input type="checkbox" name="kaidah[]" class="form-controll" value="{{$riskdetail->id}}"></td>
                                 <td>{{$no}}</td>
-                                <td>{{ $riskdetail->kpi->nama }}</td>
+                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td>
                                 <td align="center">
                                     @if($riskdetail->kaidah=='1')
                                     <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
@@ -211,18 +240,20 @@ function batalvalidriskbisnis(id){
                                     @endif
                                 </td>
                                 
-                                <td>{{ $riskdetail->risiko }}</td>
-                                <td>{{ $riskdetail->peluang->nama }}</td>
-                                <td>{{ $riskdetail->dampak->nama }}</td>
+                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->risiko }}</p>@else{{ $riskdetail->risiko }}@endif</td>
+                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->peluang->nama }}</p>@else{{ $riskdetail->peluang->nama }}@endif</td>
+                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->dampak->nama }}</p>@else{{ $riskdetail->dampak->nama }}@endif</td>
                                 <td><button type="button" class="btn btn-{{ $riskdetail->warna }} btn-sm"></button></td>
                                 <td><a class="btn btn-primary" href="#" data-toggle="modal"
                                         data-target="#modal-sumberresikobisnis"
-                                        onclick="sumberrisiko({{ $riskdetail->id }})"><i class="fa fa-reorder (alias)"
+                                        onclick="sumberrisiko({{ $riskdetail->id }},'{{$riskdetail->risiko}}')"><i class="fa fa-reorder (alias)"
                                             title="List sumber risiko"></i></a>
                                 </td>
-                                <td>{{ $riskdetail->indikator }}</td>
-                                <td>{{ $riskdetail->nilaiambang }}</td>
-                                <td></td>
+                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
+                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
+                                <td>
+                                    
+                                </td>
                             </tr>
                         
                             @endforeach
@@ -233,9 +264,11 @@ function batalvalidriskbisnis(id){
                         <tfoot>
                             <tr>
                                 <th colspan="3"><input type="checkbox" id="selectall" onClick="selectAll(this)" />&nbsp;Pilih semua</th> 
-                                <th>
+                                <th colspan="3">
                                     <a class="btn btn-primary"  onclick="sesuaikaidah()"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
                                     <a class="btn btn-warning" onclick="tidaksesuaikaidah()"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
+                                    <a class="btn btn-danger" onclick="highlight()"><i class="fa  fa-tags" title="Highlight"></i></a>
+                                    <a class="btn btn-success" onclick="batalhighlight()"><i class="fa  fa-tags" title="Batal highlight"></i></a>
                                 </th>
                                 <th></th>
                                 <th></th>
@@ -243,8 +276,7 @@ function batalvalidriskbisnis(id){
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th></th>
-                                <th></th>
+                                
                             </tr>
                         </tfoot>
 

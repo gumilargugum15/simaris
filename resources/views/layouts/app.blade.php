@@ -27,6 +27,8 @@
 <link href="{{ asset('bower_components/select2/dist/css/select2.min.css') }}" rel="stylesheet">
 <!-- bootstrap datepicker -->
 <link href="{{ asset('bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}" rel="stylesheet">
+<!-- daterange picker -->
+<link href="{{ asset('bower_components/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -46,7 +48,7 @@
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="{{ url('home') }}" class="logo">
+    <a href="{{ url('') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>RISK</b></span>
       <!-- logo for regular state and mobile devices -->
@@ -120,7 +122,7 @@
                 <img src="{{ url('dist/img/user2-160x160.png') }}" class="img-circle" alt="User Image">
 
                 <p>
-                  {{ Auth::user()->name }} - 
+                  {{ Auth::user()->name }} - {{ Auth::user()->nik }}
                   <small>{{ Auth::user()->roles[0]->name }}</small>
                 </p>
               </li>
@@ -459,7 +461,9 @@
 <script src="{{ asset('bower_components/select2/dist/js/select2.full.min.js') }}"></script>
 <!-- bootstrap datepicker -->
 <script src="{{ asset('bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
-
+<!-- date-range-picker -->
+<script src="{{ asset('bower_components/moment/min/moment.min.js') }}"></script>
+<script src="{{ asset('bower_components/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
  <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
  {{-- <script src="{{ asset('dist/js/pages/dashboard2.js') }}"></script> --}}
  <!-- AdminLTE for demo purposes -->
@@ -476,7 +480,7 @@
     $('#enddate').datepicker({
       autoclose: true
     })
-    
+    $('#startenddate').daterangepicker()
     
   })
   function selectAll(source) {

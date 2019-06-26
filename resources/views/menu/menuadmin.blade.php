@@ -23,7 +23,7 @@
         </a>
         <ul class="treeview-menu">
           <li><a href="{{ url('kpi') }}"><i class="fa fa-circle-o"></i>KPI</a></li>
-          <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i>Periode</a></li>
+          <li><a href="{{ url('periodebisnis') }}"><i class="fa fa-circle-o"></i>Periode bisnis</a></li>
           <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i>Klasifikasi</a></li>
           <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i>Peluang</a></li>
           <li><a href="{{ url('unit') }}"><i class="fa fa-circle-o"></i>Unit</a></li>

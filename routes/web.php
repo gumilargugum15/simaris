@@ -19,8 +19,8 @@ Route::group([ 'middleware' => 'auth' ], function (){
 });
 Route::group(['middleware'=>['role:keyperson|verifikatur|pimpinanunit|managergcg']], function () {
     Route::get('/sumberrisiko/{id}','ResikobisnisController@sumberrisiko');
-    Route::post('/sesuaikaidah','ResikobisnisController@sesuaikaidah');
-    Route::post('/tidaksesuaikaidah','ResikobisnisController@tidaksesuaikaidah');
+    Route::get('/edit/{id?}','ResikobisnisController@edit');
+    Route::post('/update','ResikobisnisController@update');
 });
 
 Route::group(['middleware'=>['role:keyperson']], function () {
@@ -30,8 +30,8 @@ Route::group(['middleware'=>['role:keyperson']], function () {
     Route::get('/validasibisnis/{id}','ResikobisnisController@validasibisnis');
     Route::get('/batalvalidasibisnis/{id}','ResikobisnisController@batalvalidasibisnis');
     Route::get('/addrisikobisnis','ResikobisnisController@create');
-    Route::get('/edit/{id?}','ResikobisnisController@edit');
-    Route::post('/update','ResikobisnisController@update');
+    
+    
     Route::get('/destroy/{id?}','ResikobisnisController@destroy');
 });
 
@@ -40,11 +40,17 @@ Route::group(['middleware'=>['role:verifikatur']], function () {
     Route::get('/resikobisnisverifikatur', 'RiskbisnisverifController@index');
     Route::get('/validasibisnisverif/{id}','RiskbisnisverifController@validasibisnis');
     Route::get('/batalvalidasibisnisverif/{id}','RiskbisnisverifController@batalvalidasibisnis');
+    Route::post('/sesuaikaidah','RiskbisnisverifController@sesuaikaidah');
+    Route::post('/tidaksesuaikaidah','RiskbisnisverifController@tidaksesuaikaidah');
+    Route::post('/highlight','RiskbisnisverifController@highlight');
+    Route::post('/batalhighlight','RiskbisnisverifController@batalhighlight');
+    
 });
 Route::group(['middleware'=>['role:pimpinanunit']], function () {
-    Route::get('/resikobisnispimpinan', 'RiskbisnispimpinanController@index');
+    Route::get('/resikobisnispimpinan', 'RiskbisnispimpinanController@index')->name('resikobisnispimpinan.index');
     Route::get('/validasibisnispimpinan/{id}','RiskbisnispimpinanController@validasibisnis');
     Route::get('/batalvalidasibisnispimpinan/{id}','RiskbisnispimpinanController@batalvalidasibisnis');
+    
     
 });
 Route::group(['middleware'=>['role:managergcg']], function () {
@@ -67,5 +73,10 @@ Route::group(['middleware'=>['role:superadmin']], function () {
     Route::get('/addunit','UnitController@create');
     Route::post('/storeunit','UnitController@store');
     Route::get('/destroyunit/{id?}','UnitController@destroy');
-
+    //periodebisnis
+    Route::get('/periodebisnis', 'PeriodebisnisController@index')->name('periodebisnis.index');
+    Route::get('/addperiodbisnis','PeriodebisnisController@create');
+    Route::post('/storeperiodbisnis','PeriodebisnisController@store');
+    Route::get('/editperiodbisnis/{id?}','PeriodebisnisController@edit');
+    
 });

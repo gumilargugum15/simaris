@@ -148,7 +148,7 @@ function batalvalidriskbisnisgcg(id){
                         <a href="#" class="btn btn-small btn-primary"
                             onclick="validriskbisnisgcg({{ $risikobisnis->id }})"><i class="fa fa-check-square"></i>
                             Validasi</a>
-                        @elseif($risikobisnis->statusrisiko_id > '5')
+                        @elseif($risikobisnis->statusrisiko_id > '5'||$risikobisnis->statusrisiko_id < '4')
                         -
                         @else<a href="#" class="btn btn-small btn-warning"
                             onclick="batalvalidriskbisnisgcg({{ $risikobisnis->id }})"><i class="fa fa-undo"></i> Batal
@@ -174,7 +174,7 @@ function batalvalidriskbisnisgcg(id){
                     <table id="tblresikobisnis" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th></th> 
+                                
                                 <th>No</th>  
                                 <th>KPI</th>
                                 <th width="10%">Kaidah</th>
@@ -198,53 +198,34 @@ function batalvalidriskbisnisgcg(id){
                             $no++;
                             @endphp
                             <tr>
-                                    <td><input type="checkbox" name="kaidah[]" class="form-controll" value="{{$riskdetail->id}}"></td>
                
                                 <td>{{$no}}</td>
-                                <td>{{ $riskdetail->kpi->nama }}</td>
+                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td>
                                 <td align="center">
-                                        @if($riskdetail->kaidah=='1')
-                                        <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
-                                        @else
-                                        <a class="btn btn-warning"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
-                                        @endif
-                                    </td>
-                                <td>{{ $riskdetail->risiko }}</td>
-                                <td>{{ $riskdetail->peluang->nama }}</td>
-                                <td>{{ $riskdetail->dampak->nama }}</td>
-                                <td><button type="button" class="btn btn-{{ $riskdetail->warna }} btn-sm"></button></td>
-                                <td><a class="btn btn-primary" href="#" data-toggle="modal"
-                                        data-target="#modal-sumberresikobisnis"
-                                        onclick="sumberrisiko({{ $riskdetail->id }})"><i class="fa fa-reorder (alias)"
-                                            title="List sumber risiko"></i></a>
-                                </td>
-                                <td>{{ $riskdetail->indikator }}</td>
-                                <td>{{ $riskdetail->nilaiambang }}</td>
-                                <td></td>
-                            </tr>
+                                   @if($riskdetail->kaidah=='1')
+                                   <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
+                                   @else
+                                   <a class="btn btn-warning"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
+                                   @endif
+                               </td>
+                                 
+                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->risiko }}</p>@else{{ $riskdetail->risiko }}@endif</td>
+                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->peluang->nama }}</p>@else{{ $riskdetail->peluang->nama }}@endif</td>
+                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->dampak->nama }}</p>@else{{ $riskdetail->dampak->nama }}@endif</td>
+                                 <td><button type="button" class="btn btn-{{ $riskdetail->warna }} btn-sm"></button></td>
+                                 <td><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-sumberresikobisnis"
+                                     onclick="sumberrisiko({{ $riskdetail->id }},'{{$riskdetail->risiko}}')"><i class="fa fa-reorder (alias)" title="List sumber risiko"></i></a>
+                                 </td>
+                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
+                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
+                                 <td></td>
+                               </tr>
                             @endforeach
                            
                             @endif
 
                         </tbody>
-                        <tfoot>
-                                <tr>
-                                    <th colspan="3"><input type="checkbox" id="selectall" onClick="selectAll(this)" />&nbsp;Pilih semua</th> 
-                                    <th>
-                                        <a class="btn btn-primary"  onclick="sesuaikaidah()"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
-                                        <a class="btn btn-warning" onclick="tidaksesuaikaidah()"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
-                                    </th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
-
+                        
                     </table>
                 </div>
                 <!-- /.box-body -->

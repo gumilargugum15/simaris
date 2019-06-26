@@ -127,7 +127,7 @@
               <a href="#" class="btn btn-small btn-primary"
                   onclick="validriskbisnispimpinan({{ $risikobisnis->id }})"><i class="fa fa-check-square"></i>
                   Validasi</a>
-              @elseif($risikobisnis->statusrisiko_id > '4')
+              @elseif($risikobisnis->statusrisiko_id > '4'||$risikobisnis->statusrisiko_id < '3')
               -
               @else<a href="#" class="btn btn-small btn-warning"
                   onclick="batalvalidriskbisnispimpinan({{ $risikobisnis->id }})"><i class="fa fa-undo"></i> Batal
@@ -144,6 +144,7 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
+            @include('layouts.flash')
             <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
         </div>
         <!-- /.box-header -->
@@ -153,7 +154,6 @@
           <table id="tblresikobisnis" class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th></th>
                 <th>No</th>
                 <th>KPI</th>
                 <th width="10%">Kaidah</th>
@@ -177,9 +177,9 @@
                 $no++;
                 @endphp
               <tr>
-               <td><input type="checkbox" name="kaidah[]" class="form-controll" value="{{$riskdetail->id}}"></td>
+               
                <td>{{$no}}</td>
-               <td>{{ $riskdetail->kpi->nama }}</td>
+               <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td>
                <td align="center">
                   @if($riskdetail->kaidah=='1')
                   <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
@@ -188,16 +188,20 @@
                   @endif
               </td>
                 
-                <td>{{ $riskdetail->risiko }}</td>
-                <td>{{ $riskdetail->peluang->nama }}</td>
-                <td>{{ $riskdetail->dampak->nama }}</td>
+                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->risiko }}</p>@else{{ $riskdetail->risiko }}@endif</td>
+                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->peluang->nama }}</p>@else{{ $riskdetail->peluang->nama }}@endif</td>
+                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->dampak->nama }}</p>@else{{ $riskdetail->dampak->nama }}@endif</td>
                 <td><button type="button" class="btn btn-{{ $riskdetail->warna }} btn-sm"></button></td>
                 <td><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-sumberresikobisnis"
-                    onclick="sumberrisiko({{ $riskdetail->id }})"><i class="fa fa-reorder (alias)" title="List sumber risiko"></i></a>
+                    onclick="sumberrisiko({{ $riskdetail->id }},'{{$riskdetail->risiko}}')"><i class="fa fa-reorder (alias)" title="List sumber risiko"></i></a>
                 </td>
-                <td>{{ $riskdetail->indikator }}</td>
-                <td>{{ $riskdetail->nilaiambang }}</td>
-                <td></td>
+                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
+                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
+                <td>
+                    @if($risikobisnis->statusrisiko_id<'3')
+                    <a href="{{url('edit',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                    @endif
+                </td>
               </tr>
               @endforeach 
                 @else
@@ -205,23 +209,6 @@
                 @endif
               
             </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="3"><input type="checkbox" id="selectall" onClick="selectAll(this)" />&nbsp;Pilih semua</th> 
-                    <th>
-                        <a class="btn btn-primary"  onclick="sesuaikaidah()"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
-                        <a class="btn btn-warning" onclick="tidaksesuaikaidah()"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
-                    </th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </tfoot>
             
           </table>
         </form>

@@ -194,7 +194,7 @@
               <tr >
                 {{-- <td>{{ $risikobisnis->periode." ".$risikobisnis->tahun }}</td> --}}
                <td>{{$no}}</td>
-               <td>{{ $riskdetail->kpi->nama }}</td>
+               <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td>
                <td align="center">
                   @if($riskdetail->kaidah=='1')
                   <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
@@ -203,15 +203,15 @@
                   @endif
               </td>
                 
-                <td>{{ $riskdetail->risiko }}</td>
-                <td>{{ $riskdetail->peluang->nama }}</td>
-                <td>{{ $riskdetail->dampak->nama }}</td>
+                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->risiko }}</p>@else{{ $riskdetail->risiko }}@endif</td>
+                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->peluang->nama }}</p>@else{{ $riskdetail->peluang->nama }}@endif</td>
+                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->dampak->nama }}</p>@else{{ $riskdetail->dampak->nama }}@endif</td>
                 <td><button type="button" class="btn btn-{{ $riskdetail->warna }} btn-sm"></button></td>
                 <td><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-sumberresikobisnis"
-                    onclick="sumberrisiko({{ $riskdetail->id }})"><i class="fa fa-reorder (alias)" title="List sumber risiko"></i></a>
+                    onclick="sumberrisiko({{ $riskdetail->id}},'{{$riskdetail->risiko}}')"><i class="fa fa-reorder (alias)" title="List sumber risiko"></i></a>
                 </td>
-                <td>{{ $riskdetail->indikator }}</td>
-                <td>{{ $riskdetail->nilaiambang }}</td>
+                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
+                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
               <td><a href="{{url('edit',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
                 <a href="{{url('destroy',['id'=>$riskdetail->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
               </td>
