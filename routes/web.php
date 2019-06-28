@@ -15,23 +15,23 @@
 
 Auth::routes();
 Route::group([ 'middleware' => 'auth' ], function (){ 
+    
     Route::get('/', 'HomeController@index')->name('home'); 
 });
 Route::group(['middleware'=>['role:keyperson|verifikatur|pimpinanunit|managergcg']], function () {
     Route::get('/sumberrisiko/{id}','ResikobisnisController@sumberrisiko');
-    Route::get('/edit/{id?}','ResikobisnisController@edit');
-    Route::post('/update','ResikobisnisController@update');
+    
 });
 
-Route::group(['middleware'=>['role:keyperson']], function () {
+    Route::group(['middleware'=>['role:keyperson']], function () {
     Route::get('/resikobisnis', 'ResikobisnisController@index')->name('resikobisnis.index');
     Route::post('/store','ResikobisnisController@store');
     Route::get('/getmatrixrisiko/{peluangid}/{dampakid}','ResikobisnisController@getmatrixrisiko');
     Route::get('/validasibisnis/{id}','ResikobisnisController@validasibisnis');
     Route::get('/batalvalidasibisnis/{id}','ResikobisnisController@batalvalidasibisnis');
     Route::get('/addrisikobisnis','ResikobisnisController@create');
-    
-    
+    Route::get('/edit/{id?}','ResikobisnisController@edit');
+    Route::post('/update','ResikobisnisController@update');
     Route::get('/destroy/{id?}','ResikobisnisController@destroy');
 });
 
@@ -50,8 +50,9 @@ Route::group(['middleware'=>['role:pimpinanunit']], function () {
     Route::get('/resikobisnispimpinan', 'RiskbisnispimpinanController@index')->name('resikobisnispimpinan.index');
     Route::get('/validasibisnispimpinan/{id}','RiskbisnispimpinanController@validasibisnis');
     Route::get('/batalvalidasibisnispimpinan/{id}','RiskbisnispimpinanController@batalvalidasibisnis');
-    
-    
+    Route::get('/editatasan/{id?}','RiskbisnispimpinanController@edit');
+    Route::post('/updaterbisnisatasan','RiskbisnispimpinanController@update');
+    Route::get('/getmatrixrisikopimpinan/{peluangid}/{dampakid}','RiskbisnispimpinanController@getmatrixrisiko');
 });
 Route::group(['middleware'=>['role:managergcg']], function () {
     Route::get('/resikobisnismanagergcg', 'RiskbisnismanagController@index');

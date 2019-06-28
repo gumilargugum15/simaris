@@ -111,13 +111,13 @@ function batalvalidriskbisnisgcg(id){
                                         
                                         @foreach($unitkerja as $runit)
                                         @if(isset($risikobisnis))
-                                        @if($risikobisnis->unit_id==$runit->kode)
-                                        <option value="{{$runit->kode}}" selected>{{$runit->nama}}</option>
+                                        @if($risikobisnis->unit_id==$runit->objectabbr)
+                                        <option value="{{$runit->objectabbr}}" selected>{{$runit->nama}}</option>
                                         @else
-                                        <option value="{{$runit->kode}}">{{$runit->nama}}</option>
+                                        <option value="{{$runit->objectabbr}}">{{$runit->nama}}</option>
                                         @endif
                                         @else
-                                        <option value="{{$runit->kode}}">{{$runit->nama}}</option>
+                                        <option value="{{$runit->objectabbr}}">{{$runit->nama}}</option>
                                         @endif
                                         @endforeach
                                        

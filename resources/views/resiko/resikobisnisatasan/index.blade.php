@@ -199,7 +199,7 @@
                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
                 <td>
                     @if($risikobisnis->statusrisiko_id<'3')
-                    <a href="{{url('edit',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                    <a href="{{url('editatasan',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
                     @endif
                 </td>
               </tr>

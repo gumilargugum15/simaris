@@ -18,7 +18,7 @@
 <div class="box">
         <div class="box-body">
                 <div class="box box-warning">
-                        <form action="{{ url('update') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ url('updaterbisnisatasan') }}" method="post" enctype="multipart/form-data">
                         <input name="_token" value="{{ csrf_token() }}" type="hidden">
                         <input type="hidden" name="idriskdetail" id="idriskdetail" value="{{ $riskdetail->id }}">
                         <div class="form-group">
@@ -119,7 +119,7 @@
                             <label>Nilai ambang</label>
                             <input type="text" class="form-control" name="nilaiambang" id="nilaiambang" value="{{$riskdetail->nilaiambang}}">
                             </div>
-                            <a type="button" href="{{ url('resikobisnis') }}" class="btn btn-default pull-left">Batal</a>
+                            <a type="button" href="{{ url('resikobisnispimpinan') }}" class="btn btn-default pull-left">Batal</a>
                     
                     <button type="submit" class="btn btn-primary pull-right">Ubah</button>
                 </form>
@@ -157,7 +157,7 @@
           }
           function getmatrix(peluangid,dampakid){
             $.ajax({
-                    url:"{{ url('getmatrixrisiko') }}/"+peluangid+"/"+dampakid,
+                    url:"{{ url('getmatrixrisikopimpinan') }}/"+peluangid+"/"+dampakid,
                     method: 'GET',
                     error: function (xhr, ajaxOptions, thrownError) {
                         alert(xhr.status+" : "+thrownError);

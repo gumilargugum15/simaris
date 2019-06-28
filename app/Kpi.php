@@ -20,4 +20,8 @@ class Kpi extends Model
         $tahunaktif=date("Y");
         return $query->where('tahun',$tahunaktif);
     }
+    public function scopeByUnit($query, $u)
+    {
+        return $query->where('unit_id', $u);
+    }
 }

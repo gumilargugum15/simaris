@@ -64,6 +64,7 @@
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+            
           <!-- Messages: style can be found in dropdown.less-->
          
           <!-- Notifications: style can be found in dropdown.less -->
@@ -123,7 +124,9 @@
 
                 <p>
                   {{ Auth::user()->name }} - {{ Auth::user()->nik }}
-                  <small>{{ Auth::user()->roles[0]->name }}</small>
+                  @foreach (Auth::user()->roles as $users)
+                  <small>{{ $users->name }}</small>
+                  @endforeach
                 </p>
               </li>
               <!-- Menu Body -->
@@ -179,8 +182,10 @@
         </div>
         <div class="pull-left info">
           <p>{{ Auth::user()->name }}</p>
-          
-          <a href="#"><i class="fa fa-circle text-success"></i> {{ ucfirst(Auth::user()->roles[0]->name) }}</a>
+          @foreach (Auth::user()->roles as $users)
+          <a href="#"><i class="fa fa-circle text-success"></i> {{ ucfirst($users->name) }}</a><br>
+          @endforeach
+          <br>
         </div>
       </div>
       <!-- search form -->

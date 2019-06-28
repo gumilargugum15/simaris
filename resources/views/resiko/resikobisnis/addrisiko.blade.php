@@ -77,8 +77,8 @@ function pilihdampak(krinama,dampakid,katid,level){
                             <label>Periode/tahun</label>
                             <div class="row">
                             <div class="col-xs-8">
-                            @if(isset($unituser->kode))
-                            <input type="hidden" name="unitid" id="unitid" value="{{ $unituser->kode }}">
+                            @if(isset($unituser->objectabbr))
+                            <input type="hidden" name="unitid" id="unitid" value="{{ $unituser->objectabbr }}">
                             @endif
                             <input type="text" class="form-control" name="periode" id="periode" value="{{ $periodeaktif->nama }}" placeholder="Periode ..." readonly>
                             </div>

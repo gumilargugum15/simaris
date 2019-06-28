@@ -18,7 +18,7 @@ class KpiController extends Controller
     {
         $judul = "KPI";
         $kpi =Kpi::tahunAktif()
-        ->join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.kode')
+        ->join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
         ->select('kpi.*', 'unitkerja.nama as namaunit')
         ->get();
         return view('administrator.kpi.index', compact('judul', 'kpi'));

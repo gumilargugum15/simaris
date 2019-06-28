@@ -14,6 +14,12 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public $arrContextOptions=array(
+        "ssl"=>array(
+            "verify_peer"=> false,
+            "verify_peer_name"=> false,
+        ),
+      );
     public function index(Request $request)
     {
         $judul="Unit";
@@ -23,7 +29,7 @@ class UnitController extends Controller
     }
     public function updateunit()
     {
-        $ret = file_get_contents('http://eos.krakatausteel.com/api/organization');
+        $ret = file_get_contents('https://portal.krakatausteel.com/eos/api/organization', false, stream_context_create($this->arrContextOptions));
         $jess=json_decode($ret);
         $collection = collect($jess);
         $user = Auth::user();

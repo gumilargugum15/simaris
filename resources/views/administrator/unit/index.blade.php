@@ -31,6 +31,7 @@
                   <tr>
                     <th width="5%">No</th>
                     <th>Kode</th>
+                    <th>Objectabbr</th>
                     <th>Nama</th>
                     <th width="10%">Aksi</th>
                   </tr>
@@ -46,6 +47,7 @@
                   <tr>
                     <td>{{$no}}</td>
                     <td>{{$data->kode}}</td>
+                    <td>{{$data->objectabbr}}</td>
                     <td>{{$data->nama}}</td>
                     <td><a href="{{url('edit',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
                         <a href="{{url('destroyunit',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>

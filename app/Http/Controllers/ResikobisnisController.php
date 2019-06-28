@@ -38,10 +38,10 @@ class ResikobisnisController extends Controller
         $namarisiko ="Risiko Bisnis";
         $user = Auth::user();
         $unitid = $user->unit_id;
-        $unitkerja = Unitkerja::where('kode',$unitid)->get();
+        $unitkerja = Unitkerja::where('objectabbr',$unitid)->get();
         $periodeall = Perioderisikobisnis::get();
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
-        $unituser = unitkerja::where('kode',$unitid)->first();
+        $unituser = unitkerja::where('objectabbr',$unitid)->first();
         
         $risikobisnis = Risikobisnis::byPeriod($periodeaktif->nama)
             ->byYear($periodeaktif->tahun)
@@ -150,8 +150,8 @@ class ResikobisnisController extends Controller
         $user = Auth::user();
         $unitid = $user->unit_id;
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
-        $unituser = unitkerja::where('kode',$unitid)->first();
-        $kpi = Kpi::tahunAktif()->get();
+        $unituser = unitkerja::where('objectabbr',$unitid)->first();
+        $kpi = Kpi::tahunAktif()->byUnit($unitid)->get();
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();
         $dampak = Dampak::orderBy('level', 'DESC')->get();
@@ -414,9 +414,11 @@ class ResikobisnisController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        $user = Auth::user();
+        $unitid = $user->unit_id;
         $riskdetail = Risikobisnisdetail::where('id',$id)->first();
         $riskbisnis = Risikobisnis::where('id',$riskdetail->risikobisnis_id)->first();
-        $kpi = Kpi::tahunAktif()->get();
+        $kpi = Kpi::tahunAktif()->byUnit($unitid)->get();
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();
         $kriteria = Kriteria::where('dampak_id',$riskdetail->dampak_id)->where('kategori_id',$riskdetail->kategori_id)->first();
@@ -505,38 +507,20 @@ class ResikobisnisController extends Controller
                     $datasumber->save();
                 }
             }
-            if($user->roles[0]->name=='pimpinanunit'){
-                return redirect()
-            ->route('resikobisnispimpinan.index')
-            ->with('flash_notification', [
-                'level' => 'info',
-                'message' => 'Berhasil update risiko!'
-            ]);
-            }else{
-                return redirect()
+            return redirect()
             ->route('resikobisnis.index')
             ->with('flash_notification', [
                 'level' => 'info',
                 'message' => 'Berhasil update risiko!'
             ]);
-            }
             
         }else{
-            if($user->roles[0]->name=='pimpinanunit'){
-                return redirect()
-            ->route('resikobisnispimpinan.index')
-            ->with('flash_notification', [
-                'level' => 'info',
-                'message' => 'Berhasil update risiko!'
-            ]);
-            }else{
-                return redirect()
+            return redirect()
             ->route('resikobisnis.index')
             ->with('flash_notification', [
                 'level' => 'info',
                 'message' => 'Berhasil update risiko!'
             ]);
-            }
         }
         
     }
