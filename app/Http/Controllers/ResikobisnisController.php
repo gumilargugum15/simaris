@@ -551,4 +551,88 @@ class ResikobisnisController extends Controller
             ]);
        }
     }
+    public function kpi(Request $request){
+        $user = Auth::user();
+        $unitid = $user->unit_id;
+        $judul = "KPI";
+        $kpi =Kpi::tahunAktif()
+        ->join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
+        ->select('kpi.*', 'unitkerja.nama as namaunit')
+        ->byUnit($unitid)
+        ->get();
+        return view('resiko.resikobisnis.kpiindex', compact('judul', 'kpi'));
+    }
+    public function addkpi(){
+        $user = Auth::user();
+        $unitid = $user->unit_id;
+        $unitkerja = Unitkerja::byUnit($unitid)->get();
+        return view('resiko.resikobisnis.addkpi', compact('unitkerja'));
+    }
+    public function storekpi(Request $request){
+        $kode         = $request->kode;
+        $nama         = $request->nama;
+        $unit         = $request->unit;
+        $tahun        = $request->tahun;
+
+        $user = Auth::user();
+        $datakpi = new Kpi();
+        $datakpi->kode             = $kode;
+        $datakpi->nama             = $nama;
+        $datakpi->unit_id          = $unit;
+        $datakpi->tahun            = $tahun;
+        $datakpi->creator          = $user->nik;
+        $datakpi->save();
+        if($datakpi){
+            return redirect()
+            ->route('kpikeyperson.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil menyimpan KPI!'
+            ]);
+        }else{
+            return redirect()
+            ->route('kpikeyperson.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'Gagal menyimpan KPI!'
+            ]);
+        }
+    }
+    public function editkpi(Request $request,$id)
+    {
+        $user = Auth::user();
+        $unitid = $user->unit_id;
+        $kpi = Kpi::where('id',$id)->first();
+        $unitkerja = Unitkerja::byUnit($unitid)->get();
+        return view('resiko.resikobisnis.editkpi', compact('kpi','unitkerja'));
+    }
+    public function updatekpi(Request $request)
+    {
+        $id           = $request->id;
+        $kode         = $request->kode;
+        $nama         = $request->nama;
+        $unit         = $request->unit;
+        $tahun        = $request->tahun;
+        $user         = Auth::user();
+
+        $dataupdate = ['kode'=>$kode,'nama'=>$nama,'unit_id'=>$unit,'tahun'=>$tahun,'tahun'=>$tahun,'modifier'=>$user->nik];
+
+        $Kpi = Kpi::where('id',$id)->update($dataupdate);
+        if($Kpi){
+            return redirect()
+            ->route('kpi.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil update KPI!'
+            ]);
+        }else{
+            return redirect()
+            ->route('kpi.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'Gagal update KPI!'
+            ]);
+        }
+
+    }
 }

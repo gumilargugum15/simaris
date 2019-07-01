@@ -16,6 +16,10 @@ class Unitkerja extends Model
     public function user(){
         return $this->belongsTo('App\User', 'unit_id');
     }
+    public function scopeByUnit($query, $u)
+    {
+        return $query->where('objectabbr', $u);
+    }
     
     
 }

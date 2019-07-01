@@ -20,7 +20,7 @@
 <div class="box">
         <div class="box-body">
                 <div class="box box-warning">
-                    <form action="{{ url('storekpi') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ url('storekpikeyperson') }}" method="post" enctype="multipart/form-data">
                         <input name="_token" value="{{ csrf_token() }}" type="hidden">
                         <div class="form-group">
                         <label>Kode</label>
@@ -43,7 +43,7 @@
                             <input type="text" class="form-control" name="tahun" id="tahun">
                         </div>
                     
-                    <a type="button" href="{{ url('kpi') }}" class="btn btn-default pull-left">Batal</a>
+                    <a type="button" href="{{ url('kpikeyperson') }}" class="btn btn-default pull-left">Batal</a>
                     <button type="submit" class="btn btn-primary pull-right">Simpan</button>
                     </form>
                 </div>

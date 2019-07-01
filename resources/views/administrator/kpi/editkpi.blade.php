@@ -35,10 +35,10 @@
                         <label>Unit</label>
                         <select class="form-control select2" style="width: 100%;" name="unit" id="unit">
                             @foreach ($unitkerja as $data)
-                            @if($kpi->unit_id==$data->kode)
-                            <option value="{{$data->kode}}" selected>{{$data->nama}}</option>
+                            @if($kpi->unit_id==$data->objectabbr)
+                            <option value="{{$data->objectabbr}}" selected>{{$data->nama}}</option>
                             @else
-                            <option value="{{$data->kode}}">{{$data->nama}}</option>
+                            <option value="{{$data->objectabbr}}">{{$data->nama}}</option>
                             @endif
                             @endforeach
                         </select>

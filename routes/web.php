@@ -33,6 +33,11 @@ Route::group(['middleware'=>['role:keyperson|verifikatur|pimpinanunit|managergcg
     Route::get('/edit/{id?}','ResikobisnisController@edit');
     Route::post('/update','ResikobisnisController@update');
     Route::get('/destroy/{id?}','ResikobisnisController@destroy');
+    Route::get('/kpikeyperson', 'ResikobisnisController@kpi')->name('kpikeyperson.index');
+    Route::get('/addkpikeyperson','ResikobisnisController@addkpi');
+    Route::post('/storekpikeyperson','ResikobisnisController@storekpi');
+    Route::get('/editkpikeyperson/{id?}','ResikobisnisController@editkpi');
+    Route::post('/updatekpikeyperson','ResikobisnisController@updatekpi');
 });
 
 Route::group(['middleware'=>['role:verifikatur']], function () {
