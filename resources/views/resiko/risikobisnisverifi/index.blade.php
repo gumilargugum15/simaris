@@ -74,6 +74,7 @@ function batalvalidriskbisnis(id){
     }
   }
   
+  
 </script>
 <section class="content-header">
     <h1>
@@ -103,6 +104,8 @@ function batalvalidriskbisnis(id){
                 <tr>
                     <td>
                         <form id="formcari" method="GET">
+                        <input type="hidden" id="nikuser" value="{{$nikuser}}">
+                        
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-xs-10">
@@ -196,9 +199,9 @@ function batalvalidriskbisnis(id){
             <div class="box">
                 <div class="box-header">
                     <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
-                    
+                    <a class="btn btn-info" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($risikobisnis->id)){{$risikobisnis->id}}@endif)"><i class="fa fa-commenting-o" title="Komentar"> Komentar</i></a>
                 </div>
-                <!-- /.box-header -->
+                
                 <div class="box-body">
                     <form id="fm-kaidah">
                             <input name="_token" value="{{ csrf_token() }}" type="hidden">
@@ -284,12 +287,13 @@ function batalvalidriskbisnis(id){
                     </table>
                 </form>
                 </div>
-                <!-- /.box-body -->
+                
             </div>
-            <!-- /.box -->
+            
         </div>
-        <!-- /.col -->
+        
     </div>
     @include('resiko/resikobisnis/modal/sumberresikobisnis')
+    @include('resiko/risikobisnisverifi/modal/komentar')
 </section>
 @endsection

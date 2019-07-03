@@ -18,7 +18,7 @@
 <div class="box">
         <div class="box-body">
                 <div class="box box-warning">
-                        <form action="{{ url('update') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ url('updatekpikeyperson') }}" method="post" enctype="multipart/form-data">
                         <input name="_token" value="{{ csrf_token() }}" type="hidden">
                         <input type="hidden" name="idriskdetail" id="idriskdetail" value="{{ $riskdetail->id }}">
                         <div class="form-group">

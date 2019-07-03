@@ -37,6 +37,7 @@ class ResikobisnisController extends Controller
     {
         $namarisiko ="Risiko Bisnis";
         $user = Auth::user();
+        $nikuser = $user->nik;
         $unitid = $user->unit_id;
         $unitkerja = Unitkerja::where('objectabbr',$unitid)->get();
         $periodeall = Perioderisikobisnis::get();
@@ -90,7 +91,7 @@ class ResikobisnisController extends Controller
         $hasildampak = $hsl;
 
         return view('resiko.resikobisnis.index', compact(
-            'risikobisnis', 'periodeaktif', 'kpi','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser'
+            'risikobisnis', 'periodeaktif', 'kpi','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser','nikuser'
         ));
     }
     public function getkriteria($dampakid,$kategoriid,$level){
@@ -620,17 +621,37 @@ class ResikobisnisController extends Controller
         $Kpi = Kpi::where('id',$id)->update($dataupdate);
         if($Kpi){
             return redirect()
-            ->route('kpi.index')
+            ->route('kpikeyperson.index')
             ->with('flash_notification', [
                 'level' => 'info',
                 'message' => 'Berhasil update KPI!'
             ]);
         }else{
             return redirect()
-            ->route('kpi.index')
+            ->route('kpikeyperson.index')
             ->with('flash_notification', [
                 'level' => 'warning',
                 'message' => 'Gagal update KPI!'
+            ]);
+        }
+
+    }
+    public function destroykpi(Request $request, $id)
+    {
+        $delete =  Kpi::where('id',$id)->delete();
+        if($delete){
+            return redirect()
+            ->route('kpikeyperson.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil hapus KPI!'
+            ]);
+        }else{
+            return redirect()
+            ->route('kpikeyperson.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'Gagal hapus KPI!'
             ]);
         }
 

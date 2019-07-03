@@ -17,6 +17,7 @@ use App\Kriteria;
 use App\Perioderisikobisnis;
 use App\Klasifikasi;
 use App\Matrikrisiko;
+use App\Komentar;
 use Illuminate\Support\Facades\Auth;
 
 class RiskbisnisverifController extends Controller
@@ -36,6 +37,7 @@ class RiskbisnisverifController extends Controller
     {
         $namarisiko ="Risiko Bisnis";
         $user = Auth::user();
+        $nikuser = $user->nik;
         $unitkerja = Unitkerja::get();
         // dd($unitkerja);
         $periodeall = Perioderisikobisnis::get();
@@ -52,7 +54,7 @@ class RiskbisnisverifController extends Controller
             
         }
     
-        return view('resiko.risikobisnisverifi.index', compact('risikobisnis','periodeall','namarisiko','unitkerja'));
+        return view('resiko.risikobisnisverifi.index', compact('risikobisnis','periodeall','namarisiko','unitkerja','nikuser'));
     }
     function validasibisnis(Request $request,$id){
         $risikobisnis = Risikobisnis::where('id',$id)->update(['statusrisiko_id' => '3']);    
@@ -128,6 +130,25 @@ class RiskbisnisverifController extends Controller
             $riskdetail = Risikobisnisdetail::where('id',$value)->update(['highlight'=>0,'tglhighlight'=>date("Y-m-d H:i:s")]);
         }
 
+    }
+    public function readkomen(Request $request,$id){
+        $komen = Komentar::where('risikobisnis_id',$id)->orderBy('id', 'DESC')->get();
+        return $komen;
+
+    }
+    public function kirimkomentar(Request $request){
+        $user = Auth::user();
+        $message    = $request->message;
+        $id         = $request->idrisiko;
+
+        $dtval = new Komentar();
+        $dtval->risikobisnis_id  =  $id;
+        $dtval->nik      =  $user->nik;
+        $dtval->nama     =  $user->name;
+        $dtval->komentar =  $message;
+        $dtval->creator  =  $user->nik;
+        $dtval->save();
+        
     }
 
     /**

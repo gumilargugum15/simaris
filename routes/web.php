@@ -20,6 +20,8 @@ Route::group([ 'middleware' => 'auth' ], function (){
 });
 Route::group(['middleware'=>['role:keyperson|verifikatur|pimpinanunit|managergcg']], function () {
     Route::get('/sumberrisiko/{id}','ResikobisnisController@sumberrisiko');
+    Route::get('/readkomen/{id}','RiskbisnisverifController@readkomen');
+    Route::post('/kirimkomentar','RiskbisnisverifController@kirimkomentar');
     
 });
 
@@ -38,6 +40,8 @@ Route::group(['middleware'=>['role:keyperson|verifikatur|pimpinanunit|managergcg
     Route::post('/storekpikeyperson','ResikobisnisController@storekpi');
     Route::get('/editkpikeyperson/{id?}','ResikobisnisController@editkpi');
     Route::post('/updatekpikeyperson','ResikobisnisController@updatekpi');
+    Route::get('/destroykpikeyperson/{id?}','ResikobisnisController@destroykpi');
+    
 });
 
 Route::group(['middleware'=>['role:verifikatur']], function () {
@@ -49,6 +53,7 @@ Route::group(['middleware'=>['role:verifikatur']], function () {
     Route::post('/tidaksesuaikaidah','RiskbisnisverifController@tidaksesuaikaidah');
     Route::post('/highlight','RiskbisnisverifController@highlight');
     Route::post('/batalhighlight','RiskbisnisverifController@batalhighlight');
+    
     
 });
 Route::group(['middleware'=>['role:pimpinanunit']], function () {

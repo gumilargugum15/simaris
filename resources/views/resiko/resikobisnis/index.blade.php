@@ -66,6 +66,7 @@
         <table class="table table-bordered">
           <tr>
             <th rowspan="2"><form id="formperiod" method="GET">
+                <input type="hidden" id="nikuser" value="{{$nikuser}}">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-10">
@@ -161,6 +162,7 @@
           <a class="btn btn-primary" href="{{ url('addrisikobisnis') }}"><i class="fa  fa-plus"
                 title=""> Risiko Baru</i></a>
                 <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
+                <a class="btn btn-info" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($risikobisnis->id)){{$risikobisnis->id}}@endif)"><i class="fa fa-commenting-o" title="Komentar"> Komentar</i></a>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -232,5 +234,6 @@
   </div>
   @include('resiko/resikobisnis/modal/sumberresikobisnis')
   @include('resiko/resikobisnis/modal/addrisiko')
+  @include('resiko/resikobisnis/modal/komentar')
 </section>
 @endsection

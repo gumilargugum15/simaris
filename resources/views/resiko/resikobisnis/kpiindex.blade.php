@@ -52,7 +52,7 @@
                     <td>{{$data->namaunit}}</td>
                     <td>{{$data->tahun}}</td>
                     <td><a href="{{url('editkpikeyperson',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                        <a href="{{url('destroykpi',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
+                        <a href="{{url('destroykpikeyperson',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
                     </td>
                   </tr>
                   @endforeach
