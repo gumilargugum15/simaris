@@ -536,9 +536,9 @@
             $("#komentar").empty();
             for (i = 0; i < data.length; i++) {
                 if(user==data[i].nik){
-                    $("#komentar").append('<div class="direct-chat-msg right"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-right">Anda</span><span class="direct-chat-timestamp pull-left">'+data[i].created_at+'</span></div><img class="direct-chat-img" src="../dist/img/user2-160x160.png" alt="Message User Image"><div class="direct-chat-text">'+data[i].komentar+'</div></div>');
+                    $("#komentar").append('<div class="direct-chat-msg right"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-right">Anda</span><span class="direct-chat-timestamp pull-left">'+data[i].created_at+'</span></div><img class="direct-chat-img" src="{{url('dist/img/user2-160x160.png')}}" alt="Message User Image"><div class="direct-chat-text">'+data[i].komentar+'</div></div>');
                 }else{
-                    $("#komentar").append('<div class="direct-chat-msg"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-left">'+data[i].nama+' ( '+data[i].nik+' )</span><span class="direct-chat-timestamp pull-right">'+data[i].created_at+'</span></div><img class="direct-chat-img" src="../dist/img/user2-160x160.png" alt="Message User Image"><div class="direct-chat-text">'+data[i].komentar+'</div></div>');
+                    $("#komentar").append('<div class="direct-chat-msg"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-left">'+data[i].nama+' ( '+data[i].nik+' )</span><span class="direct-chat-timestamp pull-right">'+data[i].created_at+'</span></div><img class="direct-chat-img" src="{{url('dist/img/user2-160x160.png')}}" alt="Message User Image"><div class="direct-chat-text">'+data[i].komentar+'</div></div>');
                 }
                 
             }
