@@ -516,12 +516,12 @@
                 }
             });
     }
-    var TIMEOUT = 600000 //10 mins
-    var activityChecker = setInterval(check, 60000);
-    function check(){
-      var id= $("#idrisiko").val();
-      readkomen(id);
-    }
+    // var TIMEOUT = 600000 //10 mins
+    // var activityChecker = setInterval(check, 60000);
+    // function check(){
+    //   var id= $("#idrisiko").val();
+    //   readkomen(id);
+    // }
     function readkomen(id){
     $.ajax({
         url:"{{ url('readkomen') }}/"+id,

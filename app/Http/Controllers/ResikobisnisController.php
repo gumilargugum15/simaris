@@ -17,6 +17,8 @@ use App\Kriteria;
 use App\Perioderisikobisnis;
 use App\Klasifikasi;
 use App\Matrikrisiko;
+use Storage;
+use File;
 
 use Illuminate\Support\Facades\Auth;
 class ResikobisnisController extends Controller
@@ -122,6 +124,8 @@ class ResikobisnisController extends Controller
     public function sumberrisiko(Request $request,$id){
         $return = [];
         $sumber = Sumberrisiko::where('risikobisnisdetail_id',$id)->get();
+        // dd($sumber);
+        // die();
         foreach($sumber as $key => $value){
             array_push($return,
             array(
@@ -132,7 +136,8 @@ class ResikobisnisController extends Controller
             'start_date'=>$value->start_date,
             'end_date'=>$value->end_date,
             'pic'=>$value->pic,
-            'statussumber'=>$value->statussumber
+            'statussumber'=>$value->statussumber,
+            'file'=>$value->file
             )
         );
 
@@ -187,6 +192,10 @@ class ResikobisnisController extends Controller
      */
     public function store(Request $request)
     {
+        // if($request->gambar!=null){
+        //     $path = $request->gambar->store('');
+        // }
+
         $unitid         = $request->unitid;
         $periode        = $request->periode;
         $tahun          = $request->tahun;
@@ -207,6 +216,8 @@ class ResikobisnisController extends Controller
         $status         = $request->status;
         $indikator      = $request->indikator;
         $nilaiambang    = $request->nilaiambang;
+        $gambar         = $request->gambar;
+        //dd($gambar);
         
         //dapatkan informasi user
         $user = Auth::user();
@@ -245,6 +256,11 @@ class ResikobisnisController extends Controller
             
             if($sumberrisiko!=null){
                 foreach($sumberrisiko as $key =>$value){
+                    $path ='';
+                    if(isset($gambar[$key])){
+                        $path = $gambar[$key]->store('public');
+                    }
+                    
                     $datasumber = new Sumberrisiko();
                     $datasumber->risikobisnisdetail_id    = $datariskdetail->id;
                     $datasumber->namasumber               = $value;
@@ -254,9 +270,13 @@ class ResikobisnisController extends Controller
                     $datasumber->end_date                 = $enddate[$key];
                     $datasumber->pic                      = $pic[$key];
                     $datasumber->statussumber             = $status[$key];
+                    $datasumber->file                     = $path;
                     $datasumber->save();
+
+                    
                 }
             }
+            
             return redirect()
             ->route('resikobisnis.index')
             ->with('flash_notification', [
@@ -307,6 +327,12 @@ class ResikobisnisController extends Controller
             
             if($sumberrisiko!=null){
                 foreach($sumberrisiko as $key =>$value){
+
+                    $path ='';
+                    if(isset($gambar[$key])){
+                        $path = $gambar[$key]->store('public');
+                    }
+
                     $datasumber = new Sumberrisiko();
                     $datasumber->risikobisnisdetail_id    = $datariskdetail->id;
                     $datasumber->namasumber               = $value;
@@ -316,6 +342,7 @@ class ResikobisnisController extends Controller
                     $datasumber->end_date                 = $enddate[$key];
                     $datasumber->pic                      = $pic[$key];
                     $datasumber->statussumber             = $status[$key];
+                    $datasumber->file                     = $path;
                     $datasumber->save();
                 }
             }

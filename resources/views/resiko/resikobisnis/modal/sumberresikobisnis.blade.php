@@ -15,9 +15,19 @@ function sumberrisiko(id,risiko) {
         { "data": "start_date" },
         { "data": "end_date" },
         { "data": "pic" },
-        { "data": "statussumber" }
+        { "data": "statussumber" },
+        {
+          "className": 'options',
+          "data": "file",
+          "render": function(data, type, full, meta){
+            return '<a href="#"><i class="fa fa-2x fa-file-picture-o" onclick="javascript:previewlampiran(\'' +full.file+ '\')"></i></a>'; 
+          }
+        }
       ]
     });
+  }
+  function previewlampiran(file){
+    alert(file);
   }
 </script>
 <div class="modal fade" id="modal-sumberresikobisnis">
@@ -39,6 +49,7 @@ function sumberrisiko(id,risiko) {
                               <th>Enddate</th>
                               <th>PIC</th>
                               <th>Status</th>
+                              <th>Attachment</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -53,6 +64,7 @@ function sumberrisiko(id,risiko) {
                                     <th>Enddate</th>
                                     <th>PIC</th>
                                     <th>Status</th>
+                                    <th>Attachment</th>
                                     </tr>
                             </tfoot>
                           </table>

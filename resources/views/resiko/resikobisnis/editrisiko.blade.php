@@ -143,7 +143,7 @@
         <td><textarea class="form-control" rows="2" name="pic[]" id="pic[]">${sumberrisiko[0].pic}</textarea></td>
         <td><textarea class="form-control" rows="2" name="status[]" id="status[]">${sumberrisiko[0].statussumber}</textarea></td>
         <td><button type="button" class="btn btn-warning" onclick="hapustempsumber(${no})"><i class="fa fa-trash"></i></button></td>
-        </tr>`);
+        </tr><tr id="file_${no}"><td colspan="8"><input type="file" id="gambar[]" name="gambar[]" value="0"></td></tr>`);
         no = (no-1) + 2;
         $('#rowsumber').val(no);
     }
@@ -175,18 +175,23 @@
                   
         }
         function addrisiko(){
-            var no=$('#rowsumber').val();
+    var no=$('#rowsumber').val();
             $('#sumberresikobisnis tbody').append(`
                 <tr id="input_${no}">
-                <td><textarea class="form-control" rows="2" name="sumberrisiko[]" id="sumberrisiko[]"></textarea></td>
-                <td><textarea class="form-control" rows="2" name="mitigasi[]" id="mitigasi[]"></textarea></td>
-                <td><input  class="form-control" type="number" name="biaya[]" id="biaya[]"></td>
-                <td><input size="5" type="date" class="form-control" id="startdate[]" name="startdate[]" placeholder="yyyy-m-d"></td>
-                <td><input size="5" type="date" class="form-control" id="enddate[]" name="enddate[]" placeholder="yyyy-m-d"></td>
-                <td><textarea class="form-control" rows="2" name="pic[]" id="pic[]"></textarea></td>
-                <td><textarea class="form-control" rows="2" name="status[]" id="status[]"></textarea></td>
-                <td><button type="button" class="btn btn-warning" onclick="hapustempsumber(${no})"><i class="fa fa-trash"></i></button></td>
+                
+                <td><textarea class="form-control" rows="2" name="sumberrisiko[]" id="sumberrisiko[]" required></textarea></td>
+                <td><textarea class="form-control" rows="2" name="mitigasi[]" id="mitigasi[]" required></textarea></td>
+                <td><input  class="form-control" type="number" name="biaya[]" id="biaya[]" required></td>
+                <td><input size="5" type="date" class="form-control" id="startdate[]" name="startdate[]" placeholder="yyyy-m-d" required></td>
+                <td><input size="5" type="date" class="form-control" id="enddate[]" name="enddate[]" placeholder="yyyy-m-d" required></td>
+                <td><textarea class="form-control" rows="2" name="pic[]" id="pic[]" required></textarea></td>
+                <td><textarea class="form-control" rows="2" name="status[]" id="status[]" required></textarea></td>
+                <td>
+                <button type="button" class="btn btn-warning" onclick="hapustempsumber(${no})"><i class="fa fa-trash"></i></button>
+                
+                </td>
                 </tr>
+                <tr id="file_${no}"><td colspan="8"><input type="file" id="gambar[]" name="gambar[]" value="0"></td></tr>
                     `);
                     no = (no-1) + 2;
                     $('#rowsumber').val(no);
@@ -194,6 +199,7 @@
         function hapustempsumber(e){
                 if(confirm("Apakah anda yakin ?")){
                 $("#input_"+e).remove();
+                $("#file_"+e).remove();
             }}
         </script>
 </section>
