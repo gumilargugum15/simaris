@@ -683,4 +683,21 @@ class ResikobisnisController extends Controller
         }
 
     }
+    public function kirimkomentarkeyperson(Request $request){
+        $user = Auth::user();
+        $roles = Auth::user()->roles;
+        $message    = $request->message;
+        $id         = $request->idrisiko;
+        $detid      = $request->detailrisikoid;
+
+        $dtval = new Komentar();
+        $dtval->risikobisnisdetail_id  =  $detid;
+        $dtval->risikobisnis_id        =  $id;
+        $dtval->nik      =  $user->nik;
+        $dtval->nama     =  $user->name;
+        $dtval->komentar =  $message;
+        $dtval->creator  =  $user->nik;
+        $dtval->save();
+        
+    }
 }

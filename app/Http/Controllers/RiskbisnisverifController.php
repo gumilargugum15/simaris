@@ -132,23 +132,42 @@ class RiskbisnisverifController extends Controller
 
     }
     public function readkomen(Request $request,$id){
-        $komen = Komentar::where('risikobisnis_id',$id)->orderBy('id', 'DESC')->get();
+        $komen = Komentar::where('risikobisnisdetail_id',$id)->orderBy('id', 'DESC')->get();
         return $komen;
 
     }
     public function kirimkomentar(Request $request){
         $user = Auth::user();
+        $roles = Auth::user()->roles;
         $message    = $request->message;
         $id         = $request->idrisiko;
+        $detid      = $request->detailrisikoid;
 
         $dtval = new Komentar();
-        $dtval->risikobisnis_id  =  $id;
+        $dtval->risikobisnisdetail_id  =  $detid;
+        $dtval->risikobisnis_id        =  $id;
         $dtval->nik      =  $user->nik;
         $dtval->nama     =  $user->name;
         $dtval->komentar =  $message;
         $dtval->creator  =  $user->nik;
         $dtval->save();
+
+        $risikobisnis = Risikobisnis::where('id',$id)->update(['statusrisiko_id' => '1']);
+            if($risikobisnis){
+                $hapus = Validasibisnis::where('nik',$user->nik)->where('risikobisnis_id',$id)->delete();
+            }
         
+    }
+    public function kpi(Request $request){
+        $user = Auth::user();
+        $unitid = $user->unit_id;
+        $judul = "KPI";
+        $kpi =Kpi::tahunAktif()
+        ->join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
+        ->select('kpi.*', 'unitkerja.nama as namaunit')
+        // ->byUnit($unitid)
+        ->get();
+        return view('resiko.risikobisnisverifi.kpiindex', compact('judul', 'kpi'));
     }
 
     /**

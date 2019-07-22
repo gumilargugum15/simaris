@@ -199,7 +199,7 @@ function batalvalidriskbisnis(id){
             <div class="box">
                 <div class="box-header">
                     <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
-                    <a class="btn btn-info" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($risikobisnis->id)){{$risikobisnis->id}}@endif)"><i class="fa fa-commenting-o" title="Komentar"> Komentar</i></a>
+                    {{-- <a class="btn btn-info" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($risikobisnis->id)){{$risikobisnis->id}}@endif)"><i class="fa fa-commenting-o" title="Komentar"> Komentar</i></a> --}}
                 </div>
                 
                 <div class="box-body">
@@ -256,7 +256,7 @@ function batalvalidriskbisnis(id){
                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
                                 <td>
-                                    
+                                <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($riskdetail->id)){{$riskdetail->id}}@endif,'{{$riskdetail->risiko}}')"><i class="fa fa-commenting-o" title="Komentar"></i></a>      
                                 </td>
                             </tr>
                         

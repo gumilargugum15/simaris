@@ -4,21 +4,17 @@ namespace Maatwebsite\Excel\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Maatwebsite\Excel\Writer;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Files\TemporaryFile;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class AppendDataToSheet implements ShouldQueue
+class AppendViewToSheet implements ShouldQueue
 {
-    use Queueable, Dispatchable, ProxyFailures;
+    use Queueable, Dispatchable;
 
     /**
-     * @var array
-     */
-    public $data = [];
-
-    /**
-     * @var string
+     * @var TemporaryFile
      */
     public $temporaryFile;
 
@@ -33,21 +29,20 @@ class AppendDataToSheet implements ShouldQueue
     public $sheetIndex;
 
     /**
-     * @var object
+     * @var FromView
      */
     public $sheetExport;
 
     /**
-     * @param object        $sheetExport
+     * @param FromView        $sheetExport
      * @param TemporaryFile $temporaryFile
      * @param string        $writerType
      * @param int           $sheetIndex
      * @param array         $data
      */
-    public function __construct($sheetExport, TemporaryFile $temporaryFile, string $writerType, int $sheetIndex, array $data)
+    public function __construct(FromView $sheetExport, TemporaryFile $temporaryFile, string $writerType, int $sheetIndex)
     {
         $this->sheetExport   = $sheetExport;
-        $this->data          = $data;
         $this->temporaryFile = $temporaryFile;
         $this->writerType    = $writerType;
         $this->sheetIndex    = $sheetIndex;
@@ -65,7 +60,7 @@ class AppendDataToSheet implements ShouldQueue
 
         $sheet = $writer->getSheetByIndex($this->sheetIndex);
 
-        $sheet->appendRows($this->data, $this->sheetExport);
+        $sheet->fromView($this->sheetExport, $this->sheetIndex);
 
         $writer->write($this->sheetExport, $this->temporaryFile, $this->writerType);
     }

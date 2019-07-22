@@ -21,7 +21,7 @@ Route::group([ 'middleware' => 'auth' ], function (){
 Route::group(['middleware'=>['role:keyperson|verifikatur|pimpinanunit|managergcg']], function () {
     Route::get('/sumberrisiko/{id}','ResikobisnisController@sumberrisiko');
     Route::get('/readkomen/{id}','RiskbisnisverifController@readkomen');
-    Route::post('/kirimkomentar','RiskbisnisverifController@kirimkomentar');
+    
     
 });
 
@@ -41,6 +41,7 @@ Route::group(['middleware'=>['role:keyperson|verifikatur|pimpinanunit|managergcg
     Route::get('/editkpikeyperson/{id?}','ResikobisnisController@editkpi');
     Route::post('/updatekpikeyperson','ResikobisnisController@updatekpi');
     Route::get('/destroykpikeyperson/{id?}','ResikobisnisController@destroykpi');
+    Route::post('/kirimkomentarkeyperson','ResikobisnisController@kirimkomentarkeyperson');
     
 });
 
@@ -53,7 +54,8 @@ Route::group(['middleware'=>['role:verifikatur']], function () {
     Route::post('/tidaksesuaikaidah','RiskbisnisverifController@tidaksesuaikaidah');
     Route::post('/highlight','RiskbisnisverifController@highlight');
     Route::post('/batalhighlight','RiskbisnisverifController@batalhighlight');
-    
+    Route::post('/kirimkomentar','RiskbisnisverifController@kirimkomentar');
+    Route::get('/kpiverifikatur', 'RiskbisnisverifController@kpi')->name('kpiverifikatur.index');
     
 });
 Route::group(['middleware'=>['role:pimpinanunit']], function () {
@@ -75,6 +77,7 @@ Route::group(['middleware'=>['role:superadmin']], function () {
     Route::get('/kpi', 'KpiController@index')->name('kpi.index');
     Route::get('/addkpi','KpiController@create');
     Route::post('/storekpi','KpiController@store');
+    Route::post('/importkpi','KpiController@import');
     Route::get('/editkpi/{id?}','KpiController@edit');
     Route::post('/updatekpi','KpiController@update');
     Route::get('/destroykpi/{id?}','KpiController@destroy');

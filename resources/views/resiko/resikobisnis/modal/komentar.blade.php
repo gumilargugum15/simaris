@@ -4,7 +4,7 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span></button>
-          {{-- <h4 class="modal-title">Komentar</h4> --}}
+            <h4 class="modal-title" id="judulkomentar"></h4>
         </div>
         <div class="modal-body">
             <div class="row">
@@ -17,7 +17,7 @@
                                     {{-- <span data-toggle="tooltip" title="3 New Messages" class="badge bg-light-blue">3</span> --}}
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                     </button>
-                                    <button type="button" class="btn btn-box-tool"><i class="fa fa-refresh" onclick="readkomen(@if(isset($risikobisnis->id)){{$risikobisnis->id}}@endif)"></i>
+                                    <button type="button" class="btn btn-box-tool"><i class="fa fa-refresh" onclick="readkomen($('#detailrisikoid').val(),$('#namarisiko').val())"></i>
                                     </button>
                                     {{-- <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle">
                                       <i class="fa fa-comments"></i></button> --}}
@@ -61,10 +61,12 @@
                                       <form id="formkomentar">
                                           <input name="_token" value="{{ csrf_token() }}" type="hidden">
                                           <input type="hidden" name="idrisiko" id="idrisiko" value="@if(isset($risikobisnis->id)){{$risikobisnis->id}}@endif">
+                                          <input type="hidden" id="detailrisikoid" name="detailrisikoid">
+                                          <input type="hidden" id="namarisiko" name="namarisiko">
                                       <input type="text" id="message" name="message" placeholder="Ketik pesan ..." class="form-control">
                                     </form>
                                           <span class="input-group-btn">
-                                            <button class="btn btn-primary btn-flat" onclick="kirimkomentar()">Kirim</button>
+                                            <button class="btn btn-primary btn-flat" onclick="kirimkomentarkeyperson()">Kirim</button>
                                           </span>
                                     </div>
                                 </div>

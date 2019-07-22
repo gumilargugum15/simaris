@@ -45,7 +45,7 @@ function pilihdampak(krinama,dampakid,katid,level){
         
         </td>
         </tr>
-        <tr id="file_${no}"><td colspan="8"><input type="file" id="gambar[]" name="gambar[]" value="0"></td></tr>
+        <tr id="file_${no}"><td colspan="8">Lampiran dokumen mitigasi :<input type="file" id="gambar[]" name="gambar[]" value="0"></td></tr>
              `);
              no = (no-1) + 2;
              $('#rowsumber').val(no);
@@ -77,6 +77,7 @@ function pilihdampak(krinama,dampakid,katid,level){
         <div class="box-body">
                 <div class="box box-warning">
                         <form action="{{ url('store') }}" method="post" enctype="multipart/form-data">
+                            
                         <input name="_token" value="{{ csrf_token() }}" type="hidden">
                         <div class="form-group">
                 

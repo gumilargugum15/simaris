@@ -1,7 +1,17 @@
 <script>
 function sumberrisiko(id,risiko) {
-    $("#titlesumber").html('Sumber risiko ( '+risiko+' )');
+    $("#titlesumber").html('Risiko  '+risiko+' ');
     read_sumberrisiko(id);
+  }
+  function isifile(file){
+    // alert(file);
+    // $("#preview").empty();
+    $("#preview").html('<object width="100%" height="100%" data="{{ url("storage/lTwC0NbGdZnVkBvUUVq4lLOyF7SBiP94dpt7ND2u.png")}}"></object>');
+    $('#modal-preview').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    
   }
   function read_sumberrisiko(id) {
 
@@ -20,7 +30,7 @@ function sumberrisiko(id,risiko) {
           "className": 'options',
           "data": "file",
           "render": function(data, type, full, meta){
-            return '<a href="#"><i class="fa fa-2x fa-file-picture-o" onclick="javascript:previewlampiran(\'' +full.file+ '\')"></i></a>'; 
+            return '<a href="#" onclick="isifile(\'' +data+ '\')"><i class="fa fa-2x fa-file-picture-o"></i></a>'; 
           }
         }
       ]
@@ -77,3 +87,4 @@ function sumberrisiko(id,risiko) {
         </div>
         <!-- /.modal-dialog -->
       </div>
+      @include('resiko/resikobisnis/modal/preview')

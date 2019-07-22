@@ -53,9 +53,9 @@
                     <td>{{$data->tahun}}</td>
                     <td align="center">
                         @if($data->aktif=='1')
-                        <a class="btn btn-success"><i class="fa fa-check" title="Aktif"></i></a>
+                        <a class="btn btn-success" ><i class="fa fa-check" title="Aktif"></i></a>
                         @else
-                        <a class="btn btn-danger"><i class="fa fa-minus" title="Tidak Aktif"></i></a>
+                        <a class="btn btn-danger" onclick="aktifperiode({{$data->id}});"><i class="fa fa-minus" title="Tidak Aktif"></i></a>
                         @endif
                     </td>
                     <td><a href="{{url('editperiodbisnis',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
@@ -71,6 +71,15 @@
       $(function () {
         $('#tblperiodbisnis').DataTable()
       })
+      function aktifperiode(id){
+        $.ajax({
+                url: "{{ url('aktifperiode') }}"+id,
+                method: 'post',
+                success: function (data) {
+                    location.reload();
+                }
+            });
+      }
     </script>
 </section>
 @endsection

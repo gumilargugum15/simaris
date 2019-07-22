@@ -162,7 +162,7 @@
           <a class="btn btn-primary" href="{{ url('addrisikobisnis') }}"><i class="fa  fa-plus"
                 title=""> Risiko Baru</i></a>
                 <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
-                <a class="btn btn-info" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($risikobisnis->id)){{$risikobisnis->id}}@endif)"><i class="fa fa-commenting-o" title="Komentar"> Komentar</i></a>
+                
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -180,7 +180,7 @@
                 <th>Sumber risiko</th>
                 <th>Indikator</th>
                 <th>Nilai ambang</th>
-                <th width="10%">Aksi</th>
+                <th width="15%">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -216,6 +216,7 @@
                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
               <td><a href="{{url('edit',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
                 <a href="{{url('destroy',['id'=>$riskdetail->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
+                <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($riskdetail->id)){{$riskdetail->id}}@endif,'{{$riskdetail->risiko}}')"><i class="fa fa-commenting-o" title="Komentar"></i></a>
               </td>
               </tr>
               @endforeach
@@ -235,5 +236,6 @@
   @include('resiko/resikobisnis/modal/sumberresikobisnis')
   @include('resiko/resikobisnis/modal/addrisiko')
   @include('resiko/resikobisnis/modal/komentar')
+  
 </section>
 @endsection

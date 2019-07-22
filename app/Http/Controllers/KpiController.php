@@ -7,6 +7,8 @@ use App\Kpi;
 use App\Unitkerja;
 
 use Illuminate\Support\Facades\Auth;
+use App\Imports\KpiImport;
+use Maatwebsite\Excel\Facades\Excel;
 class KpiController extends Controller
 {
     /**
@@ -17,9 +19,11 @@ class KpiController extends Controller
     public function index(Request $request) 
     {
         $judul = "KPI";
-        $kpi =Kpi::tahunAktif()
-        ->join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
+        //$kpi =Kpi::tahunAktif()
+        $kpi =Kpi::
+        join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
         ->select('kpi.*', 'unitkerja.nama as namaunit')
+        ->orderBy('tahun','desc')
         ->get();
         return view('administrator.kpi.index', compact('judul', 'kpi'));
     }
@@ -29,6 +33,27 @@ class KpiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function import(Request $request) 
+    {
+        
+        $import = Excel::import(new KpiImport, request()->file('excel'));
+        
+        if($import){
+            return redirect()
+            ->route('kpi.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil import KPI!'
+            ]);
+        }else{
+            return redirect()
+            ->route('kpi.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'Gagal import KPI!'
+            ]);
+        }
+    }
     public function create()
     {
         $unitkerja = Unitkerja::get();
