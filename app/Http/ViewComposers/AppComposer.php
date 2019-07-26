@@ -4,27 +4,29 @@ namespace App\Http\ViewComposers;
 
 use Illuminate\View\View;
 use App\komentar;
+use App\Komentar_detail;
 use Illuminate\Support\Facades\Auth; 
 
 class AppComposer
 {
 
-    protected $belumdilihat;
+    protected $belumdibaca;
     
     public function __construct()
     {
         $user = Auth::user();
         $roles = Auth::user()->roles;
-        //dd($roles);
-        $this->belumdilihat = komentar::where('nik',$user->userid)->where('read',0)->get();
+        // dd($user);
+        $this->belumdibaca = komentar_detail::where('nik',$user->nik)->where('baca',0)->get();
     }
 
     public function compose(View $view)
     {
-        $blmdilihat = $this->belumdilihat->count();
-        $notif = $blmdilihat;
+        $blmdibaca = $this->belumdibaca->count();
+        $notif = $blmdibaca;
         $with = array(
-            'blmdilihat'=>$blmdilihat);
+            'notif'=>$notif,
+            'blmdibaca'=>$blmdibaca);
         $view->with($with);
     }
 }

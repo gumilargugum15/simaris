@@ -18,6 +18,7 @@ use App\Perioderisikobisnis;
 use App\Klasifikasi;
 use App\Matrikrisiko;
 use App\Komentar;
+use App\Komentar_detail;
 use Illuminate\Support\Facades\Auth;
 
 class RiskbisnisverifController extends Controller
@@ -50,7 +51,7 @@ class RiskbisnisverifController extends Controller
             ->byUnit($request->unitkerja)
             // ->byStatusrisk('1')
             ->first();
-            
+            // dd($risikobisnis->risikobisnisdetail);
             
         }
     
@@ -132,6 +133,8 @@ class RiskbisnisverifController extends Controller
 
     }
     public function readkomen(Request $request,$id){
+        $user = Auth::user();
+        $dilihat = Komentar_detail::where('nik',$user->nik)->where('risikobisnisdetail_id',$id)->update(['baca'=>1,'tglbaca'=>date("Y-m-d H:i:s")]);
         $komen = Komentar::where('risikobisnisdetail_id',$id)->orderBy('id', 'DESC')->get();
         return $komen;
 
@@ -142,7 +145,10 @@ class RiskbisnisverifController extends Controller
         $message    = $request->message;
         $id         = $request->idrisiko;
         $detid      = $request->detailrisikoid;
+        //getriskdetail
 
+        $riskdetail = Risikobisnisdetail::where('id',$detid)->first();
+        
         $dtval = new Komentar();
         $dtval->risikobisnisdetail_id  =  $detid;
         $dtval->risikobisnis_id        =  $id;
@@ -155,6 +161,13 @@ class RiskbisnisverifController extends Controller
         $risikobisnis = Risikobisnis::where('id',$id)->update(['statusrisiko_id' => '1']);
             if($risikobisnis){
                 $hapus = Validasibisnis::where('nik',$user->nik)->where('risikobisnis_id',$id)->delete();
+                $komendet = new Komentar_detail();
+                $komendet->komentar_id   = $dtval->id;
+                $komendet->risikobisnisdetail_id  = $detid;
+                $komendet->nik   = $riskdetail->creator;
+                $komendet->nama  ='';
+                $komendet->baca  = 0;
+                $komendet->save();
             }
         
     }

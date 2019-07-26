@@ -19,8 +19,10 @@ use App\Klasifikasi;
 use App\Matrikrisiko;
 use Storage;
 use File;
-
+use App\Komentar;
+use App\Komentar_detail;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 class ResikobisnisController extends Controller
 {
     /**
@@ -39,6 +41,9 @@ class ResikobisnisController extends Controller
     {
         $namarisiko ="Risiko Bisnis";
         $user = Auth::user();
+        $role = Role::findByName('verifikatur');
+        $users = $role->users;
+        
         $nikuser = $user->nik;
         $unitid = $user->unit_id;
         $unitkerja = Unitkerja::where('objectabbr',$unitid)->get();
@@ -684,8 +689,11 @@ class ResikobisnisController extends Controller
 
     }
     public function kirimkomentarkeyperson(Request $request){
+
         $user = Auth::user();
-        $roles = Auth::user()->roles;
+        $role = Role::findByName('verifikatur');
+        $users = $role->users;
+        
         $message    = $request->message;
         $id         = $request->idrisiko;
         $detid      = $request->detailrisikoid;
@@ -698,6 +706,17 @@ class ResikobisnisController extends Controller
         $dtval->komentar =  $message;
         $dtval->creator  =  $user->nik;
         $dtval->save();
+
+        foreach ($users as $users){
+            $komendet = new Komentar_detail();
+            $komendet->komentar_id   = $dtval->id;
+            $komendet->risikobisnisdetail_id  =  $detid;
+            $komendet->nik   = $users->nik;
+            $komendet->nama  = $users->name;
+            $komendet->baca  = 0;
+            $komendet->save();
+        }
+
         
     }
 }

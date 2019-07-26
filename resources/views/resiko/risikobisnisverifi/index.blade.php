@@ -73,6 +73,9 @@ function batalvalidriskbisnis(id){
 
     }
   }
+  function notifkomen(id){
+      alert(id);
+  }
   
   
 </script>

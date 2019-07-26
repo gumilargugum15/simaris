@@ -68,22 +68,22 @@
           <!-- Messages: style can be found in dropdown.less-->
          
           <!-- Notifications: style can be found in dropdown.less -->
-          {{-- <li class="dropdown notifications-menu">
+          <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
+              <i class="fa fa-envelope-o"></i>
+              <span class="label label-warning">{{$notif}}</span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
+              <li class="header">Anda memiliki {{$notif}} notifikasi</li>
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
                   <li>
                     <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                      <i class="fa fa-comment text-aqua"></i> {{$blmdibaca}} komentar belum dibaca
                     </a>
                   </li>
-                  <li>
+                  {{-- <li>
                     <a href="#">
                       <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
                       page and may cause design problems
@@ -103,15 +103,16 @@
                     <a href="#">
                       <i class="fa fa-user text-red"></i> You changed your username
                     </a>
-                  </li>
+                  </li> --}}
                 </ul>
               </li>
               <li class="footer"><a href="#">View all</a></li>
             </ul>
-          </li> --}}
+          </li>
           <!-- Tasks: style can be found in dropdown.less -->
           
           <!-- User Account: style can be found in dropdown.less -->
+          
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="{{ url('dist/img/user2-160x160.png') }}" class="user-image" alt="User Image">
@@ -134,6 +135,7 @@
                 <div class="row">
                   <div class="col-xs-4 text-center">
                     <a href="#">Followers</a>
+                    
                   </div>
                   <div class="col-xs-4 text-center">
                     <a href="#">Sales</a>
