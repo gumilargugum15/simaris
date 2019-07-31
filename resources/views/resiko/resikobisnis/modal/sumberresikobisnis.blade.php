@@ -4,9 +4,9 @@ function sumberrisiko(id,risiko) {
     read_sumberrisiko(id);
   }
   function isifile(file){
-    // alert(file);
+     console.log(file);
     // $("#preview").empty();
-    $("#preview").html('<object width="100%" height="100%" data="{{ url("storage/lTwC0NbGdZnVkBvUUVq4lLOyF7SBiP94dpt7ND2u.png")}}"></object>');
+    $("#preview").html('<object width="100%" height="100%" data="'+file+'"></object>');
     $('#modal-preview').modal({
             backdrop: 'static',
             keyboard: false

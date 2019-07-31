@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Authenticatable
 {
     use Notifiable, HasRoles;
-
+    protected $table = 'users';
     protected $fillable = [
         'name', 'email', 'password',
     ];

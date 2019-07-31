@@ -23,6 +23,7 @@ use App\Komentar;
 use App\Komentar_detail;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
+use App\Otorisasi;
 class ResikobisnisController extends Controller
 {
     /**
@@ -586,6 +587,8 @@ class ResikobisnisController extends Controller
     }
     public function kpi(Request $request){
         $user = Auth::user();
+        $dataoto = Otorisasi::where('nik',$user->nik)->first();
+        
         $unitid = $user->unit_id;
         $judul = "KPI";
         $kpi =Kpi::tahunAktif()
@@ -593,7 +596,7 @@ class ResikobisnisController extends Controller
         ->select('kpi.*', 'unitkerja.nama as namaunit')
         ->byUnit($unitid)
         ->get();
-        return view('resiko.resikobisnis.kpiindex', compact('judul', 'kpi'));
+        return view('resiko.resikobisnis.kpiindex', compact('judul', 'kpi','dataoto'));
     }
     public function addkpi(){
         $user = Auth::user();

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Perioderisikobisnis;
+use App\Kpi;
+use App\Risikobisnis;
+use App\Risikobisnisdetail;
 use Illuminate\Support\Facades\Auth;
 class PeriodebisnisController extends Controller
 {
@@ -102,6 +105,70 @@ class PeriodebisnisController extends Controller
         $startenddate = $startdate.' - '.$enddate;
        // dd($startenddate);
         return view('administrator.periodebisnis.editperiodebisnis', compact('periodebisnis','startenddate'));
+    }
+    public function aktifperiode(Request $request,$id){
+        $update = Perioderisikobisnis::where('aktif','1')->update(['aktif' => '0']);
+        $periode = Perioderisikobisnis::where('id',$id)->update(['aktif' => '1']);
+        $periodebisnis = Perioderisikobisnis::where('id',$id)->first();
+        $kpi = Kpi::get();
+        $risikobisnis     = Risikobisnis::get();
+        $riskbisnisdetail = Risikobisnisdetail::get();
+        
+        foreach($kpi as $kpi){
+            $dtkpi = new Kpi();
+            $dtkpi->kode     =  $kpi->kode;
+            $dtkpi->nama     =  $kpi->nama;
+            $dtkpi->unit_id  =  $kpi->unit_id;
+            $dtkpi->tahun    =  $kpi->tahun;
+            $dtkpi->kwartal  =  $periodebisnis->nama;
+            $dtkpi->save();
+        }
+        foreach($risikobisnis as $risikobisnis){
+            $dtrisk = new Risikobisnis();
+            $dtrisk->periode             =  $periodebisnis->nama;
+            $dtrisk->tahun               =  $risikobisnis->tahun;
+            $dtrisk->unit_id             =  $risikobisnis->unit_id;
+            $dtrisk->statusrisiko_id     =  $risikobisnis->statusrisiko_id;
+            $dtrisk->creator             =  $risikobisnis->creator;
+            $dtrisk->save();
+        }
+        foreach($riskbisnisdetail as $riskbisnisdetail){
+            if($riskbisnisdetail->kaidah=='1'){
+                $kaidah    = $riskbisnisdetail->kaidah;
+                $tglkaidah = $riskbisnisdetail->tglkaidah;
+            }else{
+                $kaidah=0;
+                $tglkaidah='';
+            }
+            if($riskbisnisdetail->highlight=='1'){
+                $highlight    = $riskbisnisdetail->highlight;
+                $tglhighlight = $riskbisnisdetail->tglhighlight;
+            }else{
+                $highlight=0;
+                $tglhighlight='';
+            }
+                $dtriskdetail = new Risikobisnisdetail();
+                $dtriskdetail->risikobisnis_id   =  $riskbisnisdetail->risikobisnis_id;
+                $dtriskdetail->kpi_id            =  $riskbisnisdetail->kpi_id;
+                $dtriskdetail->risiko            =  $riskbisnisdetail->risiko;
+                $dtriskdetail->akibat            =  $riskbisnisdetail->akibat;
+                $dtriskdetail->klasifikasi_id    =  $riskbisnisdetail->klasifikasi_id;
+                $dtriskdetail->peluang_id        =  $riskbisnisdetail->peluang_id;
+                $dtriskdetail->dampak_id         =  $riskbisnisdetail->dampak_id;
+                $dtriskdetail->warna             =  $riskbisnisdetail->warna;
+                $dtriskdetail->indikator         =  $riskbisnisdetail->indikator;
+                $dtriskdetail->nilaiambang       =  $riskbisnisdetail->nilaiambang;
+                $dtriskdetail->kaidah            =  $kaidah;
+                $dtriskdetail->tglkaidah         =  $tglkaidah;
+                $dtriskdetail->creator           =  $riskbisnisdetail->creator;
+                $dtriskdetail->kategori_id       =  $riskbisnisdetail->kategori_id;
+                $dtriskdetail->highlight         =  $highlight;
+                $dtriskdetail->tglhighlight      =  $tglhighlight;
+                $dtriskdetail->save();
+            }
+
+
+       
     }
 
     /**

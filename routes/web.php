@@ -56,6 +56,9 @@ Route::group(['middleware'=>['role:verifikatur']], function () {
     Route::post('/batalhighlight','RiskbisnisverifController@batalhighlight');
     Route::post('/kirimkomentar','RiskbisnisverifController@kirimkomentar');
     Route::get('/kpiverifikatur', 'RiskbisnisverifController@kpi')->name('kpiverifikatur.index');
+    Route::get('/userkeyperson', 'UserkeypersonController@index')->name('userkeyperson.index');
+    Route::get('/bukaotorisasi/{nik}','UserkeypersonController@bukaotorisasi');
+    Route::get('/tutupotorisasi/{nik}','UserkeypersonController@tutupotorisasi');
     
 });
 Route::group(['middleware'=>['role:pimpinanunit']], function () {
@@ -92,5 +95,7 @@ Route::group(['middleware'=>['role:superadmin']], function () {
     Route::get('/addperiodbisnis','PeriodebisnisController@create');
     Route::post('/storeperiodbisnis','PeriodebisnisController@store');
     Route::get('/editperiodbisnis/{id?}','PeriodebisnisController@edit');
-    
+    Route::get('/aktifperiode/{id?}','PeriodebisnisController@aktifperiode');
+    //users
+    Route::get('/users', 'UsersController@index')->name('users.index');
 });

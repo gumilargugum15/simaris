@@ -22,20 +22,17 @@
     <div class="box">
         <div class="box-header">
             @include('layouts.flash')
-            @if($dataoto->status=='1')
-            <a class="btn btn-primary" href="{{ url('addkpikeyperson') }}"><i class="fa  fa-plus" title=""> KPI Baru</i></a>
-            @endif
+            {{-- <a class="btn btn-primary" href="{{ url('addusers') }}"><i class="fa  fa-plus" title=""> User baru</i></a> --}}
         </div>
         <div class="box-body">
-            <table id="tblkpi" class="table table-bordered table-striped">
+            <table id="tbluser" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    {{-- <th>Periode</th> --}}
                     <th>No</th>
-                    <th>Kode</th>
+                    <th>Nik</th>
                     <th>Nama</th>
+                    <th>Email</th>
                     <th>Unit</th>
-                    <th>Tahun</th>
                     <th width="10%">Aksi</th>
                   </tr>
                 </thead>
@@ -43,22 +40,23 @@
                     @php
                     $no=0;
                     @endphp
-                  @foreach($kpi as $data)
+                  @foreach($user as $data)
                   @php
                   $no++;
                   @endphp
                   <tr>
                     <td>{{$no}}</td>
-                    <td>{{$data->kode}}</td>
-                    <td>{{$data->nama}}</td>
+                    <td>{{$data->nik}}</td>
+                    <td>{{$data->name}}</td>
+                    <td>{{$data->email}}</td>
                     <td>{{$data->namaunit}}</td>
-                    <td>{{$data->tahun}}</td>
-                    <td>
-                      @if($dataoto->status=='1')
-                      <a href="{{url('editkpikeyperson',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                      <a href="{{url('destroykpikeyperson',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
+                    <td align="center">
+                      @if($data->aktif=='1')
+                      <a class="btn btn-success" onclick="tutupotorisasi({{$data->id}});"><i class="fa fa-power-off" title="Tutup otorisasi"></i></a>
+                      @else
+                      <a class="btn btn-danger" onclick="bukaotorisasi({{$data->id}});"><i class="fa fa-power-off" title="Buka otorisasi"></i></a>
                       @endif
-                    </td>
+                  </td>
                   </tr>
                   @endforeach
                 </tbody>
@@ -67,8 +65,17 @@
     </div>
     <script>
       $(function () {
-        $('#tblkpi').DataTable()
+        $('#tbluser').DataTable()
       })
+      function aktifperiode(id){
+        $.ajax({
+                url: "{{ url('aktifperiode') }}"+id,
+                method: 'post',
+                success: function (data) {
+                    location.reload();
+                }
+            });
+      }
     </script>
 </section>
 @endsection
