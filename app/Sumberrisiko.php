@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Sumberrisiko extends Model
 {
@@ -10,5 +11,9 @@ class Sumberrisiko extends Model
     public function risikobisnisdetail(){
         return $this->belongsTo('App\Risikobisnisdetail', 'risikobisnisdetail_id');
     }
+
+    // public function getFileAttribute($value) {
+    //     return Storage::disk('local')->url($value);
+    // }
     
 }

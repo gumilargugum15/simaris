@@ -18,7 +18,7 @@
 <div class="box">
         <div class="box-body">
                 <div class="box box-warning">
-                        <form action="{{ url('updatekpikeyperson') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ url('update') }}" method="post" enctype="multipart/form-data">
                         <input name="_token" value="{{ csrf_token() }}" type="hidden">
                         <input type="hidden" name="idriskdetail" id="idriskdetail" value="{{ $riskdetail->id }}">
                         <div class="form-group">
@@ -128,24 +128,38 @@
 
 </div>
 @include('resiko/resikobisnis/modal/dampakrisiko')
+@include('resiko/resikobisnis/modal/preview')
 {{-- @include('resiko/resikobisnis/modal/addsumberrisikobisnis') --}}
 <script>
     var sumberrisiko = <?=$sumberrisiko?>;
-    console.log(sumberrisiko[0].namasumber);
+    console.log(sumberrisiko);
     var no=$('#rowsumber').val();
     for (i = 0; i < sumberrisiko.length; i++) {
       $("#sumberresikobisnis tbody").append(`<tr id="input_${no}">
-        <td><textarea class="form-control" rows="2" name="sumberrisiko[]" id="sumberrisiko[]">${sumberrisiko[0].namasumber}</textarea></td>
-        <td><textarea class="form-control" rows="2" name="mitigasi[]" id="mitigasi[]">${sumberrisiko[0].mitigasi}</textarea></td>
-        <td><input  class="form-control" type="number" name="biaya[]" id="biaya[]" value="${sumberrisiko[0].biaya}"></td>
-        <td><input size="5" type="date" class="form-control" id="startdate[]" name="startdate[]" placeholder="yyyy-m-d" value="${sumberrisiko[0].start_date}"></td>
-        <td><input size="5" type="date" class="form-control" id="enddate[]" name="enddate[]" placeholder="yyyy-m-d" value="${sumberrisiko[0].end_date}"></td>
-        <td><textarea class="form-control" rows="2" name="pic[]" id="pic[]">${sumberrisiko[0].pic}</textarea></td>
-        <td><textarea class="form-control" rows="2" name="status[]" id="status[]">${sumberrisiko[0].statussumber}</textarea></td>
+        <td><textarea class="form-control" rows="2" name="sumberrisiko[]" id="sumberrisiko[]">${sumberrisiko[i].namasumber}</textarea></td>
+        <td><textarea class="form-control" rows="2" name="mitigasi[]" id="mitigasi[]">${sumberrisiko[i].mitigasi}</textarea></td>
+        <td><input  class="form-control" type="number" name="biaya[]" id="biaya[]" value="${sumberrisiko[i].biaya}"></td>
+        <td><input size="5" type="date" class="form-control" id="startdate[]" name="startdate[]" placeholder="yyyy-m-d" value="${sumberrisiko[i].start_date}"></td>
+        <td><input size="5" type="date" class="form-control" id="enddate[]" name="enddate[]" placeholder="yyyy-m-d" value="${sumberrisiko[i].end_date}"></td>
+        <td><textarea class="form-control" rows="2" name="pic[]" id="pic[]">${sumberrisiko[i].pic}</textarea></td>
+        <td><textarea class="form-control" rows="2" name="status[]" id="status[]">${sumberrisiko[i].statussumber}</textarea></td>
         <td><button type="button" class="btn btn-warning" onclick="hapustempsumber(${no})"><i class="fa fa-trash"></i></button></td>
-        </tr><tr id="file_${no}"><td colspan="8"><input type="file" id="gambar[]" name="gambar[]" value="0"></td></tr>`);
+        </tr><tr id="file_${no}"><td colspan="8">Ganti lampiran dokumen mitigasi :<br><a onclick="isifile(\'${sumberrisiko[i].file}\')"><i class="fa fa-2x fa-file-picture-o"></i></a><input type="file" id="gambar[]" name="gambar[]" value="0">
+        </td></tr>`);
         no = (no-1) + 2;
         $('#rowsumber').val(no);
+    }
+    function isifile(file){
+     console.log(file);
+     var pecah = file.split("/");
+     var isi =  "storage/"+pecah[1];
+     
+        $("#preview").html('<object width="100%" height="100%" data="'+file+'"></object>');
+        $('#modal-preview').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        
     }
         function pilihdampak(krinama,dampakid,katid,level){
             var peluangid = $("#peluang").val();

@@ -73,7 +73,23 @@ class ResikobisnisController extends Controller
             
 
         }
-        $kpi = Kpi::tahunAktif()->get();
+        $status = null;
+        $cekkpinull = Kpi::tahunAktif($periodeaktif->tahun)
+        ->byUnit($unitid)
+        ->byKwartal($periodeaktif->nama)
+        ->byStatus($status)
+        ->get();
+        $jmlkpinull = count($cekkpinull);
+
+        $cekkpiall = Kpi::tahunAktif($periodeaktif->tahun)
+        ->byUnit($unitid)
+        ->byKwartal($periodeaktif->nama)
+        ->get();
+        $jmlkpiall = count($cekkpiall);
+        //dd($periodeaktif->tahun."-".$unitid."-".$periodeaktif->nama);
+        // dd($jmlkpinull."-".$jmlkpiall);
+        $kpi = Kpi::tahunAktif($periodeaktif->tahun)
+        ->get();
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();
         $dampak = Dampak::orderBy('level', 'DESC')->get();
@@ -99,7 +115,7 @@ class ResikobisnisController extends Controller
         $hasildampak = $hsl;
 
         return view('resiko.resikobisnis.index', compact(
-            'risikobisnis', 'periodeaktif', 'kpi','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser','nikuser'
+            'risikobisnis', 'periodeaktif', 'kpi','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser','nikuser','jmlkpinull','jmlkpiall'
         ));
     }
     public function getkriteria($dampakid,$kategoriid,$level){
@@ -163,7 +179,7 @@ class ResikobisnisController extends Controller
         $unitid = $user->unit_id;
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         $unituser = unitkerja::where('objectabbr',$unitid)->first();
-        $kpi = Kpi::tahunAktif()->byUnit($unitid)->get();
+        $kpi = Kpi::tahunAktif($periodeaktif->tahun)->byUnit($unitid)->get();
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();
         $dampak = Dampak::orderBy('level', 'DESC')->get();
@@ -256,6 +272,7 @@ class ResikobisnisController extends Controller
         $datariskdetail->creator            = $user->nik;
         $datariskdetail->save();
         if($datariskdetail){
+            $updatekpi = Kpi::where('id',$kpi)->update(['status'=>'1']);
             if($risikobisnis->statusrisiko_id=='0'){
                 $risikobisnis = Risikobisnis::where('id',$risikobisnis->id)->update(['statusrisiko_id' => '1']);
             }
@@ -263,8 +280,9 @@ class ResikobisnisController extends Controller
             if($sumberrisiko!=null){
                 foreach($sumberrisiko as $key =>$value){
                     $path ='';
+                    $pathurl ='';
                     if(isset($gambar[$key])){
-                        $path = $gambar[$key]->store('public');
+                        $path = $gambar[$key]->store('risikobisnis');
                     }
                     
                     $datasumber = new Sumberrisiko();
@@ -327,6 +345,7 @@ class ResikobisnisController extends Controller
             $datariskdetail->creator            = $user->nik;
             $datariskdetail->save();
             if($datariskdetail){
+            $updatekpi = Kpi::where('id',$kpi)->update(['status'=>'1']);
             if($risikobisnis->statusrisiko_id=='0'){
                 $risikobisnis = Risikobisnis::where('id',$risikobisnis->id)->update(['statusrisiko_id' => '1']);
             }
@@ -335,8 +354,9 @@ class ResikobisnisController extends Controller
                 foreach($sumberrisiko as $key =>$value){
 
                     $path ='';
+                    $pathurl='';
                     if(isset($gambar[$key])){
-                        $path = $gambar[$key]->store('public');
+                        $path = $gambar[$key]->store('risikobisnis');
                     }
 
                     $datasumber = new Sumberrisiko();
@@ -452,14 +472,19 @@ class ResikobisnisController extends Controller
         $unitid = $user->unit_id;
         $riskdetail = Risikobisnisdetail::where('id',$id)->first();
         $riskbisnis = Risikobisnis::where('id',$riskdetail->risikobisnis_id)->first();
-        $kpi = Kpi::tahunAktif()->byUnit($unitid)->get();
+        $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
+        $kpi = Kpi::tahunAktif($periodeaktif->tahun)->byUnit($unitid)->get();
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();
         $kriteria = Kriteria::where('dampak_id',$riskdetail->dampak_id)->where('kategori_id',$riskdetail->kategori_id)->first();
         $matrik = Matrikrisiko::where('dampak_id',$riskdetail->dampak_id)->where('peluang_id',$riskdetail->peluang_id)->first();
         // dd($matrik);
         $sumberrisiko = Sumberrisiko::where('risikobisnisdetail_id',$riskdetail->id)->get();
-        
+        $sumberrisiko = $sumberrisiko->map(function($item, $key){
+            $item->file = Storage::url($item->file);
+            return $item;
+        });
+        //dd($sumberrisiko);
         $dampak = Dampak::orderBy('level', 'DESC')->get();
         $kategori = Kategori::get();
         $hsl='';
@@ -517,6 +542,8 @@ class ResikobisnisController extends Controller
         $status         = $request->status;
         $indikator      = $request->indikator;
         $nilaiambang    = $request->nilaiambang;
+        $gambar         = $request->gambar;
+        // dd($gambar);
 
         $dataupdate = ['kpi_id'=>$kpi,'risiko'=>$risiko,'akibat'=>$akibat,'klasifikasi_id'=>$klasifikasi,
         'peluang_id'=>$peluang,'dampak_id'=>$iddampak,'warna'=>$warna,'indikator'=>$indikator,'nilaiambang'=>$nilaiambang,
@@ -529,6 +556,9 @@ class ResikobisnisController extends Controller
             Sumberrisiko::where('risikobisnisdetail_id',$idriskdetail)->delete();
             if($sumberrisiko!=null){
                 foreach($sumberrisiko as $key =>$value){
+                    if(isset($gambar[$key])){
+                        $path = $gambar[$key]->store('risikobisnis');
+                    }
                     $datasumber = new Sumberrisiko();
                     $datasumber->risikobisnisdetail_id    = $idriskdetail;
                     $datasumber->namasumber               = $value;
@@ -538,6 +568,7 @@ class ResikobisnisController extends Controller
                     $datasumber->end_date                 = $enddate[$key];
                     $datasumber->pic                      = $pic[$key];
                     $datasumber->statussumber             = $status[$key];
+                    $datasumber->file                     = $path;
                     $datasumber->save();
                 }
             }

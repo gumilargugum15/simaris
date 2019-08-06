@@ -131,11 +131,14 @@
               
               </td>
             <td>
+              
               @if(isset($risikobisnis->statusrisiko_id))
               @if($risikobisnis->statusrisiko_id=='1')
-              <a href="#"
+                @if($jmlkpinull<1)
+                <a href="#"
                 class="btn btn-small btn-primary" onclick="validriskbisnis({{ $risikobisnis->id }})"><i class="fa fa-check-square"></i> Validasi</a>
-              @elseif($risikobisnis->statusrisiko_id=='0')
+                @endif
+                @elseif($risikobisnis->statusrisiko_id=='0')
               <a href="#"
                 class="btn btn-small btn-danger">Belum input risiko...</a>
               @elseif($risikobisnis->statusrisiko_id > '2')

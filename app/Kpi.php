@@ -16,12 +16,20 @@ class Kpi extends Model
         return $this->belongsTo('App\Unitkerja', 'unit_id');
     }
     
-    public function scopeTahunAktif($query){
-        $tahunaktif=date("Y");
-        return $query->where('tahun',$tahunaktif);
+    public function scopeTahunAktif($query,$t){
+       // $tahunaktif=date("Y");
+        return $query->where('tahun',$t);
     }
     public function scopeByUnit($query, $u)
     {
         return $query->where('unit_id', $u);
+    }
+    public function scopeByKwartal($query, $u)
+    {
+        return $query->where('kwartal', $u);
+    }
+    public function scopeByStatus($query, $u)
+    {
+        return $query->where('status', $u);
     }
 }

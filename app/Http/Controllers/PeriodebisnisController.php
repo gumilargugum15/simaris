@@ -107,11 +107,16 @@ class PeriodebisnisController extends Controller
         return view('administrator.periodebisnis.editperiodebisnis', compact('periodebisnis','startenddate'));
     }
     public function aktifperiode(Request $request,$id){
-        $update = Perioderisikobisnis::where('aktif','1')->update(['aktif' => '0']);
+        $update  = Perioderisikobisnis::where('aktif','1')->update(['aktif' => '2']);
         $periode = Perioderisikobisnis::where('id',$id)->update(['aktif' => '1']);
+        
+        
         $periodebisnis = Perioderisikobisnis::where('id',$id)->first();
-        $kpi = Kpi::get();
-        $risikobisnis     = Risikobisnis::get();
+        
+        $kpi = Kpi::where('tahun',$periodebisnis->tahun)->get();
+        
+        $risikobisnis     = Risikobisnis::where('tahun',$periodebisnis->tahun)->get();
+        
         $riskbisnisdetail = Risikobisnisdetail::get();
         
         foreach($kpi as $kpi){
@@ -123,6 +128,7 @@ class PeriodebisnisController extends Controller
             $dtkpi->kwartal  =  $periodebisnis->nama;
             $dtkpi->save();
         }
+        
         foreach($risikobisnis as $risikobisnis){
             $dtrisk = new Risikobisnis();
             $dtrisk->periode             =  $periodebisnis->nama;
@@ -131,7 +137,17 @@ class PeriodebisnisController extends Controller
             $dtrisk->statusrisiko_id     =  $risikobisnis->statusrisiko_id;
             $dtrisk->creator             =  $risikobisnis->creator;
             $dtrisk->save();
+
+            $this->storeriskdetail($dtrisk->id,$riskbisnisdetail);
+
         }
+        
+        $hsl='success';
+        return $hsl;
+       
+    }
+    public function storeriskdetail($riskid,$riskbisnisdetail){
+     
         foreach($riskbisnisdetail as $riskbisnisdetail){
             if($riskbisnisdetail->kaidah=='1'){
                 $kaidah    = $riskbisnisdetail->kaidah;
@@ -148,7 +164,7 @@ class PeriodebisnisController extends Controller
                 $tglhighlight='';
             }
                 $dtriskdetail = new Risikobisnisdetail();
-                $dtriskdetail->risikobisnis_id   =  $riskbisnisdetail->risikobisnis_id;
+                $dtriskdetail->risikobisnis_id   =  $riskid;
                 $dtriskdetail->kpi_id            =  $riskbisnisdetail->kpi_id;
                 $dtriskdetail->risiko            =  $riskbisnisdetail->risiko;
                 $dtriskdetail->akibat            =  $riskbisnisdetail->akibat;
@@ -165,10 +181,7 @@ class PeriodebisnisController extends Controller
                 $dtriskdetail->highlight         =  $highlight;
                 $dtriskdetail->tglhighlight      =  $tglhighlight;
                 $dtriskdetail->save();
-            }
-
-
-       
+        }
     }
 
     /**

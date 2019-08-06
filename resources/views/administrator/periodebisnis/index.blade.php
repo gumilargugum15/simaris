@@ -54,8 +54,11 @@
                     <td align="center">
                         @if($data->aktif=='1')
                         <a class="btn btn-success"><i class="fa fa-check" title="Aktif"></i></a>
+                        @elseif($data->aktif=='2')
+                        <a class="btn btn-default"><i class="fa fa-power-off" title="Tidak aktif"></i></a>
                         @else
-                        <a class="btn btn-danger" onclick="aktifperiode({{$data->id}});"><i class="fa fa-minus" title="Tidak Aktif"></i></a>
+                        <a id="loading" class="btn btn-info" style="display:none;">Sedang memproses...</a>
+                        <a id="btninaktif" class="btn btn-danger" onclick="aktifperiode({{$data->id}});"><i class="fa fa-minus" title="Tidak Aktif"></i></a>
                         @endif
                     </td>
                     <td><a href="{{url('editperiodbisnis',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
@@ -76,8 +79,17 @@
         $.ajax({
                 url: "{{ url('aktifperiode') }}/"+id,
                 method: 'get',
+                beforeSend: function() {
+                $("#loading").show();
+                $("#btninaktif").hide();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status+" : "+thrownError);
+                $("#loading").hide();
+              },
                 success: function (data) {
                     location.reload();
+                    $("#loading").hide();
                 }
             });
       }
