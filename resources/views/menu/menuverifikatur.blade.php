@@ -20,8 +20,8 @@
       </span>
     </a>
     <ul class="treeview-menu">
-      <li><a href="{{ url('kpiverifikatur') }}"><i class="fa fa-circle-o"></i>KPI</a></li>
-      <li><a href="{{ url('periodebisnisverif') }}"><i class="fa fa-circle-o"></i>Periode risiko bisnis</a></li>
+      <li><a href="{{ url('kpi') }}"><i class="fa fa-circle-o"></i>KPI</a></li>
+      <li><a href="{{ url('periodebisnis') }}"><i class="fa fa-circle-o"></i>Periode risiko bisnis</a></li>
     </ul>
   </li>
 <li class="treeview">

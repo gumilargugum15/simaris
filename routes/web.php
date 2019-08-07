@@ -24,6 +24,24 @@ Route::group(['middleware'=>['role:keyperson|verifikatur|pimpinanunit|managergcg
     
     
 });
+Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
+    //periodebisnis
+    Route::get('/periodebisnis', 'PeriodebisnisController@index')->name('periodebisnis.index');
+    Route::get('/addperiodbisnis','PeriodebisnisController@create');
+    Route::post('/storeperiodbisnis','PeriodebisnisController@store');
+    Route::get('/editperiodbisnis/{id?}','PeriodebisnisController@edit');
+    Route::get('/aktifperiode/{id?}','PeriodebisnisController@aktifperiode');
+    //kpi
+    Route::get('/kpi', 'KpiController@index')->name('kpi.index');
+    Route::get('/addkpi','KpiController@create');
+    Route::post('/storekpi','KpiController@store');
+    Route::post('/importkpi','KpiController@import');
+    Route::get('/editkpi/{id?}','KpiController@edit');
+    Route::post('/updatekpi','KpiController@update');
+    Route::get('/destroykpi/{id?}','KpiController@destroy');
+    
+    
+});
 
     Route::group(['middleware'=>['role:keyperson']], function () {
     Route::get('/resikobisnis', 'ResikobisnisController@index')->name('resikobisnis.index');
@@ -60,6 +78,7 @@ Route::group(['middleware'=>['role:verifikatur']], function () {
     Route::get('/bukaotorisasi/{nik}','UserkeypersonController@bukaotorisasi');
     Route::get('/tutupotorisasi/{nik}','UserkeypersonController@tutupotorisasi');
     
+    
 });
 Route::group(['middleware'=>['role:pimpinanunit']], function () {
     Route::get('/resikobisnispimpinan', 'RiskbisnispimpinanController@index')->name('resikobisnispimpinan.index');
@@ -76,26 +95,14 @@ Route::group(['middleware'=>['role:managergcg']], function () {
     
 });
 Route::group(['middleware'=>['role:superadmin']], function () {
-    //kpi
-    Route::get('/kpi', 'KpiController@index')->name('kpi.index');
-    Route::get('/addkpi','KpiController@create');
-    Route::post('/storekpi','KpiController@store');
-    Route::post('/importkpi','KpiController@import');
-    Route::get('/editkpi/{id?}','KpiController@edit');
-    Route::post('/updatekpi','KpiController@update');
-    Route::get('/destroykpi/{id?}','KpiController@destroy');
+    
     //unit
     Route::get('/unit', 'UnitController@index')->name('unit.index');
     Route::get('/updateunit','UnitController@updateunit');
     Route::get('/addunit','UnitController@create');
     Route::post('/storeunit','UnitController@store');
     Route::get('/destroyunit/{id?}','UnitController@destroy');
-    //periodebisnis
-    Route::get('/periodebisnis', 'PeriodebisnisController@index')->name('periodebisnis.index');
-    Route::get('/addperiodbisnis','PeriodebisnisController@create');
-    Route::post('/storeperiodbisnis','PeriodebisnisController@store');
-    Route::get('/editperiodbisnis/{id?}','PeriodebisnisController@edit');
-    Route::get('/aktifperiode/{id?}','PeriodebisnisController@aktifperiode');
+    
     //users
     Route::get('/users', 'UsersController@index')->name('users.index');
 });

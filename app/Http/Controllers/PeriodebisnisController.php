@@ -107,17 +107,20 @@ class PeriodebisnisController extends Controller
         return view('administrator.periodebisnis.editperiodebisnis', compact('periodebisnis','startenddate'));
     }
     public function aktifperiode(Request $request,$id){
+        $periodebisnis = Perioderisikobisnis::where('id',$id)->first();
+        
+        $periodesebelum = Perioderisikobisnis::where('aktif','1')->where('tahun',$periodebisnis->tahun)->first();
+        // dd($periodesebelum);
+        $kwartalsebelum = $periodesebelum->nama;
+        //dd($kwartalsebelum);
+        $kpi = Kpi::where('tahun',$periodebisnis->tahun)->where('kwartal',$kwartalsebelum)->get();
+        $risikobisnis     = Risikobisnis::where('tahun',$periodebisnis->tahun)->where('periode',$kwartalsebelum)->get();
+        // dd($risikobisnis);
         $update  = Perioderisikobisnis::where('aktif','1')->update(['aktif' => '2']);
         $periode = Perioderisikobisnis::where('id',$id)->update(['aktif' => '1']);
         
         
-        $periodebisnis = Perioderisikobisnis::where('id',$id)->first();
-        
-        $kpi = Kpi::where('tahun',$periodebisnis->tahun)->get();
-        
-        $risikobisnis     = Risikobisnis::where('tahun',$periodebisnis->tahun)->get();
-        
-        $riskbisnisdetail = Risikobisnisdetail::get();
+        // $riskbisnisdetail = Risikobisnisdetail::get();
         
         foreach($kpi as $kpi){
             $dtkpi = new Kpi();
@@ -138,7 +141,7 @@ class PeriodebisnisController extends Controller
             $dtrisk->creator             =  $risikobisnis->creator;
             $dtrisk->save();
 
-            $this->storeriskdetail($dtrisk->id,$riskbisnisdetail);
+            // $this->storeriskdetail($dtrisk->id,$riskbisnisdetail);
 
         }
         
