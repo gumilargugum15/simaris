@@ -175,7 +175,8 @@ class RiskbisnisverifController extends Controller
         $user = Auth::user();
         $unitid = $user->unit_id;
         $judul = "KPI";
-        $kpi =Kpi::tahunAktif()
+        $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
+        $kpi =Kpi::tahunAktif($periodeaktif->tahun)
         ->join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
         ->select('kpi.*', 'unitkerja.nama as namaunit')
         // ->byUnit($unitid)
