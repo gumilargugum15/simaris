@@ -57,7 +57,8 @@ class RiskbisnispimpinanController extends Controller
             
 
         }
-        $kpi = Kpi::tahunAktif()->get();
+
+        $kpi = Kpi::tahunAktif($periodeaktif->tahun)->get();
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();
         $dampak = Dampak::orderBy('level', 'DESC')->get();

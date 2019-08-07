@@ -619,10 +619,10 @@ class ResikobisnisController extends Controller
     public function kpi(Request $request){
         $user = Auth::user();
         $dataoto = Otorisasi::where('nik',$user->nik)->first();
-        
+        $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         $unitid = $user->unit_id;
         $judul = "KPI";
-        $kpi =Kpi::tahunAktif()
+        $kpi =Kpi::tahunAktif($periodeaktif->tahun)
         ->join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
         ->select('kpi.*', 'unitkerja.nama as namaunit')
         ->byUnit($unitid)

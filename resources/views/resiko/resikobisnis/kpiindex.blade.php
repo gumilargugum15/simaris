@@ -22,8 +22,10 @@
     <div class="box">
         <div class="box-header">
             @include('layouts.flash')
+            @if(isset($dataoto))
             @if($dataoto->status=='1')
             <a class="btn btn-primary" href="{{ url('addkpikeyperson') }}"><i class="fa  fa-plus" title=""> KPI Baru</i></a>
+            @endif
             @endif
         </div>
         <div class="box-body">
@@ -54,9 +56,11 @@
                     <td>{{$data->namaunit}}</td>
                     <td>{{$data->tahun}}</td>
                     <td>
+                      @if(isset($dataoto))
                       @if($dataoto->status=='1')
                       <a href="{{url('editkpikeyperson',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                      <a href="{{url('destroykpikeyperson',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
+                      {{-- <a href="{{url('destroykpikeyperson',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a> --}}
+                      @endif
                       @endif
                     </td>
                   </tr>
