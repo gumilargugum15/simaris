@@ -133,6 +133,7 @@ class PeriodebisnisController extends Controller
         }
         
         foreach($risikobisnis as $risikobisnis){
+            
             $dtrisk = new Risikobisnis();
             $dtrisk->periode             =  $periodebisnis->nama;
             $dtrisk->tahun               =  $risikobisnis->tahun;
