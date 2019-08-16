@@ -18,6 +18,17 @@
 <div class="box">
         <div class="box-body">
                 <div class="box box-warning">
+                        @if (count($errors) > 0)
+                        <div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
                         <form action="{{ url('update') }}" method="post" enctype="multipart/form-data">
                         <input name="_token" value="{{ csrf_token() }}" type="hidden">
                         <input type="hidden" name="idriskdetail" id="idriskdetail" value="{{ $riskdetail->id }}">
@@ -26,10 +37,10 @@
                             <label>Periode/tahun</label>
                             <div class="row">
                             <div class="col-xs-8">
-                            <input type="text" class="form-control" name="periode" id="periode" value="{{ $riskbisnis->periode }}" placeholder="Periode ..." readonly>
+                            <input type="text" class="form-control" name="periode" id="periode" value="{{ $riskbisnis->periode }}" placeholder="Periode ..." readonly required>
                             </div>
                             <div class="col-xs-4">
-                            <input type="text" class="form-control" name="tahun" id="tahun" value="{{ $riskbisnis->tahun }}" placeholder="Tahun ..." readonly>
+                            <input type="text" class="form-control" name="tahun" id="tahun" value="{{ $riskbisnis->tahun }}" placeholder="Tahun ..." readonly required>
                             </div>
                             </div>
                         </div>
@@ -48,15 +59,15 @@
                         </div>
                         <div class="form-group">
                         <label>Risiko</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="risiko" id="risiko">{{$riskdetail->risiko}}</textarea>
+                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="risiko" id="risiko" required>{{$riskdetail->risiko}}</textarea>
                         </div>
                         <div class="form-group">
                         <label>Akibat</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="akibat" id="akibat">{{$riskdetail->akibat}}</textarea>
+                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="akibat" id="akibat" required>{{$riskdetail->akibat}}</textarea>
                         </div>
                         <div class="form-group">
                         <label>Klasifikasi</label>
-                        <select class="form-control select2" style="width: 100%;" name="klasifikasi" id="klasifikasi">
+                        <select class="form-control select2" style="width: 100%;" name="klasifikasi" id="klasifikasi" required>
                             @foreach ($klasifikasi as $rowklasifikasi)
                             @if($riskdetail->klasifikasi_id==$rowklasifikasi->id)
                             <option value="{{$rowklasifikasi->id}}" selected>{{$rowklasifikasi->nama}}</option>
@@ -68,7 +79,7 @@
                         </div>
                         <div class="form-group">
                         <label>Peluang</label>
-                        <select class="form-control select2" style="width: 100%;" name="peluang" id="peluang">
+                        <select class="form-control select2" style="width: 100%;" name="peluang" id="peluang" required>
                             @foreach ($peluang as $rowpeluang)
                             @if($riskdetail->peluang_id==$rowpeluang->id)
                             <option value="{{$rowpeluang->id}}" selected>{{$rowpeluang->level}}-{{$rowpeluang->nama}}-{{$rowpeluang->kriteria}}</option>
@@ -113,11 +124,11 @@
                             </div>
                             <div class="form-group">
                             <label>Indikator</label>
-                            <textarea class="form-control" rows="3" placeholder="Enter ..." name="indikator" id="indikator">{{$riskdetail->indikator}}</textarea>
+                            <textarea class="form-control" rows="3" placeholder="Enter ..." name="indikator" id="indikator" required>{{$riskdetail->indikator}}</textarea>
                             </div>
                             <div class="form-group">
                             <label>Nilai ambang</label>
-                            <input type="text" class="form-control" name="nilaiambang" id="nilaiambang" value="{{$riskdetail->nilaiambang}}">
+                            <input type="text" class="form-control" name="nilaiambang" id="nilaiambang" value="{{$riskdetail->nilaiambang}}" required>
                             </div>
                             <a type="button" href="{{ url('resikobisnis') }}" class="btn btn-default pull-left">Batal</a>
                     

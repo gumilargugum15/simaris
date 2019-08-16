@@ -61,6 +61,7 @@ function pilihdampak(krinama,dampakid,katid,level){
         }
     
   }
+  
 </script>
 <section class="content-header">
 <h1>
@@ -76,8 +77,20 @@ function pilihdampak(krinama,dampakid,katid,level){
 <div class="box">
         <div class="box-body">
                 <div class="box box-warning">
+                    @if (count($errors) > 0)
+                   
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                         <form action="{{ url('store') }}" method="post" enctype="multipart/form-data">
-                            
+                        
                         <input name="_token" value="{{ csrf_token() }}" type="hidden">
                         <div class="form-group">
                 
@@ -104,11 +117,11 @@ function pilihdampak(krinama,dampakid,katid,level){
                         </div>
                         <div class="form-group">
                         <label>Risiko</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="risiko" id="risiko" required></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="risiko" id="risiko" required>{{ old('risiko') }}</textarea>
                         </div>
                         <div class="form-group">
                         <label>Akibat</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="akibat" id="akibat" required></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="akibat" id="akibat" required>{{ old('akibat') }}</textarea>
                         </div>
                         <div class="form-group">
                         <label>Klasifikasi</label>
@@ -129,13 +142,13 @@ function pilihdampak(krinama,dampakid,katid,level){
                         <div class="form-group">
                         
                         <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-dampakrisiko"><i class="fa fa-search (alias)" title="">&nbsp;Dampak</i></a><br><br>
-                        <input type="hidden" class="form-control" name="iddampak" id="iddampak" readonly>
-                        <input type="hidden" class="form-control" name="idkategori" id="idkategori" readonly>
-                        <input type="text" class="form-control" name="dampak" id="dampak" placeholder="Dampak ..." readonly required>
+                        <input type="hidden" class="form-control" name="iddampak" id="iddampak" value="{{ old('iddampak') }}" readonly>
+                        <input type="hidden" class="form-control" name="idkategori" id="idkategori" value="{{ old('idkategori') }}"  readonly>
+                        <input type="text" class="form-control" name="dampak" id="dampak" value="{{ old('dampak') }}" placeholder="Dampak ..." readonly required>
                         </div>
                         <div class="form-group">
                         <label>Warna</label>
-                        <input type="hidden" class="form-control" name="warna" id="warna" value="Hijau" readonly>
+                        <input type="hidden" class="form-control" name="warna" id="warna" value="{{ old('warna') }}"  readonly>
                         <div id="buttonwarna"></div>
                         </div>
                         <div class="form-group">
@@ -164,14 +177,15 @@ function pilihdampak(krinama,dampakid,katid,level){
                         </div>
                     <div class="form-group">
                         <label>Indikator</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="indikator" id="indikator" required></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="indikator" id="indikator" required>{{ old('indikator') }}</textarea>
                     </div>
                     <div class="form-group">
                     <label>Nilai ambang</label>
-                    <input type="text" class="form-control" name="nilaiambang" id="nilaiambang" required>
+                    <input type="text" class="form-control" name="nilaiambang" id="nilaiambang" value="{{ old('nilaiambang') }}" required>
                     </div>
                     <a type="button" href="{{ url('resikobisnis') }}" class="btn btn-default pull-left">Batal</a>
                     <button type="submit" class="btn btn-primary pull-right">Simpan</button>
+                    
                 </form>
                 </div>
         </div>

@@ -113,7 +113,7 @@ class ResikobisnisController extends Controller
         }
         $hsl.='</tr></table>';
         $hasildampak = $hsl;
-
+        // dd($risikobisnis->risikobisnisdetail);
         return view('resiko.resikobisnis.index', compact(
             'risikobisnis', 'periodeaktif', 'kpi','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser','nikuser','jmlkpinull','jmlkpiall'
         ));
@@ -217,6 +217,16 @@ class ResikobisnisController extends Controller
         // if($request->gambar!=null){
         //     $path = $request->gambar->store('');
         // }
+        $this->validate($request,[
+            'sumberrisiko' => 'required',
+            'mitigasi' => 'required',
+            'biaya' => 'required',
+            'startdate' => 'required',
+            'enddate' => 'required',
+            'pic' => 'required',
+            'status' => 'required',
+            'gambar' => 'required'
+         ]);
 
         $unitid         = $request->unitid;
         $periode        = $request->periode;
@@ -520,6 +530,15 @@ class ResikobisnisController extends Controller
      */
     public function update(Request $request)
     {
+        $this->validate($request,[
+            'sumberrisiko' => 'required',
+            'mitigasi' => 'required',
+            'biaya' => 'required',
+            'startdate' => 'required',
+            'enddate' => 'required',
+            'pic' => 'required',
+            'status' => 'required'
+         ]);
         $user = Auth::user();
         //dd($user->roles[0]->name);
         $idriskdetail   = $request->idriskdetail;

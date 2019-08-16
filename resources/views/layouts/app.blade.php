@@ -40,7 +40,11 @@
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-</head>
+        <style>
+         tr.lapriskbisnis {border: 1px solid #ddd;padding: 10px;font-size: 9px;text-align: center;}
+          table#lapriskbisnis {border-collapse: collapse;padding:2px;}table, td, th {border: 1px solid black;font-size: 9px;padding:2px;}
+          </style>
+      </head>
 <body class="hold-transition skin-blue sidebar-mini fixed">
  
 <div class="wrapper">

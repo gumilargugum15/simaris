@@ -77,7 +77,8 @@ Route::group(['middleware'=>['role:verifikatur']], function () {
     Route::get('/userkeyperson', 'UserkeypersonController@index')->name('userkeyperson.index');
     Route::get('/bukaotorisasi/{nik}','UserkeypersonController@bukaotorisasi');
     Route::get('/tutupotorisasi/{nik}','UserkeypersonController@tutupotorisasi');
-    
+    Route::get('/laprisikobisnis', 'LaprisikobisnisController@index');
+    Route::get('/export', 'LaprisikobisnisController@export');
     
 });
 Route::group(['middleware'=>['role:pimpinanunit']], function () {
