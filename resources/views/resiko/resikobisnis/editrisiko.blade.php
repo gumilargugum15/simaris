@@ -107,6 +107,7 @@
                                 <input type="hidden" id="rowsumber" value="1">
                                 <thead>
                                 <tr>
+                                <th></th>
                                 <th>Sumber risiko</th>
                                 <th>Mitigasi</th>
                                 <th>Biaya</th>
@@ -147,6 +148,7 @@
     var no=$('#rowsumber').val();
     for (i = 0; i < sumberrisiko.length; i++) {
       $("#sumberresikobisnis tbody").append(`<tr id="input_${no}">
+        <td><input type="hidden" name="sumberid[]" value="${sumberrisiko[i].id}"></td>
         <td><textarea class="form-control" rows="2" name="sumberrisiko[]" id="sumberrisiko[]">${sumberrisiko[i].namasumber}</textarea></td>
         <td><textarea class="form-control" rows="2" name="mitigasi[]" id="mitigasi[]">${sumberrisiko[i].mitigasi}</textarea></td>
         <td><input  class="form-control" type="number" name="biaya[]" id="biaya[]" value="${sumberrisiko[i].biaya}"></td>
@@ -155,7 +157,7 @@
         <td><textarea class="form-control" rows="2" name="pic[]" id="pic[]">${sumberrisiko[i].pic}</textarea></td>
         <td><textarea class="form-control" rows="2" name="status[]" id="status[]">${sumberrisiko[i].statussumber}</textarea></td>
         <td><button type="button" class="btn btn-warning" onclick="hapustempsumber(${no})"><i class="fa fa-trash"></i></button></td>
-        </tr><tr id="file_${no}"><td colspan="8">Ganti lampiran dokumen mitigasi :<br><a onclick="isifile(\'${sumberrisiko[i].file}\')"><i class="fa fa-2x fa-file-picture-o"></i></a><input type="file" id="gambar[]" name="gambar[]" value="0">
+        </tr><tr id="file_${no}"><td><input type="hidden" name="gambarfile[]" value="${sumberrisiko[i].filex}"></td><td colspan="8">Lampiran dokumen mitigasi :<br><a onclick="isifile(\'${sumberrisiko[i].file}\')"><i class="fa fa-2x fa-file-picture-o"></i></a><input type="file" id="gambar[]" name="gambar[]" value="0">
         </td></tr>`);
         no = (no-1) + 2;
         $('#rowsumber').val(no);
@@ -203,7 +205,7 @@
     var no=$('#rowsumber').val();
             $('#sumberresikobisnis tbody').append(`
                 <tr id="input_${no}">
-                
+                <td><input type="hidden" name="sumberid[]" ></td>
                 <td><textarea class="form-control" rows="2" name="sumberrisiko[]" id="sumberrisiko[]" required></textarea></td>
                 <td><textarea class="form-control" rows="2" name="mitigasi[]" id="mitigasi[]" required></textarea></td>
                 <td><input  class="form-control" type="number" name="biaya[]" id="biaya[]" required></td>
@@ -216,7 +218,7 @@
                 
                 </td>
                 </tr>
-                <tr id="file_${no}"><td colspan="8"><input type="file" id="gambar[]" name="gambar[]" value="0"></td></tr>
+                <tr id="file_${no}"><td></td><td colspan="8">Lampiran dokumen mitigasi :<br><input type="file" id="gambar[]" name="gambar[]" value="0"></td></tr>
                     `);
                     no = (no-1) + 2;
                     $('#rowsumber').val(no);

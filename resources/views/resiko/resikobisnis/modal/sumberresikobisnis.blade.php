@@ -32,7 +32,13 @@ function sumberrisiko(id,risiko) {
           "className": 'options',
           "data": "file",
           "render": function(data, type, full, meta){
-            return '<a href="#" onclick="isifile(\'' +data+ '\')"><i class="fa fa-2x fa-file-picture-o"></i></a>'; 
+           
+            if(data !=''){
+              return '<a href="#" onclick="isifile(\'' +data+ '\')"><i class="fa fa-2x fa-file-picture-o"></i></a>';
+            }else{
+              return '';
+            }
+             
           }
         }
       ]

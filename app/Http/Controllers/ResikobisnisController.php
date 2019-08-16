@@ -224,8 +224,7 @@ class ResikobisnisController extends Controller
             'startdate' => 'required',
             'enddate' => 'required',
             'pic' => 'required',
-            'status' => 'required',
-            'gambar' => 'required'
+            'status' => 'required'
          ]);
 
         $unitid         = $request->unitid;
@@ -290,8 +289,8 @@ class ResikobisnisController extends Controller
             if($sumberrisiko!=null){
                 foreach($sumberrisiko as $key =>$value){
                     $path ='';
-                    $pathurl ='';
-                    if(isset($gambar[$key])){
+                    
+                    if($gambar[$key]<>null){
                         $path = $gambar[$key]->store('risikobisnis');
                     }
                     
@@ -491,10 +490,11 @@ class ResikobisnisController extends Controller
         // dd($matrik);
         $sumberrisiko = Sumberrisiko::where('risikobisnisdetail_id',$riskdetail->id)->get();
         $sumberrisiko = $sumberrisiko->map(function($item, $key){
+            $item->filex = $item->file;
             $item->file = Storage::url($item->file);
             return $item;
         });
-        //dd($sumberrisiko);
+        // dd($sumberrisiko);
         $dampak = Dampak::orderBy('level', 'DESC')->get();
         $kategori = Kategori::get();
         $hsl='';
@@ -562,7 +562,10 @@ class ResikobisnisController extends Controller
         $indikator      = $request->indikator;
         $nilaiambang    = $request->nilaiambang;
         $gambar         = $request->gambar;
-        // dd($gambar);
+        $sumberid       = $request->sumberid;
+        $gambarfile     = $request->gambarfile;
+        
+        // dd($gambarfile);
 
         $dataupdate = ['kpi_id'=>$kpi,'risiko'=>$risiko,'akibat'=>$akibat,'klasifikasi_id'=>$klasifikasi,
         'peluang_id'=>$peluang,'dampak_id'=>$iddampak,'warna'=>$warna,'indikator'=>$indikator,'nilaiambang'=>$nilaiambang,
@@ -572,10 +575,13 @@ class ResikobisnisController extends Controller
         $riskdetail = Risikobisnisdetail::where('id',$idriskdetail)
         ->update($dataupdate);
         if($riskdetail){
-            Sumberrisiko::where('risikobisnisdetail_id',$idriskdetail)->delete();
+            
             if($sumberrisiko!=null){
                 foreach($sumberrisiko as $key =>$value){
-                    if(isset($gambar[$key])){
+                    $path='';
+                    
+                    if($sumberid[$key]==null){
+                    if($gambar[$key]<> null){
                         $path = $gambar[$key]->store('risikobisnis');
                     }
                     $datasumber = new Sumberrisiko();
@@ -589,6 +595,29 @@ class ResikobisnisController extends Controller
                     $datasumber->statussumber             = $status[$key];
                     $datasumber->file                     = $path;
                     $datasumber->save();
+                    }else{
+
+                    if(isset($gambar[$key])){
+                        Storage::delete($gambarfile[$key]);
+                        $path = $gambar[$key]->store('risikobisnis');
+                        $datasumber = [
+                            'namasumber'=>$value,'mitigasi'=>$mitigasi[$key],'mitigasi'=>$biaya[$key],
+                            'start_date'=>$startdate[$key],'end_date'=>$enddate[$key],'pic'=>$pic[$key],'statussumber'=>$status[$key],'file'=>$path
+                        ];
+                    $sumberrisk = Sumberrisiko::where('id',$sumberid[$key])->update($datasumber);
+
+                    }else{
+                        
+                        $datasumber = [
+                            'namasumber'=>$value,'mitigasi'=>$mitigasi[$key],'mitigasi'=>$biaya[$key],
+                            'start_date'=>$startdate[$key],'end_date'=>$enddate[$key],'pic'=>$pic[$key],'statussumber'=>$status[$key]
+                        ];
+                    $sumberrisk = Sumberrisiko::where('id',$sumberid[$key])->update($datasumber);
+
+                    }
+                    
+                    }
+                    
                 }
             }
             return redirect()
