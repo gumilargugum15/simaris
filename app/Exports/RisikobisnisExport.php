@@ -94,7 +94,7 @@ class RisikobisnisExport implements FromView,WithEvents
     {
         
         return [
-            BeforeExport::class    => function(AfterSheet $event) {
+            AfterSheet::class    => function(AfterSheet $event) {
                 $styleArray = [
                     'borders' => [
                         'allborders' => [

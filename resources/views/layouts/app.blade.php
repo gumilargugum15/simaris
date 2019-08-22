@@ -484,6 +484,8 @@
   }
    $(function () {
     $('#tblresikobisnis').DataTable()
+    $('#tblresikoaset').DataTable()
+    
     $('.select2').select2()
     $('#startdate').datepicker({
       autoclose: true

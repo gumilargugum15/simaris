@@ -44,8 +44,8 @@ class ResikobisnisController extends Controller
         $user = Auth::user();
         $role = Role::findByName('verifikatur');
         $users = $role->users;
-        
         $nikuser = $user->nik;
+        
         $unitid = $user->unit_id;
         $unitkerja = Unitkerja::where('objectabbr',$unitid)->get();
         $periodeall = Perioderisikobisnis::get();
@@ -146,8 +146,7 @@ class ResikobisnisController extends Controller
     public function sumberrisiko(Request $request,$id){
         $return = [];
         $sumber = Sumberrisiko::where('risikobisnisdetail_id',$id)->get();
-        // dd($sumber);
-        // die();
+        
         foreach($sumber as $key => $value){
             array_push($return,
             array(
@@ -494,7 +493,7 @@ class ResikobisnisController extends Controller
             $item->file = Storage::url($item->file);
             return $item;
         });
-        // dd($sumberrisiko);
+        //  dd($sumberrisiko);
         $dampak = Dampak::orderBy('level', 'DESC')->get();
         $kategori = Kategori::get();
         $hsl='';

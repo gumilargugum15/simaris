@@ -7,7 +7,7 @@ function sumberrisiko(id,risiko) {
      console.log(file);
     // var pecah = file.split("/");
      var isi = "storage/"+file;
-    // $("#preview").empty();
+       
     $("#preview").html('<object width="100%" height="100%" data="'+isi+'"></object>');
     $('#modal-preview').modal({
             backdrop: 'static',

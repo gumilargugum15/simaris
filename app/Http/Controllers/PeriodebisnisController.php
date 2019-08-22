@@ -108,12 +108,13 @@ class PeriodebisnisController extends Controller
     }
     public function aktifperiode(Request $request,$id){
         $periodebisnis = Perioderisikobisnis::where('id',$id)->first();
-        
+        // dd($periodebisnis);
         $periodesebelum = Perioderisikobisnis::where('aktif','1')->where('tahun',$periodebisnis->tahun)->first();
         // dd($periodesebelum);
         $kwartalsebelum = $periodesebelum->nama;
-        //dd($kwartalsebelum);
+        // dd($kwartalsebelum);
         $kpi = Kpi::where('tahun',$periodebisnis->tahun)->where('kwartal',$kwartalsebelum)->get();
+        dd($kpi);
         $risikobisnis     = Risikobisnis::where('tahun',$periodebisnis->tahun)->where('periode',$kwartalsebelum)->get();
         // dd($risikobisnis);
         $update  = Perioderisikobisnis::where('aktif','1')->update(['aktif' => '2']);
