@@ -25,6 +25,7 @@
           <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i>Klasifikasi</a></li>
           <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i>Peluang</a></li>
           <li><a href="{{ url('unit') }}"><i class="fa fa-circle-o"></i>Unit</a></li>
+          <li><a href="{{ url('project') }}"><i class="fa fa-circle-o"></i>Project</a></li>
         </ul>
       </li>
       <li class="treeview">

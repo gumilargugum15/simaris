@@ -5,6 +5,25 @@
 
 @section('content')
 <script>
+function exportexcel(){
+    if (confirm("Apakah anda yakin ?") == true) {
+            $.ajax({
+                url: "{{ url('export') }}/" + id,
+                method: 'get',
+                success: function (data) {
+                    if (data == 'success') {
+                        alert('Export berhasil !');
+                        location.reload();
+                       
+                    } else {
+                        alert('Export gagal !');
+                        location.reload();
+                    }
+
+                }
+            });
+        }
+}
 function validriskbisnisverif(id){
     if (confirm("Apakah anda yakin ?") == true) {
             $.ajax({

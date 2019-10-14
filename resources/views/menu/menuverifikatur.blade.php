@@ -33,8 +33,8 @@
         </a>
         <ul class="treeview-menu">
           <li><a href="{{ url('resikobisnisverifikatur') }}"><i class="fa fa-circle-o"></i>Resiko Proses Bisnis</a></li>
-          <li><a href="pages/forms/advanced.html"><i class="fa fa-circle-o"></i>Resiko Project</a></li>
-          <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i>Resiko Asset</a></li>
+          <li><a href="{{ url('risikoaset') }}"><i class="fa fa-circle-o"></i>Resiko Asset</a></li>
+          <li><a href="{{ url('risikoprojectverifikatur') }}"><i class="fa fa-circle-o"></i>Resiko Project</a></li>
         </ul>
       </li>
       <li class="treeview">

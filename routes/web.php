@@ -21,7 +21,7 @@ Route::group([ 'middleware' => 'auth' ], function (){
 Route::group(['middleware'=>['role:keyperson|verifikatur|pimpinanunit|managergcg']], function () {
     Route::get('/sumberrisiko/{id}','ResikobisnisController@sumberrisiko');
     Route::get('/readkomen/{id}','RiskbisnisverifController@readkomen');
-    
+    Route::get('/sumberrisikoproject/{id}','RisikoprojectController@sumberrisiko');
     
 });
 Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
@@ -39,8 +39,13 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::get('/editkpi/{id?}','KpiController@edit');
     Route::post('/updatekpi','KpiController@update');
     Route::get('/destroykpi/{id?}','KpiController@destroy');
-    
-    
+    // nama project
+    Route::get('/project', 'ProjectController@index')->name('project.index');
+    Route::get('/addproject','ProjectController@create');
+    Route::get('/carikeyperson/{nikkeyperson}','ProjectController@carikeyperson');
+    Route::post('/storeproject','ProjectController@store');
+    Route::get('/editproject/{id?}','ProjectController@edit');
+    Route::post('/updateproject','ProjectController@update');
 });
 
     Route::group(['middleware'=>['role:keyperson']], function () {
@@ -63,6 +68,14 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     //risiko aset
     Route::get('/risikoaset', 'RisikoasetController@index')->name('risikoaset.index');
     Route::get('/addrisikoaset','RisikoasetController@create');
+    //risiko project
+    Route::get('/risikoproject', 'RisikoprojectController@index')->name('risikoproject.index');
+    Route::get('/addrisikoproject','RisikoprojectController@create');
+    Route::post('/storeriskproject','RisikoprojectController@store');
+    Route::get('/editriskproject/{id?}','RisikoprojectController@edit');
+    Route::post('/updateriskproject','RisikoprojectController@update');
+    Route::get('/destroyriskproject/{id?}','RisikoprojectController@destroy');
+    Route::get('/validriskproject/{id}','RisikoprojectController@validriskproject');
 });
 
 Route::group(['middleware'=>['role:verifikatur']], function () {
@@ -81,6 +94,8 @@ Route::group(['middleware'=>['role:verifikatur']], function () {
     Route::get('/tutupotorisasi/{nik}','UserkeypersonController@tutupotorisasi');
     Route::get('/laprisikobisnis', 'LaprisikobisnisController@index');
     Route::get('/export', 'LaprisikobisnisController@export');
+    //risiko project
+    Route::get('/risikoprojectverifikatur', 'RisikoprojectverifController@index')->name('risikoprojectperif.index');
     
 });
 Route::group(['middleware'=>['role:pimpinanunit']], function () {

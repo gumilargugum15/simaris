@@ -17,5 +17,8 @@ class Dampak extends Model
     public function risikoasetdetail(){
         return $this->hasMany('App\Risikoasetdetail','dampak_id');
     }
+    public function risikoprojectdetail(){
+        return $this->hasMany('App\Risikoprojectdetail','dampak_id');
+    }
 
 }
