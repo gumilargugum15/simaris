@@ -631,5 +631,24 @@ class RisikoprojectController extends Controller
         }
         return Redirect::back()->withErrors(['msg', 'Error']);
     }
+    function batalvalidasiproject(Request $request,$id){
+        //dapatkan informasi user
+        $user = Auth::user();
+        $datariskproject = Risikoproject::where('id',$id)->first();
+        
+        if($datariskproject->statusrisiko_id > 2){
+            $hsl='gagal';
+            return $hsl;
+        }else{
+            $risikoproject = Risikoproject::where('id',$id)->update(['statusrisiko_id' => '1']);
+            if($risikoproject){
+                $hapus = Validasiproject::where('nik',$user->nik)->where('risikoproject_id',$id)->delete();
+                $hsl='success';
+                return $hsl;
+            }
+        }
+        
+        return Redirect::back()->withErrors(['msg', 'Error']);
+    }
 
 }

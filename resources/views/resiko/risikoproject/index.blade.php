@@ -24,10 +24,10 @@
             });
         }
   }
-  function batalvalidriskbisnis(id){
+  function batalvalidriskproject(id){
     if (confirm("Apakah anda yakin ?") == true) {
             $.ajax({
-                url: "{{ url('batalvalidasibisnis') }}/" + id,
+                url: "{{ url('batalvalidasiproject') }}/" + id,
                 method: 'get',
                 success: function (data) {
                     if (data == 'success') {
@@ -145,7 +145,7 @@
               -
               @else
               <a href="#"
-              class="btn btn-small btn-warning" onclick="batalvalidriskbisnis({{ $risikoproject->id }})"><i class="fa fa-undo"></i> Batal validasi</a>
+              class="btn btn-small btn-warning" onclick="batalvalidriskproject({{ $risikoproject->id }})"><i class="fa fa-undo"></i> Batal validasi</a>
               
               @endif</td>
               @endif

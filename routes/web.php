@@ -76,6 +76,7 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::post('/updateriskproject','RisikoprojectController@update');
     Route::get('/destroyriskproject/{id?}','RisikoprojectController@destroy');
     Route::get('/validriskproject/{id}','RisikoprojectController@validriskproject');
+    Route::get('/batalvalidasiproject/{id}','RisikoprojectController@batalvalidasiproject');
 });
 
 Route::group(['middleware'=>['role:verifikatur']], function () {

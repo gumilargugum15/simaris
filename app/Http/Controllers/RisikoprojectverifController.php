@@ -40,69 +40,41 @@ class RisikoprojectverifController extends Controller
       );
       public function index(Request $request)
       {
-          $namarisiko ="Risiko Project";
-          $user = Auth::user();
-          $role = Role::findByName('verifikatur');
-          $users = $role->users;
-          $nikuser = $user->nik;
-          
-          $unitid = $user->unit_id;
-          $unitkerja = Unitkerja::where('objectabbr',$unitid)->get();
-          $periodeall = Perioderisikoproject::get();
-          $periodeaktif = Perioderisikoproject::periodeAktif()->first();
-          $unituser = unitkerja::where('objectabbr',$unitid)->first();
-          
-          $risikoproject = risikoproject::byPeriod($periodeaktif->nama)
-              ->byYear($periodeaktif->tahun)
-              ->byUnit($unitid)
-              ->first();
-          if(isset($request->periode)){
-             $pecahperiod = explode("-",$request->periode);
-             $namaperoiod = $pecahperiod[0];
-             $tahunperiod = $pecahperiod[1];
-             $risikoproject = risikoproject::byPeriod($namaperoiod)
-              ->byYear($tahunperiod)
-              ->byUnit($unitid)
-              ->first();
-              
-          }else{
-              $risikoproject = risikoproject::byPeriod($periodeaktif->nama)
-              ->byYear($periodeaktif->tahun)
-              ->byUnit($unitid)
-              ->first();
-              
-  
-          }
-          $status = null;
-          
-          $klasifikasi = Klasifikasi::get();
-          $peluang = Peluangproject::get();
-          $dampak = Dampak::orderBy('level', 'DESC')->get();
-          $kategori = Kategori::get();
-          $hsl='';
-          $hsl.='<table class="table table-bordered table-striped">';
-          $hsl.='<tr><td><b>LEVEL</b></td><td><b>DAMPAK</b></td>';
-          foreach($kategori as $rkat){
-              $hsl.='<td><b>'.strtoupper($rkat->nama).'</b></td>';
-          }
-          
-          foreach($dampak as $key=>$value){
-              $hsl.='<tr><td><b>'.$value->level.'</b></td><td><b>'.$value->nama.'</b></td>';
-              
-              foreach($kategori as $keykat=>$valkat){
-                  $hsl.='<td>';
-                  $hsl.=$this->getkriteria($value->id,$valkat->id,$value->level);
-                  $hsl.='</td>';}
-              
-              $hsl.='</tr>';
-          }
-          $hsl.='</tr></table>';
-          $hasildampak = $hsl;
-          // dd($risikoproject->risikoprojectdetail[0]);
-          return view('resiko.risikoprojectverif.index', compact(
-              'risikoproject', 'periodeaktif','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser','nikuser'
-          ));
-      }
+        $namarisiko ="Risiko Project";
+        $user = Auth::user();
+        $nikuser = $user->nik;
+        $unitkerja = Unitkerja::get();
+        $periodeall = Perioderisikoproject::get();
+        if(isset($request->periode ) && isset($request->unitkerja)){
+           $pecahperiod = explode("-",$request->periode);
+           $namaperoiod = $pecahperiod[0];
+           $tahunperiod = $pecahperiod[1];
+           $risikoproject = risikoproject::byPeriod($namaperoiod)
+            ->byYear($tahunperiod)
+            ->byUnit($request->unitkerja)
+            ->first();
+           
+        }
+    
+        return view('resiko.risikoprojectverif.index', compact('risikoproject','periodeall','namarisiko','unitkerja','nikuser'));
+    }
+      public function getkriteria($dampakid,$kategoriid,$level){
+        $hsl='';
+        $kriteria = Kriteria::where('dampak_id',$dampakid)->where('kategori_id',$kategoriid)->where('level',$level)->get();
+            //$hsl.='<ul>';
+            $no=0;
+            foreach($kriteria as $rkri){
+                $no++;
+                if(count($kriteria)>1){
+                    $hsl.='<a href="#" onclick="pilihdampak(\'' .$rkri->nama. '\','.$dampakid.','.$kategoriid.','.$level.')">'.$no.')'.$rkri->nama.'</a><hr><br>';
+                }else{
+                    $hsl.='<a href="#" onclick="pilihdampak(\'' .$rkri->nama. '\','.$dampakid.','.$kategoriid.','.$level.')">'.$rkri->nama.'</a><br>';
+                }
+                
+            }
+            //$hsl.='</ul>';
+        return $hsl;
+    }
 
     /**
      * Show the form for creating a new resource.
