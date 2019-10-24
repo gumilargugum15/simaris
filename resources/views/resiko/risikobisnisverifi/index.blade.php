@@ -5,6 +5,28 @@
 
 @section('content')
 <script>
+function sesuaikaidah(){  
+        var data_val = $('#fm-kaidah').serialize();
+        $.ajax({
+                url: "{{ url('sesuaikaidah') }}",
+                method: 'post',
+                data	: data_val,
+                success: function (data) {
+                    location.reload();
+                }
+            });
+    }
+    function tidaksesuaikaidah(){
+        var data_val = $('#fm-kaidah').serialize();
+        $.ajax({
+                url: "{{ url('tidaksesuaikaidah') }}",
+                method: 'post',
+                data	: data_val,
+                success: function (data) {
+                    location.reload();
+                }
+            });
+    }
 function validriskbisnisverif(id){
     if (confirm("Apakah anda yakin ?") == true) {
             $.ajax({

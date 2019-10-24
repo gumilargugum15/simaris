@@ -25,14 +25,14 @@ class ProjectController extends Controller
         $judul = "Project";
         //$kpi =Kpi::tahunAktif()
         $project =Project::
-          join('unitkerja as a', 'project.unit_id', '=', 'a.objectabbr')
+          join('unitkerja as a', 'project.unit_id', '=', 'a.kode')
         ->join('users as b', 'b.nik', '=', 'project.keyperson')
         ->join('users as c', 'c.nik', '=', 'project.pm')
         ->join('statusproject as d', 'd.id', '=', 'project.statusproject_id')
         ->select('project.*', 'a.nama as namaunit','b.name as namakeyperson','c.name as namapm','d.nama as statusproject')
         ->orderBy('tahun','desc')
         ->get();
-        // dd($project);
+        //  dd($project);
         return view('administrator.project.index', compact('judul', 'project'));
     }
 
@@ -203,7 +203,7 @@ class ProjectController extends Controller
          $tahun                = $request->tahun;
 
          $data =['nama'=>$nama,'unit_id'=>$unit,'keyperson'=>$keyperson,'namakeyperson'=>$namakeyperson,'jabkeyperson'=>$jabkeyperson
-         ,'pm'=>$namapm,'namapm'=>$namapm,'jabpm'=>$jabpm,'namakontrak'=>$namakontrak,'nomorkontrak'=>$nomorkontrak,'start_date'=>$startdate,'end_date'=>$end_date
+         ,'pm'=>$namapm,'namapm'=>$namapm,'jabpm'=>$jabpm,'namakontrak'=>$namakontrak,'nomorkontrak'=>$nomorkontrak,'start_date'=>$startdate,'end_date'=>$enddate
          ,'modifier'=>$user->nik];
          $project = Project::where('id',$id)->update($data);
          if($project){

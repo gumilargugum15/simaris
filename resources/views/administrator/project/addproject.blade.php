@@ -42,7 +42,7 @@
                         <label>Unit</label>
                         <select class="form-control select2" style="width: 100%;" name="unit" id="unit">
                             @foreach ($unitkerja as $data)
-                            <option value="{{$data->objectabbr}}">{{$data->nama}}</option>
+                            <option value="{{$data->kode}}">{{$data->nama}}</option>
                             @endforeach
                         </select>
                         </div>

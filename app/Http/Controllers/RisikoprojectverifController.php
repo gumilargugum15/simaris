@@ -75,6 +75,67 @@ class RisikoprojectverifController extends Controller
             //$hsl.='</ul>';
         return $hsl;
     }
+    function validriskproject(Request $request,$id){
+        $risikoproject = Risikoproject::where('id',$id)->update(['statusrisiko_id' => '3']);    
+        if($risikoproject){
+            $user = Auth::user();
+            $retval    = [];
+            //$retval    = file_get_contents('https://portal.krakatausteel.com/eos/api/structdisp/'.$user->nik);
+            $retval = file_get_contents('https://portal.krakatausteel.com/eos/api/structdisp/'.$user->nik, false, stream_context_create($this->arrContextOptions));
+        
+            $jessval   =json_decode($retval);
+            $personnel_no     = $jessval->personnel_no;
+            $name             = $jessval->name;
+            $position_name    = $jessval->position_name;
+            
+            $dtval = new Validasiproject();
+            $dtval->risikoproject_id     =  $id;
+            $dtval->nik     =  $personnel_no;
+            $dtval->nama    =  $name;
+            $dtval->jabatan =  $position_name;
+            $dtval->aktorvalidasi_id = 2;
+            $dtval->statusvalidasi_id =3;
+            $dtval->tglvalidasi =date("Y-m-d H:i:s");
+            $dtval->save();
+
+            $hsl='success';
+            return $hsl;
+        }
+        return Redirect::back()->withErrors(['msg', 'Error']);
+    }
+    function batalvalidriskproject(Request $request,$id){
+        $user = Auth::user();
+        $datariskproject = Risikoproject::where('id',$id)->first();
+        
+        if($datariskproject->statusrisiko_id > 3){
+            $hsl='gagal';
+            return $hsl;
+        }else{
+            $risikoproject = Risikoproject::where('id',$id)->update(['statusrisiko_id' => '2']);
+            if($risikoproject){
+                $hapus = Validasiproject::where('nik',$user->nik)->where('risikoproject_id',$id)->delete();
+                $hsl='success';
+                return $hsl;
+            }
+        }
+        
+        return Redirect::back()->withErrors(['msg', 'Error']);
+        
+    }
+    public function sesuaikaidah(Request $request){
+        $kaidah         = $request->kaidah;
+        foreach($kaidah as $key=>$value){
+            $riskdetail = Risikoprojectdetail::where('id',$value)->update(['kaidah'=>1,'tglkaidah'=>date("Y-m-d H:i:s")]);
+        }
+
+    }
+    public function tidaksesuaikaidah(Request $request){
+        $kaidah         = $request->kaidah;
+        foreach($kaidah as $key=>$value){
+            $riskdetail = Risikoprojectdetail::where('id',$value)->update(['kaidah'=>0,'tglkaidah'=>date("Y-m-d H:i:s")]);
+        }
+
+    }
 
     /**
      * Show the form for creating a new resource.

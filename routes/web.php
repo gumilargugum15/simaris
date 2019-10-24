@@ -97,7 +97,10 @@ Route::group(['middleware'=>['role:verifikatur']], function () {
     Route::get('/export', 'LaprisikobisnisController@export');
     //risiko project
     Route::get('/risikoprojectverifikatur', 'RisikoprojectverifController@index')->name('risikoprojectperif.index');
-    
+    Route::get('/validriskprojectverif/{id}','RisikoprojectverifController@validriskproject');
+    Route::get('/batalvalidriskprojectverif/{id}','RisikoprojectverifController@batalvalidriskproject');
+    Route::post('/sesuaikaidahproject','RisikoprojectverifController@sesuaikaidah');
+    Route::post('/tidaksesuaikaidahproject','RisikoprojectverifController@tidaksesuaikaidah');
 });
 Route::group(['middleware'=>['role:pimpinanunit']], function () {
     Route::get('/resikobisnispimpinan', 'RiskbisnispimpinanController@index')->name('resikobisnispimpinan.index');

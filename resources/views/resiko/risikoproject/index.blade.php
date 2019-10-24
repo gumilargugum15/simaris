@@ -174,6 +174,7 @@
               <tr>
                 {{-- <th>Periode</th> --}}
                 <th>No</th>
+                <th>Kaidah</th>
                 <th>Nama Project</th>
                 <th>Tahap Project</th>
                 <th>Risiko</th>
@@ -202,6 +203,13 @@
                 <tr >
                 {{-- <td>{{ $risikobisnis->periode." ".$risikobisnis->tahun }}</td> --}}
                <td>{{$no}}</td>
+               <td align="center">
+                @if($riskdetail->kaidah=='1')
+                <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
+                @else
+                <a class="btn btn-warning"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
+                @endif
+              </td>
                <td>{{$riskdetail->project->nama}}</td>
                <td>{{$riskdetail->tahapproject->nama}}</td>
                <td>{{$riskdetail->risiko}}</td>

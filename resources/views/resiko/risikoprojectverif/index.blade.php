@@ -5,10 +5,32 @@
 
 @section('content')
 <script>
-function validriskbisnisverif(id){
+function sesuaikaidah(){  
+        var data_val = $('#fm-kaidah').serialize();
+        $.ajax({
+                url: "{{ url('sesuaikaidahproject') }}",
+                method: 'post',
+                data	: data_val,
+                success: function (data) {
+                    location.reload();
+                }
+            });
+    }
+function tidaksesuaikaidah(){
+        var data_val = $('#fm-kaidah').serialize();
+        $.ajax({
+                url: "{{ url('tidaksesuaikaidahproject') }}",
+                method: 'post',
+                data	: data_val,
+                success: function (data) {
+                    location.reload();
+                }
+            });
+    }
+function validriskprojectverif(id){
     if (confirm("Apakah anda yakin ?") == true) {
             $.ajax({
-                url: "{{ url('validasibisnisverif') }}/" + id,
+                url: "{{ url('validriskprojectverif') }}/" + id,
                 method: 'get',
                 success: function (data) {
                     if (data == 'success') {
@@ -24,10 +46,10 @@ function validriskbisnisverif(id){
         }
 
 }
-function batalvalidriskbisnis(id){
+function batalvalidriskprojectverif(id){
     if (confirm("Apakah anda yakin ?") == true) {
             $.ajax({
-                url: "{{ url('batalvalidasibisnisverif') }}/" + id,
+                url: "{{ url('batalvalidriskprojectverif') }}/" + id,
                 method: 'get',
                 success: function (data) {
                     if (data == 'success') {
@@ -45,39 +67,7 @@ function batalvalidriskbisnis(id){
         }
 
   }
-  function highlight(){
-    if (confirm("Apakah anda yakin ?") == true) {
-        var data_val = $('#fm-kaidah').serialize();
-        $.ajax({
-                url: "{{ url('highlight') }}",
-                method: 'post',
-                data	: data_val,
-                success: function (data) {
-                    location.reload();
-                }
-            });
-
-    }
-  }
-  function batalhighlight(){
-    if (confirm("Apakah anda yakin ?") == true) {
-        var data_val = $('#fm-kaidah').serialize();
-        $.ajax({
-                url: "{{ url('batalhighlight') }}",
-                method: 'post',
-                data	: data_val,
-                success: function (data) {
-                    location.reload();
-                }
-            });
-
-    }
-  }
-  function notifkomen(id){
-      alert(id);
-  }
-  
-  
+ 
 </script>
 <section class="content-header">
     <h1>
@@ -182,12 +172,12 @@ function batalvalidriskbisnis(id){
                         @if(isset($risikoproject->statusrisiko_id))
                         @if($risikoproject->statusrisiko_id=='2')
                         <a href="#" class="btn btn-small btn-primary"
-                            onclick="validriskbisnisverif({{ $risikoproject->id }})"><i class="fa fa-check-square"></i>
+                            onclick="validriskprojectverif({{ $risikoproject->id }})"><i class="fa fa-check-square"></i>
                             Validasi</a>
                         @elseif($risikoproject->statusrisiko_id > '3'||$risikoproject->statusrisiko_id < '2')
                         -
                         @else<a href="#" class="btn btn-small btn-warning"
-                            onclick="batalvalidriskbisnis({{ $risikoproject->id }})"><i class="fa fa-undo"></i> Batal
+                            onclick="batalvalidriskprojectverif({{ $risikoproject->id }})"><i class="fa fa-undo"></i> Batal
                             validasi</a>
                         @endif
                         @endif</td>
@@ -213,6 +203,7 @@ function batalvalidriskbisnis(id){
                             <tr>
                                 <th></th> 
                                 <th>No</th>  
+                                <th width="10%">Kaidah</th>
                                 <th>Nama Project</th>
                                 <th>Tahap Project</th>
                                 <th>Risiko</th>
@@ -238,6 +229,13 @@ function batalvalidriskbisnis(id){
                             <tr>
                                 <td><input type="checkbox" name="kaidah[]" class="form-controll" value="{{$riskdetail->id}}"></td>
                                 <td>{{$no}}</td>
+                                <td align="center">
+                                    @if($riskdetail->kaidah=='1')
+                                    <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
+                                    @else
+                                    <a class="btn btn-warning"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
+                                    @endif
+                                </td>
                                 <td>{{$riskdetail->project->nama}}</td>
                                 <td>{{$riskdetail->tahapproject->nama}}</td>
                                 <td>{{$riskdetail->risiko}}</td>
@@ -263,8 +261,7 @@ function batalvalidriskbisnis(id){
                                 <th colspan="3">
                                     <a class="btn btn-primary"  onclick="sesuaikaidah()"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
                                     <a class="btn btn-warning" onclick="tidaksesuaikaidah()"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
-                                    <a class="btn btn-danger" onclick="highlight()"><i class="fa  fa-tags" title="Highlight"></i></a>
-                                    <a class="btn btn-success" onclick="batalhighlight()"><i class="fa  fa-tags" title="Batal highlight"></i></a>
+                                    
                                 </th>
                                 <th></th>
                                 <th></th>
@@ -285,7 +282,6 @@ function batalvalidriskbisnis(id){
         </div>
         
     </div>
-    @include('resiko/resikobisnis/modal/sumberresikobisnis')
-    @include('resiko/risikobisnisverifi/modal/komentar')
+    @include('resiko/risikoproject/modal/sumberresiko')
 </section>
 @endsection
