@@ -203,7 +203,7 @@ class ProjectController extends Controller
          $tahun                = $request->tahun;
 
          $data =['nama'=>$nama,'unit_id'=>$unit,'keyperson'=>$keyperson,'namakeyperson'=>$namakeyperson,'jabkeyperson'=>$jabkeyperson
-         ,'pm'=>$namapm,'namapm'=>$namapm,'jabpm'=>$jabpm,'namakontrak'=>$namakontrak,'nomorkontrak'=>$nomorkontrak,'start_date'=>$startdate,'end_date'=>$enddate
+         ,'pm'=>$pm,'namapm'=>$namapm,'jabpm'=>$jabpm,'namakontrak'=>$namakontrak,'nomorkontrak'=>$nomorkontrak,'start_date'=>$startdate,'end_date'=>$enddate
          ,'modifier'=>$user->nik];
          $project = Project::where('id',$id)->update($data);
          if($project){

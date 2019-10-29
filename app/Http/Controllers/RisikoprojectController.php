@@ -164,7 +164,7 @@ class RisikoprojectController extends Controller
         $periodeaktif = Perioderisikoproject::periodeAktif()->first();
         $unituser = unitkerja::where('objectabbr',$unitid)->first();
         $klasifikasi = Klasifikasi::get();
-        $project = Project::get();
+        $project = Project::where('keyperson',$user->nik)->get();
         $tahapproject = Tahapproject::get();
         $peluang = Peluangproject::get();
         $dampak = Dampak::orderBy('level', 'DESC')->get();
@@ -536,7 +536,7 @@ class RisikoprojectController extends Controller
 
                     if(isset($gambar[$key])){
                         Storage::delete($gambarfile[$key]);
-                        $path = $gambar[$key]->store('risikobisnis');
+                        $path = $gambar[$key]->store('risikoproject');
                         $datasumber = [
                             'namasumber'=>$value,'mitigasi'=>$mitigasi[$key],'mitigasi'=>$biaya[$key],
                             'start_date'=>$startdate[$key],'end_date'=>$enddate[$key],'pic'=>$pic[$key],'statussumber'=>$status[$key],'file'=>$path

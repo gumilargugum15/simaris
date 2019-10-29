@@ -53,10 +53,10 @@
                     <td>{{$no}}</td>
                     <td>{{$data->nama}}</td>
                     <td>{{$data->namaunit}}</td>
-                    <td>{{$data->namakeyperson}}</td>
-                    <td>{{$data->namapm}}</td>
+                    <td>{{$data->namakeyperson}} ( {{$data->keyperson}} )</td>
+                    <td>{{$data->namapm}} ( {{$data->pm}} )</td>
                     <td>{{$data->tujuan}}</td>
-                    <td>{{$data->nomorkontrak}} ({{$data->namakontrak}})</td>
+                    <td>{{$data->nomorkontrak}} ( {{$data->namakontrak}} )</td>
                     <td>{{$data->start_date}} / {{$data->end_date}}</td>
                     <td>{{$data->statusproject}}</td>
                     <td><a href="{{url('editproject',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
