@@ -40,39 +40,46 @@ class RisikoprojectController extends Controller
       );
     public function index(Request $request)
     {
+        
         $namarisiko ="Risiko Project";
         $user = Auth::user();
         $role = Role::findByName('verifikatur');
         $users = $role->users;
         $nikuser = $user->nik;
-        
+        $project = Project::where('keyperson',$user->nik)->get();
         $unitid = $user->unit_id;
         $unitkerja = Unitkerja::where('objectabbr',$unitid)->get();
         $periodeall = Perioderisikoproject::get();
         $periodeaktif = Perioderisikoproject::periodeAktif()->first();
         $unituser = unitkerja::where('objectabbr',$unitid)->first();
         
-        $risikoproject = risikoproject::byPeriod($periodeaktif->nama)
-            ->byYear($periodeaktif->tahun)
-            ->byUnit($unitid)
-            ->first();
+        // $risikoproject = risikoproject::byPeriod($periodeaktif->nama)
+        //     ->byYear($periodeaktif->tahun)
+        //     ->byUnit($unitid)
+        //     ->first();
+        // $risikoproject = risikoproject::get();
         if(isset($request->periode)){
+           $projectid   = $request->project;
            $pecahperiod = explode("-",$request->periode);
            $namaperoiod = $pecahperiod[0];
            $tahunperiod = $pecahperiod[1];
            $risikoproject = risikoproject::byPeriod($namaperoiod)
             ->byYear($tahunperiod)
             ->byUnit($unitid)
+            ->byProject($projectid)
             ->first();
             
         }else{
             $risikoproject = risikoproject::byPeriod($periodeaktif->nama)
             ->byYear($periodeaktif->tahun)
             ->byUnit($unitid)
+            // ->byProject($projectid)
             ->first();
+            // $risikoproject = risikoproject::first();
             
 
         }
+        
         $status = null;
         
         $klasifikasi = Klasifikasi::get();
@@ -100,7 +107,7 @@ class RisikoprojectController extends Controller
         $hasildampak = $hsl;
         // dd($risikoproject->risikoprojectdetail[0]);
         return view('resiko.risikoproject.index', compact(
-            'risikoproject', 'periodeaktif', 'kpi','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser','nikuser'
+            'risikoproject', 'periodeaktif', 'kpi','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser','nikuser','project'
         ));
     }
     public function getkriteria($dampakid,$kategoriid,$level){
@@ -159,6 +166,7 @@ class RisikoprojectController extends Controller
      */
     public function create(Request $request)
     {
+        
         $user = Auth::user();
         $unitid = $user->unit_id;
         $periodeaktif = Perioderisikoproject::periodeAktif()->first();
@@ -245,6 +253,7 @@ class RisikoprojectController extends Controller
         $countrisk = risikoproject::byPeriod($periode)
             ->byYear($tahun)
             ->byUnit($unitid)
+            ->byProject($project)
             ->count();
         
        if( $countrisk > 0){
@@ -252,6 +261,7 @@ class RisikoprojectController extends Controller
         $risikoproject = risikoproject::byPeriod($periode)
             ->byYear($tahun)
             ->byUnit($unitid)
+            ->byProject($project)
             ->first();
         
         $datariskdetail = new Risikoprojectdetail();
@@ -285,7 +295,7 @@ class RisikoprojectController extends Controller
                     }
                     
                     $datasumber = new Sumberrisikoproject();
-                    $datasumber->risikoprojectdetail_id    = $datariskdetail->id;
+                    $datasumber->risikoprojectdetail_id   = $datariskdetail->id;
                     $datasumber->namasumber               = $value;
                     $datasumber->mitigasi                 = $mitigasi[$key];
                     $datasumber->biaya                    = $biaya[$key];
@@ -320,6 +330,7 @@ class RisikoprojectController extends Controller
            $datarisk->periode            = $periode;
            $datarisk->tahun              = $tahun;
            $datarisk->unit_id            = $unitid;
+           $datarisk->project_id         = $project;
            $datarisk->statusrisiko_id    = 0;
            $datarisk->creator            = $user->nik;
            $datarisk->save();
@@ -327,6 +338,7 @@ class RisikoprojectController extends Controller
            $risikoproject = Risikoproject::byPeriod($periode)
             ->byYear($tahun)
             ->byUnit($unitid)
+            ->byProject($project)
             ->first();
         
             $datariskdetail = new Risikoprojectdetail();
@@ -519,7 +531,7 @@ class RisikoprojectController extends Controller
                     
                     if($sumberid[$key]==null){
                     if($gambar[$key]<> null){
-                        $path = $gambar[$key]->store('risikobisnis');
+                        $path = $gambar[$key]->store('risikoproject');
                     }
                     $datasumber = new Sumberrisikoproject();
                     $datasumber->risikoprojectdetail_id    = $idriskdetail;

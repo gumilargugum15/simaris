@@ -20,6 +20,9 @@ class Unitkerja extends Model
     {
         return $query->where('objectabbr', $u);
     }
+    public function risikoproject(){
+        return $this->hasMany('App\Risikoproject','unit_id');
+    }
     
     
 }

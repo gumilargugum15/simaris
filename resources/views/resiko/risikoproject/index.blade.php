@@ -69,7 +69,7 @@
                 <input type="hidden" id="nikuser" value="{{$nikuser}}">
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-xs-10">
+                        <div class="col-xs-5">
                         <select class="form-control select2" style="width: 100%;" name="periode" id="periode">
                             <option value="">Pilih Periode</option>
                               @foreach ($periodeall as $period)
@@ -86,6 +86,23 @@
                         </select>
                         <input name="_token" value="{{ csrf_token() }}" type="hidden">
                         </div>
+                        <div class="col-xs-5">
+                            <select class="form-control select2" style="width: 100%;" name="project" id="project">
+                                <option value="">Pilih Project</option>
+                                  @foreach ($project as $project)
+                                  @if(isset($risikoproject->project_id))
+                                  @if(($project->id)==($risikoproject->project_id)){
+                                    <option value="{{$project->id}}" selected>{{$project->nama}}</option>
+                                  @else
+                                  <option value="{{$project->id}}">{{$project->nama}}</option>
+                                  @endif
+                                  @else
+                                  <option value="{{$project->id}}">{{$project->nama}}</option>
+                                  @endif
+                                  @endforeach
+                            </select>
+                            
+                            </div>
                         <div class="col-xs-2">
                             <button type="submit" class="btn btn-primary pull-right">Cari</button>
                         <div>
@@ -163,7 +180,8 @@
               title=""> Risiko Baru</i></a> --}}
           @include('layouts.flash')
           <a class="btn btn-primary" href="{{ url('addrisikoproject') }}"><i class="fa  fa-plus"
-                title=""> Risiko Baru</i></a>
+            title=""> Risiko Baru</i></a>
+          
                 <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
                 
         </div>

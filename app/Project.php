@@ -10,4 +10,7 @@ class Project extends Model
     public function risikoprojectdetail(){
         return $this->hasMany('App\Risikoprojectdetail','project_id');
     }
+    public function risikoproject(){
+        return $this->hasMany('App\Risikoproject','project_id');
+    }
 }

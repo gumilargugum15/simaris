@@ -89,7 +89,7 @@ function batalvalidriskprojectverif(id){
                 <tr>
                     <th>Periode</th>
                     {{-- <th>Periode</th> --}}
-                    <th>Unit Kerja</th>
+                    <th>Project</th>
                     <th>Grup Kriteria</th>
                     <th style="width: 100px">Status</th>
                     <th style="width: 100px">Aksi</th>
@@ -130,7 +130,7 @@ function batalvalidriskprojectverif(id){
                     <td>
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-xs-10">
+                                {{-- <div class="col-xs-5">
                                     <select class="form-control select2" style="width: 100%;" name="unitkerja"
                                         id="unitkerja" required>
                                         <option value="">Pilih Unit</option>
@@ -148,7 +148,24 @@ function batalvalidriskprojectverif(id){
                                         @endforeach
                                        
                                     </select>
-                                </div>
+                                </div> --}}
+                                <div class="col-xs-10">
+                                        <select class="form-control select2" style="width: 100%;" name="project" id="project">
+                                            <option value="">Pilih Project</option>
+                                              @foreach ($project as $project)
+                                              @if(isset($risikoproject->project_id))
+                                              @if(($project->id)==($risikoproject->project_id)){
+                                                <option value="{{$project->id}}" selected>{{$project->nama}}</option>
+                                              @else
+                                              <option value="{{$project->id}}">{{$project->nama}}</option>
+                                              @endif
+                                              @else
+                                              <option value="{{$project->id}}">{{$project->nama}}</option>
+                                              @endif
+                                              @endforeach
+                                        </select>
+                                        
+                                        </div>
                                 <div class="col-xs-2">
                                         <button type="submit" class="btn btn-primary pull-right">Cari</button>
                                     <div>

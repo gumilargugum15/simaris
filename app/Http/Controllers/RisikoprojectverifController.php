@@ -44,19 +44,23 @@ class RisikoprojectverifController extends Controller
         $user = Auth::user();
         $nikuser = $user->nik;
         $unitkerja = Unitkerja::get();
+        $project = Project::get();
+        // dd($project);
         $periodeall = Perioderisikoproject::get();
-        if(isset($request->periode ) && isset($request->unitkerja)){
+        if(isset($request->periode ) && isset($request->project)){
+           $projectid   = $request->project;
            $pecahperiod = explode("-",$request->periode);
            $namaperoiod = $pecahperiod[0];
            $tahunperiod = $pecahperiod[1];
            $risikoproject = risikoproject::byPeriod($namaperoiod)
             ->byYear($tahunperiod)
-            ->byUnit($request->unitkerja)
+            // ->byUnit($request->unitkerja)
+            ->byProject($projectid)
             ->first();
            
         }
     
-        return view('resiko.risikoprojectverif.index', compact('risikoproject','periodeall','namarisiko','unitkerja','nikuser'));
+        return view('resiko.risikoprojectverif.index', compact('risikoproject','periodeall','namarisiko','unitkerja','nikuser','project'));
     }
       public function getkriteria($dampakid,$kategoriid,$level){
         $hsl='';

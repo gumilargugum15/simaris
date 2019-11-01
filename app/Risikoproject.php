@@ -11,6 +11,10 @@ class Risikoproject extends Model
     {
         return $this->belongsTo('App\Unitkerja', 'unit_id');
     }
+    public function project()
+    {
+        return $this->belongsTo('App\Project', 'project_id');
+    }
 
     public function statusrisiko()
     {
@@ -44,5 +48,9 @@ class Risikoproject extends Model
     public function scopeByStatusrisk($query, $s)
     {
         return $query->where('statusrisiko_id','>', $s);
+    }
+    public function scopeByProject($query, $u)
+    {
+        return $query->where('project_id', $u);
     }
 }
