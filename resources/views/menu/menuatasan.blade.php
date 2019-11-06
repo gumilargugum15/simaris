@@ -7,7 +7,7 @@
     </a>
     <ul class="treeview-menu">
       <li><a href="{{ url('resikobisnispimpinan') }}"><i class="fa fa-circle-o"></i>Resiko Proses Bisnis</a></li>
-      <li><a href="pages/forms/advanced.html"><i class="fa fa-circle-o"></i>Resiko Project</a></li>
-      <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i>Resiko Asset</a></li>
+      {{-- <li><a href="pages/forms/advanced.html"><i class="fa fa-circle-o"></i>Resiko Project</a></li>
+      <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i>Resiko Asset</a></li> --}}
     </ul>
   </li>
