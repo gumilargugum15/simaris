@@ -26,6 +26,12 @@ class RiskbisnismanagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public $arrContextOptions=array(
+        "ssl"=>array(
+            "verify_peer"=> false,
+            "verify_peer_name"=> false,
+        ),
+      );
     public function index(Request $request)
     {
         $namarisiko ="Risiko Bisnis";
@@ -53,7 +59,8 @@ class RiskbisnismanagController extends Controller
         if($risikobisnis){
             $user = Auth::user();
             $retval    = [];
-            $retval    = file_get_contents('http://eos.krakatausteel.com/api/structdisp/'.$user->nik);
+            $retval = file_get_contents('https://portal.krakatausteel.com/eos/api/structdisp/'.$user->nik, false, stream_context_create($this->arrContextOptions));
+        
             $jessval   =json_decode($retval);
             $personnel_no     = $jessval->personnel_no;
             $name             = $jessval->name;

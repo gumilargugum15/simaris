@@ -1,4 +1,4 @@
-{{-- <li class="treeview">
+      <li class="treeview">
         <a href="#">
           <i class="fa fa-gears (alias)"></i>
           <span>Konfigurasi</span>
@@ -7,10 +7,11 @@
           </span>
         </a>
         <ul class="treeview-menu">
+          <li><a href="{{ url('userkeyperson') }}"><i class="fa fa-circle-o"></i>Otorisasi KPI</a></li>
           <li><a href="{{ url('users') }}"><i class="fa fa-circle-o"></i>Users</a></li>
           
         </ul>
-      </li> --}}
+      </li>
       <li class="treeview">
         <a href="#">
           <i class="fa fa-laptop"></i>
@@ -36,7 +37,7 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a href="{{ url('resikobisnis') }}"><i class="fa fa-circle-o"></i>Resiko Proses Bisnis</a></li>
+          <li><a href="{{ url('resikobisnisadmin') }}"><i class="fa fa-circle-o"></i>Resiko Proses Bisnis</a></li>
           {{-- <li><a href="pages/forms/advanced.html"><i class="fa fa-circle-o"></i>Resiko Project</a></li>
           <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i>Resiko Asset</a></li> --}}
         </ul>
@@ -49,8 +50,6 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i>Resiko Proses Bisnis</a></li>
-          <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i>Resiko Project</a></li>
-          <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i>Resiko Assets</a></li>
+          <li><a href="{{ url('laprisikobisnis') }}"><i class="fa fa-circle-o"></i>Resiko Proses Bisnis</a></li>
         </ul>
       </li>

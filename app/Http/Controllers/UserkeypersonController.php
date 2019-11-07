@@ -15,7 +15,7 @@ class UserkeypersonController extends Controller
      */
     public function index(Request $request)
     {
-        $judul = "Users keyperson";
+        $judul = "Otorisasi KPI";
         $user =user::select('users.*','unitkerja.nama as namaunit','otorisasi.status')
         ->join('unitkerja','unitkerja.objectabbr','=','users.unit_id')
         ->join('model_has_roles','model_has_roles.model_id','=','users.nik')

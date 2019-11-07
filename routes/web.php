@@ -46,6 +46,16 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::post('/storeproject','ProjectController@store');
     Route::get('/editproject/{id?}','ProjectController@edit');
     Route::post('/updateproject','ProjectController@update');
+    //risiko bisnis
+    Route::get('/resikobisnisadmin', 'RiskbisnisverifController@index');
+    Route::get('/laprisikobisnis', 'LaprisikobisnisController@index');
+    Route::get('/export', 'LaprisikobisnisController@export');
+    //otorisasi kpi
+    Route::get('/userkeyperson', 'UserkeypersonController@index')->name('userkeyperson.index');
+    Route::get('/bukaotorisasi/{nik}','UserkeypersonController@bukaotorisasi');
+    Route::get('/tutupotorisasi/{nik}','UserkeypersonController@tutupotorisasi');
+    //user
+    
 });
 
     Route::group(['middleware'=>['role:keyperson']], function () {
@@ -90,11 +100,8 @@ Route::group(['middleware'=>['role:verifikatur']], function () {
     Route::post('/batalhighlight','RiskbisnisverifController@batalhighlight');
     Route::post('/kirimkomentar','RiskbisnisverifController@kirimkomentar');
     Route::get('/kpiverifikatur', 'RiskbisnisverifController@kpi')->name('kpiverifikatur.index');
-    Route::get('/userkeyperson', 'UserkeypersonController@index')->name('userkeyperson.index');
-    Route::get('/bukaotorisasi/{nik}','UserkeypersonController@bukaotorisasi');
-    Route::get('/tutupotorisasi/{nik}','UserkeypersonController@tutupotorisasi');
-    Route::get('/laprisikobisnis', 'LaprisikobisnisController@index');
-    Route::get('/export', 'LaprisikobisnisController@export');
+    
+    
     //risiko project
     Route::get('/risikoprojectverifikatur', 'RisikoprojectverifController@index')->name('risikoprojectperif.index');
     Route::get('/validriskprojectverif/{id}','RisikoprojectverifController@validriskproject');
@@ -127,4 +134,7 @@ Route::group(['middleware'=>['role:superadmin']], function () {
     
     //users
     Route::get('/users', 'UsersController@index')->name('users.index');
+    Route::get('/nonaktifuser/{nik}','UsersController@nonaktifuser');
+    Route::get('/aktifkanuser/{nik}','UsersController@aktifkanuser');
+    Route::get('/addusers','UsersController@create');
 });

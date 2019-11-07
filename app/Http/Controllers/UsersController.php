@@ -15,13 +15,51 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $judul = "Users";
-        $user =user::select('users.*','Unitkerja.nama as namaunit')
+        $user =user::select('users.*','Unitkerja.nama as namaunit','roles.name as namarole')
         ->join('Unitkerja','Unitkerja.objectabbr','=','users.unit_id')
         ->join('model_has_roles','model_has_roles.model_id','=','users.nik')
-        ->where('model_has_roles.role_id','1')
+        ->join('roles','roles.id','=','model_has_roles.role_id')
         ->get();
-       
+        //  dd($user);
         return view('administrator.users.index', compact('judul', 'user'));
+    }
+    function nonaktifuser(Request $request,$nik){
+        $user = User::where('nik',$nik)->update(['status'=>0]);
+        if($user){
+            return redirect()
+            ->route('users.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'User dengan '.$nik.' berhasil dinonaktifkan !'
+            ]);
+        }else{
+            return redirect()
+            ->route('users.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'User dengan '.$nik.' gagal dinonaktifkan !'
+            ]);
+        }
+
+    }
+    function aktifkanuser(Request $request,$nik){
+        $user = User::where('nik',$nik)->update(['status'=>1]);
+        if($user){
+            return redirect()
+            ->route('users.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'User dengan '.$nik.' berhasil diaktifkan !'
+            ]);
+        }else{
+            return redirect()
+            ->route('users.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'User dengan '.$nik.' gagal diaktifkan !'
+            ]);
+        }
+
     }
 
     /**

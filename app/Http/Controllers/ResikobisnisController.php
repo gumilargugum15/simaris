@@ -670,7 +670,7 @@ class ResikobisnisController extends Controller
         $unitid = $user->unit_id;
         $judul = "KPI";
         $kpi =Kpi::tahunAktif($periodeaktif->tahun)
-        ->join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
+        ->leftJoin('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
         ->select('kpi.*', 'unitkerja.nama as namaunit')
         ->byUnit($unitid)
         ->get();

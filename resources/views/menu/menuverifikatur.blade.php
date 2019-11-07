@@ -7,7 +7,7 @@
     </span>
   </a>
   <ul class="treeview-menu">
-    <li><a href="{{ url('userkeyperson') }}"><i class="fa fa-circle-o"></i>Users keyperson</a></li>
+    <li><a href="{{ url('userkeyperson') }}"><i class="fa fa-circle-o"></i>Otorisasi KPI</a></li>
     
   </ul>
 </li>

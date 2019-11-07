@@ -22,7 +22,7 @@
     <div class="box">
         <div class="box-header">
             @include('layouts.flash')
-            {{-- <a class="btn btn-primary" href="{{ url('addusers') }}"><i class="fa  fa-plus" title=""> User baru</i></a> --}}
+            <a class="btn btn-primary" href="{{ url('addusers') }}"><i class="fa  fa-plus" title=""> User baru</i></a>
         </div>
         <div class="box-body">
             <table id="tbluser" class="table table-bordered table-striped">
@@ -33,6 +33,7 @@
                     <th>Nama</th>
                     <th>Email</th>
                     <th>Unit</th>
+                    <th>Role</th>
                     <th width="10%">Aksi</th>
                   </tr>
                 </thead>
@@ -50,11 +51,12 @@
                     <td>{{$data->name}}</td>
                     <td>{{$data->email}}</td>
                     <td>{{$data->namaunit}}</td>
+                    <td>{{$data->namarole}}</td>
                     <td align="center">
-                      @if($data->aktif=='1')
-                      <a class="btn btn-success" onclick="tutupotorisasi({{$data->id}});"><i class="fa fa-power-off" title="Tutup otorisasi"></i></a>
+                      @if($data->status=='1')
+                      <a class="btn btn-success" onclick="nonaktifuser({{$data->nik}});"><i class="fa fa-power-off" title="Non aktifkan"></i></a>
                       @else
-                      <a class="btn btn-danger" onclick="bukaotorisasi({{$data->id}});"><i class="fa fa-power-off" title="Buka otorisasi"></i></a>
+                      <a class="btn btn-danger" onclick="aktifkanuser({{$data->nik}});"><i class="fa fa-power-off" title="Aktifkan"></i></a>
                       @endif
                   </td>
                   </tr>
@@ -67,10 +69,19 @@
       $(function () {
         $('#tbluser').DataTable()
       })
-      function aktifperiode(id){
+      function nonaktifuser(id){
         $.ajax({
-                url: "{{ url('aktifperiode') }}"+id,
-                method: 'post',
+                url: "{{ url('nonaktifuser') }}/"+id,
+                method: 'get',
+                success: function (data) {
+                    location.reload();
+                }
+            });
+      }
+      function aktifkanuser(id){
+        $.ajax({
+                url: "{{ url('aktifkanuser') }}/"+id,
+                method: 'get',
                 success: function (data) {
                     location.reload();
                 }
