@@ -42,20 +42,22 @@ class RiskbisnisverifController extends Controller
         $unitkerja = Unitkerja::get();
         // dd($unitkerja);
         $periodeall = Perioderisikobisnis::get();
+        $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         if(isset($request->periode ) && isset($request->unitkerja)){
-           $pecahperiod = explode("-",$request->periode);
-           $namaperoiod = $pecahperiod[0];
-           $tahunperiod = $pecahperiod[1];
-           $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
-            ->byYear($tahunperiod)
-            ->byUnit($request->unitkerja)
-            // ->byStatusrisk('1')
-            ->first();
+        //    $pecahperiod = explode("-",$request->periode);
+        //    $namaperoiod = $pecahperiod[0];
+        //    $tahunperiod = $pecahperiod[1];
+        //    $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
+        //     ->byYear($tahunperiod)
+        //     ->byUnit($request->unitkerja)
+        //     // ->byStatusrisk('1')
+        //     ->first();
+            $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($request->unitkerja)->first();
             // dd($risikobisnis->risikobisnisdetail);
             
         }
     
-        return view('resiko.risikobisnisverifi.index', compact('risikobisnis','periodeall','namarisiko','unitkerja','nikuser'));
+        return view('resiko.risikobisnisverifi.index', compact('risikobisnis','periodeall','namarisiko','unitkerja','nikuser','periodeaktif'));
     }
     function validasibisnis(Request $request,$id){
         $risikobisnis = Risikobisnis::where('id',$id)->update(['statusrisiko_id' => '3']);    
@@ -183,7 +185,48 @@ class RiskbisnisverifController extends Controller
         ->get();
         return view('resiko.risikobisnisverifi.kpiindex', compact('judul', 'kpi'));
     }
+    public function kri(Request $request){
+        $kaidah         = $request->kaidah;
+        foreach($kaidah as $key=>$value){
+            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['jenisrisiko'=>'KRI']);
+        }
 
+    }
+    public function batalkri(Request $request){
+        $kaidah         = $request->kaidah;
+        foreach($kaidah as $key=>$value){
+            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['jenisrisiko'=>'']);
+        }
+
+    }
+    public function rkap(Request $request){
+        $kaidah         = $request->kaidah;
+        foreach($kaidah as $key=>$value){
+            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['jenisrisiko'=>'RKAP']);
+        }
+
+    }
+    public function batalrkap(Request $request){
+        $kaidah         = $request->kaidah;
+        foreach($kaidah as $key=>$value){
+            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['jenisrisiko'=>'']);
+        }
+
+    }
+    public function krirkap(Request $request){
+        $namarisiko ="Risiko Bisnis KRI/RKAP";
+        $user = Auth::user();
+        $nikuser = $user->nik;
+        $unitkerja = Unitkerja::get();
+        $periodeall = Perioderisikobisnis::get();
+        $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
+        if(isset($request->periode ) && isset($request->unitkerja)){
+            $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($request->unitkerja)->first();
+           }
+        
+        return view('resiko.risikobisnisverifi.risikobisniskrirkap', compact('risikobisnis','periodeall','namarisiko','unitkerja','nikuser','periodeaktif'));
+    }
+    
     /**
      * Show the form for creating a new resource.
      *

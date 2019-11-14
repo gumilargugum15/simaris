@@ -45,22 +45,23 @@ class RiskbisnispimpinanController extends Controller
 
         
         if(isset($request->periode)){
-           $pecahperiod = explode("-",$request->periode);
-           $namaperoiod = $pecahperiod[0];
-           $tahunperiod = $pecahperiod[1];
-           $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
-            ->byYear($tahunperiod)
-            ->byUnit($unitid)
-            //->byStatusrisk('2')
-            ->first();
+        //    $pecahperiod = explode("-",$request->periode);
+        //    $namaperoiod = $pecahperiod[0];
+        //    $tahunperiod = $pecahperiod[1];
+        //    $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
+        //     ->byYear($tahunperiod)
+        //     ->byUnit($unitid)
+        //     //->byStatusrisk('2')
+        //     ->first();
+            $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($unitid)->first();
             
         }else{
-            $risikobisnis = Risikobisnis::byPeriod($periodeaktif->nama)
-            ->byYear($periodeaktif->tahun)
-            ->byUnit($unitid)
-            //->byStatusrisk('2')
-            ->first();
-            
+            // $risikobisnis = Risikobisnis::byPeriod($periodeaktif->nama)
+            // ->byYear($periodeaktif->tahun)
+            // ->byUnit($unitid)
+            // //->byStatusrisk('2')
+            // ->first();
+            $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
 
         }
 

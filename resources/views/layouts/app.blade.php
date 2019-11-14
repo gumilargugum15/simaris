@@ -110,7 +110,7 @@
                   </li> --}}
                 </ul>
               </li>
-              <li class="footer"><a href="#">View all</a></li>
+              {{-- <li class="footer"><a href="#">View all</a></li> --}}
             </ul>
           </li>
           <!-- Tasks: style can be found in dropdown.less -->
@@ -135,7 +135,7 @@
                 </p>
               </li>
               <!-- Menu Body -->
-              <li class="user-body">
+              {{-- <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
                     <a href="#">Followers</a>
@@ -149,12 +149,12 @@
                   </div>
                 </div>
                 <!-- /.row -->
-              </li>
+              </li> --}}
               <!-- Menu Footer-->
               <li class="user-footer">
-                <div class="pull-left">
+                {{-- <div class="pull-left">
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
-                </div>
+                </div> --}}
                 <div class="pull-right">
                   
                   <a class="btn btn-default btn-flat" href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -483,7 +483,27 @@
     location.reload();
   }
    $(function () {
-    $('#tblresikobisnis').DataTable()
+    // $('#tblresikobisnis').DataTable()
+    $('#tblresikobisnis thead tr').clone(true).appendTo( '#tblresikobisnis thead' );
+    $('#tblresikobisnis thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text();
+        $(this).html( '<input size="5" type="text" placeholder="Cari..."/>' );
+ 
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+ 
+    var table = $('#tblresikobisnis').DataTable( {
+      orderCellsTop: true,
+        fixedHeader: true,
+       responsive: true
+    } );
     $('#tblresikoaset').DataTable()
     
     $('.select2').select2()

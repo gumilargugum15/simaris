@@ -72,13 +72,17 @@
                             <option value="">Pilih Periode</option>
                               @foreach ($periodeall as $period)
                               @if(isset($risikobisnis->periode))
-                              @if(($period->nama."-".$period->tahun)==($risikobisnis->periode."-".$risikobisnis->tahun)){
-                                <option value="{{$period->nama}}-{{$period->tahun}}" selected>{{$period->nama}}/{{$period->tahun}}</option>
+                              {{-- @if(($period->nama."-".$period->tahun)==($risikobisnis->periode."-".$risikobisnis->tahun)){ --}}
+                              @if(($period->id)==($risikobisnis->perioderisikobisnis_id)){
+                                <option value="{{$period->id}}" selected>{{$period->nama}}/{{$period->tahun}}</option>
+                                {{-- <option value="{{$period->nama}}-{{$period->tahun}}" selected>{{$period->nama}}/{{$period->tahun}}</option> --}}
                               @else
-                              <option value="{{$period->nama}}-{{$period->tahun}}">{{$period->nama}}/{{$period->tahun}}</option>
+                              {{-- <option value="{{$period->nama}}-{{$period->tahun}}">{{$period->nama}}/{{$period->tahun}}</option> --}}
+                              <option value="{{$period->id}}">{{$period->nama}}/{{$period->tahun}}</option>
                               @endif
                               @else
-                              <option value="{{$period->nama}}-{{$period->tahun}}">{{$period->nama}}/{{$period->tahun}}</option>
+                              {{-- <option value="{{$period->nama}}-{{$period->tahun}}">{{$period->nama}}/{{$period->tahun}}</option> --}}
+                              <option value="{{$period->id}}">{{$period->nama}}/{{$period->tahun}}</option>
                               @endif
                               @endforeach
                         </select>
@@ -156,6 +160,8 @@
               <tr>
                 <th>No</th>
                 <th>KPI</th>
+                <th>Utama</th>
+                <th>Jenis</th>
                 <th width="10%">Kaidah</th>
                 <th>Risiko</th>
                 <th>Peluang</th>
@@ -180,6 +186,8 @@
                
                <td>{{$no}}</td>
                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td>
+               <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->utama }}</p>@else{{ $riskdetail->kpi->utama }}@endif</td>
+               <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>             
                <td align="center">
                   @if($riskdetail->kaidah=='1')
                   <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>

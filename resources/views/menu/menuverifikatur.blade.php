@@ -32,7 +32,8 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a href="{{ url('resikobisnisverifikatur') }}"><i class="fa fa-circle-o"></i>Resiko Proses Bisnis</a></li>
+          <li><a href="{{ url('resikobisnisverifikatur') }}"><i class="fa fa-circle-o"></i>Risiko Proses Bisnis</a></li>
+          <li><a href="{{ url('risikokrirkap') }}"><i class="fa fa-circle-o"></i>Risiko KRI / RKAP</a></li>
           {{-- <li><a href="{{ url('risikoaset') }}"><i class="fa fa-circle-o"></i>Resiko Asset</a></li>
           <li><a href="{{ url('risikoprojectverifikatur') }}"><i class="fa fa-circle-o"></i>Resiko Project</a></li> --}}
         </ul>
@@ -46,6 +47,7 @@
         </a>
         <ul class="treeview-menu">
           <li><a href="{{ url('laprisikobisnis') }}"><i class="fa fa-circle-o"></i>Resiko Proses Bisnis</a></li>
+          
           {{-- <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i>Resiko Project</a></li>
           <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i>Resiko Assets</a></li> --}}
         </ul>

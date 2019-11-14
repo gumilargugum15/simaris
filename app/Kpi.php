@@ -32,4 +32,8 @@ class Kpi extends Model
     {
         return $query->where('status', $u);
     }
+    public function scopeById($query, $u)
+    {
+        return $query->where('perioderisikobisnis_id', $u);
+    }
 }

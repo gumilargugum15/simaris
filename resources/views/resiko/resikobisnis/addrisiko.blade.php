@@ -45,7 +45,7 @@ function pilihdampak(krinama,dampakid,katid,level){
         
         </td>
         </tr>
-        <tr id="file_${no}"><td colspan="8">Lampiran dokumen mitigasi :<input type="file" id="gambar[]" name="gambar[]" value="0"></td></tr>
+        <tr id="file_${no}"><td colspan="8"><b>Lampiran dokumen mitigasi :</b><input type="file" id="gambar[]" name="gambar[]" value="0"></td></tr>
              `);
              no = (no-1) + 2;
              $('#rowsumber').val(no);
@@ -100,6 +100,7 @@ function pilihdampak(krinama,dampakid,katid,level){
                             @if(isset($unituser->objectabbr))
                             <input type="hidden" name="unitid" id="unitid" value="{{ $unituser->objectabbr }}">
                             @endif
+                            <input type="hidden" name="periodeid" id="periodeid" value="{{ $periodeaktif->id }}">
                             <input type="text" class="form-control" name="periode" id="periode" value="{{ $periodeaktif->nama }}" placeholder="Periode ..." readonly>
                             </div>
                             <div class="col-xs-4">
@@ -111,7 +112,11 @@ function pilihdampak(krinama,dampakid,katid,level){
                         <label>KPI</label>
                         <select class="form-control select2" style="width: 100%;" name="kpi" id="kpi">
                             @foreach ($kpi as $rowkpi)
-                            <option value="{{$rowkpi->id}}">{{$rowkpi->nama}}</option>
+                            @if($rowkpi->status==1)
+                            <option value="{{$rowkpi->id}}" class="text-{{$rowkpi->warnatext}}">{{$rowkpi->nama}} ( {{$rowkpi->namalevel}} ) [ sudah diinput...]</option>
+                            @else
+                            <option value="{{$rowkpi->id}}" class="text-{{$rowkpi->warnatext}}">{{$rowkpi->nama}} ( {{$rowkpi->namalevel}} )</option>
+                            @endif
                             @endforeach
                         </select>
                         </div>

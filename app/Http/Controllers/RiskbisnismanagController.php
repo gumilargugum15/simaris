@@ -39,20 +39,21 @@ class RiskbisnismanagController extends Controller
         $unitkerja = Unitkerja::get();
         // dd($unitkerja);
         $periodeall = Perioderisikobisnis::get();
+        $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         if(isset($request->periode ) && isset($request->unitkerja)){
-           $pecahperiod = explode("-",$request->periode);
-           $namaperoiod = $pecahperiod[0];
-           $tahunperiod = $pecahperiod[1];
-           $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
-            ->byYear($tahunperiod)
-            ->byUnit($request->unitkerja)
-            //->byStatusrisk('3')
-            ->first();
-            
+        //    $pecahperiod = explode("-",$request->periode);
+        //    $namaperoiod = $pecahperiod[0];
+        //    $tahunperiod = $pecahperiod[1];
+        //    $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
+        //     ->byYear($tahunperiod)
+        //     ->byUnit($request->unitkerja)
+        //     //->byStatusrisk('3')
+        //     ->first();
+            $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($request->unitkerja)->first();
             
         }
     
-        return view('resiko.risikobisnismanagergcg.index', compact('risikobisnis','periodeall','namarisiko','unitkerja'));
+        return view('resiko.risikobisnismanagergcg.index', compact('risikobisnis','periodeall','namarisiko','unitkerja','periodeaktif'));
     }
     function validasibisnis(Request $request,$id){
         $risikobisnis = Risikobisnis::where('id',$id)->update(['statusrisiko_id' => '5']);    

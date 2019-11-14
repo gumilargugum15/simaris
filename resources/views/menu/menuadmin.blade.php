@@ -38,6 +38,7 @@
         </a>
         <ul class="treeview-menu">
           <li><a href="{{ url('resikobisnisadmin') }}"><i class="fa fa-circle-o"></i>Resiko Proses Bisnis</a></li>
+          <li><a href="{{ url('risikokrirkap') }}"><i class="fa fa-circle-o"></i>Risiko KRI / RKAP</a></li>
           {{-- <li><a href="pages/forms/advanced.html"><i class="fa fa-circle-o"></i>Resiko Project</a></li>
           <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i>Resiko Asset</a></li> --}}
         </ul>

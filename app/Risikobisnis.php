@@ -47,4 +47,8 @@ class Risikobisnis extends Pivot
     {
         return $query->where('statusrisiko_id','>', $s);
     }
+    public function scopeById($query, $u)
+    {
+        return $query->where('perioderisikobisnis_id', $u);
+    }
 }

@@ -37,6 +37,7 @@
                             <label>Periode/tahun</label>
                             <div class="row">
                             <div class="col-xs-8">
+                            <input type="hidden" name="periodeid" id="periodeid" value="{{ $riskbisnis->perioderisikobisnis_id }}">
                             <input type="text" class="form-control" name="periode" id="periode" value="{{ $riskbisnis->periode }}" placeholder="Periode ..." readonly required>
                             </div>
                             <div class="col-xs-4">

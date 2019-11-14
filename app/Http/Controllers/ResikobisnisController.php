@@ -52,44 +52,62 @@ class ResikobisnisController extends Controller
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         $unituser = unitkerja::where('objectabbr',$unitid)->first();
         
-        $risikobisnis = Risikobisnis::byPeriod($periodeaktif->nama)
-            ->byYear($periodeaktif->tahun)
-            ->byUnit($unitid)
-            ->first();
+        // $risikobisnis = Risikobisnis::byPeriod($periodeaktif->nama)
+        //     ->byYear($periodeaktif->tahun)
+        //     ->byUnit($unitid)
+        //     ->byId($periodeaktif->id)
+        //     ->first();
+        $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
+        
         if(isset($request->periode)){
-           $pecahperiod = explode("-",$request->periode);
-           $namaperoiod = $pecahperiod[0];
-           $tahunperiod = $pecahperiod[1];
-           $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
-            ->byYear($tahunperiod)
-            ->byUnit($unitid)
-            ->first();
+        //    $pecahperiod = explode("-",$request->periode);
+        //    $namaperoiod = $pecahperiod[0];
+        //    $tahunperiod = $pecahperiod[1];
+        //    $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
+        //     ->byYear($tahunperiod)
+        //     ->byUnit($unitid)
+        //     ->byId($periodeaktif->id)
+        //     ->first();
+            $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($unitid)->first();
+        
             
         }else{
-            $risikobisnis = Risikobisnis::byPeriod($periodeaktif->nama)
-            ->byYear($periodeaktif->tahun)
-            ->byUnit($unitid)
-            ->first();
+            // $risikobisnis = Risikobisnis::byPeriod($periodeaktif->nama)
+            // ->byYear($periodeaktif->tahun)
+            // ->byUnit($unitid)
+            // ->byId($periodeaktif->id)
+            // ->first();
+            $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
             
 
         }
-        $status = null;
-        $cekkpinull = Kpi::tahunAktif($periodeaktif->tahun)
-        ->byUnit($unitid)
-        ->byKwartal($periodeaktif->nama)
-        ->byStatus($status)
-        ->get();
-        $jmlkpinull = count($cekkpinull);
+        $status = 0;
+        // $cekkpinull = Kpi::tahunAktif($periodeaktif->tahun)
+        // ->byUnit($unitid)
+        // ->byKwartal($periodeaktif->nama)
+        // ->byStatus($status)
+        // ->byId($periodeaktif->id)
+        // ->get();
 
-        $cekkpiall = Kpi::tahunAktif($periodeaktif->tahun)
-        ->byUnit($unitid)
-        ->byKwartal($periodeaktif->nama)
-        ->get();
+        $cekkpinull = Kpi::byId($periodeaktif->id)->byStatus($status)->byUnit($unitid)->get();
+        $jmlkpinull = count($cekkpinull);
+        // $cekkpiall = Kpi::tahunAktif($periodeaktif->tahun)
+        // ->byUnit($unitid)
+        // ->byKwartal($periodeaktif->nama)
+        // ->byId($periodeaktif->id)
+        // ->get();
+        // $cekkpiall = Kpi::tahunAktif($periodeaktif->tahun)
+        // ->byUnit($unitid)
+        // ->byKwartal($periodeaktif->nama)
+        // ->byId($periodeaktif->id)
+        // ->get();
+        $cekkpiall = Kpi::byId($periodeaktif->id)->byUnit($unitid)->get();
+
         $jmlkpiall = count($cekkpiall);
         //dd($periodeaktif->tahun."-".$unitid."-".$periodeaktif->nama);
         // dd($jmlkpinull."-".$jmlkpiall);
-        $kpi = Kpi::tahunAktif($periodeaktif->tahun)
-        ->get();
+        // $kpi = Kpi::tahunAktif($periodeaktif->tahun)->byId($periodeaktif->id)->get();
+        $kpi = Kpi::byId($periodeaktif->id)->get();
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();
         $dampak = Dampak::orderBy('level', 'DESC')->get();
@@ -178,7 +196,13 @@ class ResikobisnisController extends Controller
         $unitid = $user->unit_id;
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         $unituser = unitkerja::where('objectabbr',$unitid)->first();
-        $kpi = Kpi::tahunAktif($periodeaktif->tahun)->byUnit($unitid)->get();
+        $kpi = Kpi::tahunAktif($periodeaktif->tahun)
+        ->leftJoin('level_kpi', 'level_kpi.id', '=', 'kpi.level')
+        ->select('kpi.*','level_kpi.nama as namalevel','level_kpi.warnatext')
+        ->byUnit($unitid)
+        ->byId($periodeaktif->id)
+        ->orderby('level','desc')->get();
+        // dd($kpi);
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();
         $dampak = Dampak::orderBy('level', 'DESC')->get();
@@ -227,6 +251,7 @@ class ResikobisnisController extends Controller
          ]);
 
         $unitid         = $request->unitid;
+        $periodeid      = $request->periodeid;
         $periode        = $request->periode;
         $tahun          = $request->tahun;
         $kpi            = $request->kpi;
@@ -253,31 +278,35 @@ class ResikobisnisController extends Controller
         $user = Auth::user();
         
         //cari risiko bisnis berdasarkan periode,tahun dan unit id
-        $countrisk = Risikobisnis::byPeriod($periode)
-            ->byYear($tahun)
-            ->byUnit($unitid)
-            ->count();
+        // $countrisk = Risikobisnis::byPeriod($periode)
+        //     ->byYear($tahun)
+        //     ->byUnit($unitid)
+        //     ->count();
+        $countrisk = Risikobisnis::byId($periodeid)->byUnit($unitid)->count();
         
        if( $countrisk > 0){
         //cari data risk
-        $risikobisnis = Risikobisnis::byPeriod($periode)
-            ->byYear($tahun)
-            ->byUnit($unitid)
-            ->first();
+        // $risikobisnis = Risikobisnis::byPeriod($periode)
+        //     ->byYear($tahun)
+        //     ->byUnit($unitid)
+        //     ->first();
+        $risikobisnis = Risikobisnis::byId($periodeid)->byUnit($unitid)->first();
         
         $datariskdetail = new Risikobisnisdetail();
-        $datariskdetail->risikobisnis_id    = $risikobisnis->id;
-        $datariskdetail->kpi_id             = $kpi;
-        $datariskdetail->risiko             = $risiko;
-        $datariskdetail->akibat             = $akibat;
-        $datariskdetail->klasifikasi_id     = $klasifikasi;
-        $datariskdetail->peluang_id         = $peluang;
-        $datariskdetail->dampak_id          = $iddampak;
-        $datariskdetail->kategori_id        = $idkategori;
-        $datariskdetail->warna              = $warna;
-        $datariskdetail->indikator          = $indikator;
-        $datariskdetail->nilaiambang        = $nilaiambang;
-        $datariskdetail->creator            = $user->nik;
+        $datariskdetail->risikobisnis_id            = $risikobisnis->id;
+        $datariskdetail->kpi_id                     = $kpi;
+        $datariskdetail->risiko                     = $risiko;
+        $datariskdetail->akibat                     = $akibat;
+        $datariskdetail->klasifikasi_id             = $klasifikasi;
+        $datariskdetail->peluang_id                 = $peluang;
+        $datariskdetail->dampak_id                  = $iddampak;
+        $datariskdetail->kategori_id                = $idkategori;
+        $datariskdetail->warna                      = $warna;
+        $datariskdetail->indikator                  = $indikator;
+        $datariskdetail->nilaiambang                = $nilaiambang;
+        $datariskdetail->creator                    = $user->nik;
+        $datariskdetail->perioderisikobisnis_id     = $periodeid;
+        $datariskdetail->jenisrisiko                = '';
         $datariskdetail->save();
         if($datariskdetail){
             $updatekpi = Kpi::where('id',$kpi)->update(['status'=>'1']);
@@ -303,6 +332,7 @@ class ResikobisnisController extends Controller
                     $datasumber->pic                      = $pic[$key];
                     $datasumber->statussumber             = $status[$key];
                     $datasumber->file                     = $path;
+                    $datasumber->perioderisikobisnis_id   = $periodeid;
                     $datasumber->save();
 
                     
@@ -326,17 +356,20 @@ class ResikobisnisController extends Controller
          
        }else{
            $datarisk = new Risikobisnis();
-           $datarisk->periode            = $periode;
-           $datarisk->tahun              = $tahun;
-           $datarisk->unit_id            = $unitid;
-           $datarisk->statusrisiko_id    = 0;
-           $datarisk->creator            = $user->nik;
+           $datarisk->periode                   = $periode;
+           $datarisk->tahun                     = $tahun;
+           $datarisk->unit_id                   = $unitid;
+           $datarisk->statusrisiko_id           = 0;
+           $datarisk->perioderisikobisnis_id    = $periodeid;
+           $datarisk->creator                   = $user->nik;
            $datarisk->save();
 
-           $risikobisnis = Risikobisnis::byPeriod($periode)
-            ->byYear($tahun)
-            ->byUnit($unitid)
-            ->first();
+        //    $risikobisnis = Risikobisnis::byPeriod($periode)
+        //     ->byYear($tahun)
+        //     ->byUnit($unitid)
+        //     ->first();
+
+            $risikobisnis = Risikobisnis::byId($periodeid)->byUnit($unitid)->first();
         
             $datariskdetail = new Risikobisnisdetail();
             $datariskdetail->risikobisnis_id    = $risikobisnis->id;
@@ -351,6 +384,8 @@ class ResikobisnisController extends Controller
             $datariskdetail->indikator          = $indikator;
             $datariskdetail->nilaiambang        = $nilaiambang;
             $datariskdetail->creator            = $user->nik;
+            $datariskdetail->perioderisikobisnis_id     = $periodeid;
+            $datariskdetail->jenisrisiko                = '';
             $datariskdetail->save();
             if($datariskdetail){
             $updatekpi = Kpi::where('id',$kpi)->update(['status'=>'1']);
@@ -377,6 +412,7 @@ class ResikobisnisController extends Controller
                     $datasumber->pic                      = $pic[$key];
                     $datasumber->statussumber             = $status[$key];
                     $datasumber->file                     = $path;
+                    $datasumber->perioderisikobisnis_id   = $periodeid;
                     $datasumber->save();
                 }
             }
@@ -481,7 +517,7 @@ class ResikobisnisController extends Controller
         $riskdetail = Risikobisnisdetail::where('id',$id)->first();
         $riskbisnis = Risikobisnis::where('id',$riskdetail->risikobisnis_id)->first();
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
-        $kpi = Kpi::tahunAktif($periodeaktif->tahun)->byUnit($unitid)->get();
+        $kpi = Kpi::tahunAktif($periodeaktif->tahun)->byUnit($unitid)->byId($periodeaktif->id)->get();
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();
         $kriteria = Kriteria::where('dampak_id',$riskdetail->dampak_id)->where('kategori_id',$riskdetail->kategori_id)->first();
@@ -541,6 +577,7 @@ class ResikobisnisController extends Controller
         $user = Auth::user();
         //dd($user->roles[0]->name);
         $idriskdetail   = $request->idriskdetail;
+        $periodeid      = $request->periodeid;
         $periode        = $request->periode;
         $tahun          = $request->tahun;
         $kpi            = $request->kpi;
@@ -568,7 +605,7 @@ class ResikobisnisController extends Controller
 
         $dataupdate = ['kpi_id'=>$kpi,'risiko'=>$risiko,'akibat'=>$akibat,'klasifikasi_id'=>$klasifikasi,
         'peluang_id'=>$peluang,'dampak_id'=>$iddampak,'warna'=>$warna,'indikator'=>$indikator,'nilaiambang'=>$nilaiambang,
-        'modifier'=>$user->nik
+        'modifier'=>$user->nik,'perioderisikobisnis_id'=>$periodeid
         ];
 
         $riskdetail = Risikobisnisdetail::where('id',$idriskdetail)
@@ -593,6 +630,7 @@ class ResikobisnisController extends Controller
                     $datasumber->pic                      = $pic[$key];
                     $datasumber->statussumber             = $status[$key];
                     $datasumber->file                     = $path;
+                    $datasumber->perioderisikobisnis_id   = $periodeid;
                     $datasumber->save();
                     }else{
 
@@ -600,7 +638,7 @@ class ResikobisnisController extends Controller
                         Storage::delete($gambarfile[$key]);
                         $path = $gambar[$key]->store('risikobisnis');
                         $datasumber = [
-                            'namasumber'=>$value,'mitigasi'=>$mitigasi[$key],'mitigasi'=>$biaya[$key],
+                            'namasumber'=>$value,'mitigasi'=>$mitigasi[$key],'biaya'=>$biaya[$key],
                             'start_date'=>$startdate[$key],'end_date'=>$enddate[$key],'pic'=>$pic[$key],'statussumber'=>$status[$key],'file'=>$path
                         ];
                     $sumberrisk = Sumberrisiko::where('id',$sumberid[$key])->update($datasumber);
@@ -608,7 +646,7 @@ class ResikobisnisController extends Controller
                     }else{
                         
                         $datasumber = [
-                            'namasumber'=>$value,'mitigasi'=>$mitigasi[$key],'mitigasi'=>$biaya[$key],
+                            'namasumber'=>$value,'mitigasi'=>$mitigasi[$key],'biaya'=>$biaya[$key],
                             'start_date'=>$startdate[$key],'end_date'=>$enddate[$key],'pic'=>$pic[$key],'statussumber'=>$status[$key]
                         ];
                     $sumberrisk = Sumberrisiko::where('id',$sumberid[$key])->update($datasumber);
@@ -669,12 +707,14 @@ class ResikobisnisController extends Controller
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         $unitid = $user->unit_id;
         $judul = "KPI";
-        $kpi =Kpi::tahunAktif($periodeaktif->tahun)
-        ->leftJoin('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
-        ->select('kpi.*', 'unitkerja.nama as namaunit')
+        $kpi =Kpi::leftJoin('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
+        ->leftJoin('level_kpi', 'level_kpi.id', '=', 'kpi.level')
+        ->join('perioderisikobisnis', 'perioderisikobisnis.id', '=', 'kpi.perioderisikobisnis_id')
+        ->select('kpi.*', 'unitkerja.nama as namaunit','level_kpi.nama as namalevel','level_kpi.warna','perioderisikobisnis.nama as namaperiode','perioderisikobisnis.tahun as tahunperiode')
         ->byUnit($unitid)
+        ->orderby('level','desc')
         ->get();
-        return view('resiko.resikobisnis.kpiindex', compact('judul', 'kpi','dataoto'));
+        return view('resiko.resikobisnis.kpiindex', compact('judul', 'kpi','dataoto','periodeaktif'));
     }
     public function addkpi(){
         $user = Auth::user();
@@ -799,5 +839,33 @@ class ResikobisnisController extends Controller
         }
 
         
+    }
+    public function levelbiasa(Request $request){
+        $level         = $request->level;
+        foreach($level as $key=>$value){
+            $kpi = Kpi::where('id',$value)->update(['level'=>1]);
+        }
+
+    }
+    public function levelhight(Request $request){
+        $level         = $request->level;
+        foreach($level as $key=>$value){
+            $kpi = Kpi::where('id',$value)->update(['level'=>2]);
+        }
+
+    }
+    public function kpiutama(Request $request){
+        $level         = $request->level;
+        foreach($level as $key=>$value){
+            $kpi = Kpi::where('id',$value)->update(['utama'=>'Y']);
+        }
+
+    }
+    public function batalkpiutama(Request $request){
+        $level         = $request->level;
+        foreach($level as $key=>$value){
+            $kpi = Kpi::where('id',$value)->update(['utama'=>'N']);
+        }
+
     }
 }

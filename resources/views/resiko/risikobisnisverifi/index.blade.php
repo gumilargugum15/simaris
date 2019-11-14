@@ -5,6 +5,7 @@
 
 @section('content')
 <script>
+
 function sesuaikaidah(){  
         var data_val = $('#fm-kaidah').serialize();
         $.ajax({
@@ -81,6 +82,62 @@ function batalvalidriskbisnis(id){
 
     }
   }
+  function kri(){
+    if (confirm("Apakah anda yakin ?") == true) {
+        var data_val = $('#fm-kaidah').serialize();
+        $.ajax({
+                url: "{{ url('kri') }}",
+                method: 'post',
+                data	: data_val,
+                success: function (data) {
+                    location.reload();
+                }
+            });
+
+    }
+  }
+  function batalkri(){
+    if (confirm("Apakah anda yakin ?") == true) {
+        var data_val = $('#fm-kaidah').serialize();
+        $.ajax({
+                url: "{{ url('batalkri') }}",
+                method: 'post',
+                data	: data_val,
+                success: function (data) {
+                    location.reload();
+                }
+            });
+
+    }
+  }
+  function rkap(){
+    if (confirm("Apakah anda yakin ?") == true) {
+        var data_val = $('#fm-kaidah').serialize();
+        $.ajax({
+                url: "{{ url('rkap') }}",
+                method: 'post',
+                data	: data_val,
+                success: function (data) {
+                    location.reload();
+                }
+            });
+
+    }
+  }
+  function batalrkap(){
+    if (confirm("Apakah anda yakin ?") == true) {
+        var data_val = $('#fm-kaidah').serialize();
+        $.ajax({
+                url: "{{ url('batalrkap') }}",
+                method: 'post',
+                data	: data_val,
+                success: function (data) {
+                    location.reload();
+                }
+            });
+
+    }
+  }
   function batalhighlight(){
     if (confirm("Apakah anda yakin ?") == true) {
         var data_val = $('#fm-kaidah').serialize();
@@ -116,7 +173,11 @@ function batalvalidriskbisnis(id){
     {{-- <div class="callout callout-success"> --}}
     <div class="box">
         <div class="box-body">
-                
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                Periode aktif : <b>{{$periodeaktif->nama." ".$periodeaktif->tahun}}</b> dari tanggal : <b>{{$periodeaktif->start_date}}</b> sampai tanggal <b>{{$periodeaktif->end_date}}</b>
+              </div>    
             <table class="table table-bordered">
                 <tr>
                     <th>Periode</th>
@@ -139,16 +200,21 @@ function batalvalidriskbisnis(id){
                                             <option value="">Pilih Periode</option>
                                             @foreach ($periodeall as $period)
                                             @if(isset($risikobisnis->periode))
-                                            @if(($period->nama."-".$period->tahun)==($risikobisnis->periode."-".$risikobisnis->tahun)){
-                                            <option value="{{$period->nama}}-{{$period->tahun}}" selected>
-                                                {{$period->nama}}/{{$period->tahun}}</option>
+                                            {{-- @if(($period->nama."-".$period->tahun)==($risikobisnis->periode."-".$risikobisnis->tahun)){ --}}
+                                            @if(($period->id)==($risikobisnis->perioderisikobisnis_id)){
+                                            {{-- <option value="{{$period->nama}}-{{$period->tahun}}" selected> --}}
+                                                {{-- {{$period->nama}}/{{$period->tahun}}</option> --}}
+                                                <option value="{{$period->id}}" selected>{{$period->nama}}/{{$period->tahun}}</option>
                                             @else
-                                            <option value="{{$period->nama}}-{{$period->tahun}}">
-                                                {{$period->nama}}/{{$period->tahun}}</option>
+                                            {{-- <option value="{{$period->nama}}-{{$period->tahun}}">
+                                                {{$period->nama}}/{{$period->tahun}}</option> --}}
+                                            <option value="{{$period->id}}">{{$period->nama}}/{{$period->tahun}}</option>
                                             @endif
                                             @else
-                                            <option value="{{$period->nama}}-{{$period->tahun}}">
-                                                {{$period->nama}}/{{$period->tahun}}</option>
+                                            {{-- <option value="{{$period->nama}}-{{$period->tahun}}">
+                                                {{$period->nama}}/{{$period->tahun}}</option> --}}
+
+                                            <option value="{{$period->id}}">{{$period->nama}}/{{$period->tahun}}</option>
                                             @endif
                                             @endforeach
                                         </select>
@@ -233,9 +299,11 @@ function batalvalidriskbisnis(id){
                     <table id="tblresikobisnis" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th></th> 
-                                <th>No</th>  
+                                <th width="2%"></th> 
+                                <th width="2%">No</th>  
                                 <th>KPI</th>
+                                <th>Utama</th>
+                                <th>Jenis</th>
                                 <th width="10%">Kaidah</th>
                                 <th>Risiko</th>
                                 <th>Peluang</th>
@@ -261,6 +329,8 @@ function batalvalidriskbisnis(id){
                                 <td><input type="checkbox" name="kaidah[]" class="form-controll" value="{{$riskdetail->id}}"></td>
                                 <td>{{$no}}</td>
                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td>
+                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->utama }}</p>@else{{ $riskdetail->kpi->utama }}@endif</td>
+                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>
                                 <td align="center">
                                     @if($riskdetail->kaidah=='1')
                                     <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
@@ -293,14 +363,16 @@ function batalvalidriskbisnis(id){
                         <tfoot>
                             <tr>
                                 <th colspan="3"><input type="checkbox" id="selectall" onClick="selectAll(this)" />&nbsp;Pilih semua</th> 
-                                <th colspan="3">
+                                <th colspan="7">
                                     <a class="btn btn-primary"  onclick="sesuaikaidah()"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
                                     <a class="btn btn-warning" onclick="tidaksesuaikaidah()"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
                                     <a class="btn btn-danger" onclick="highlight()"><i class="fa  fa-tags" title="Highlight"></i></a>
                                     <a class="btn btn-success" onclick="batalhighlight()"><i class="fa  fa-tags" title="Batal highlight"></i></a>
+                                    <a class="btn btn-info" onclick="kri()">KRI</a>
+                                    <a class="btn btn-warning" onclick="batalkri()">Batal KRI</a>
+                                    <a class="btn btn-info" onclick="rkap()">RKAP</a>
+                                    <a class="btn btn-warning" onclick="batalrkap()">Batal RKAP</a>
                                 </th>
-                                <th></th>
-                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>

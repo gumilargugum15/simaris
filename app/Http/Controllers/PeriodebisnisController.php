@@ -7,6 +7,9 @@ use App\Perioderisikobisnis;
 use App\Kpi;
 use App\Risikobisnis;
 use App\Risikobisnisdetail;
+use App\Temp_riskbisnis_id;
+use App\Temp_riskbisnisdet_id;
+use App\Sumberrisiko;
 use Illuminate\Support\Facades\Auth;
 class PeriodebisnisController extends Controller
 {
@@ -112,16 +115,22 @@ class PeriodebisnisController extends Controller
         $periodesebelum = Perioderisikobisnis::where('aktif','1')->where('tahun',$periodebisnis->tahun)->first();
         // dd($periodesebelum);
         $kwartalsebelum = $periodesebelum->nama;
-        // dd($kwartalsebelum);
-        $kpi = Kpi::where('tahun',$periodebisnis->tahun)->where('kwartal',$kwartalsebelum)->get();
-        dd($kpi);
-        $risikobisnis     = Risikobisnis::where('tahun',$periodebisnis->tahun)->where('periode',$kwartalsebelum)->get();
+        $periodeidsebelum = $periodesebelum->id;
+        // dd($periodeidsebelum);
+        // $kpi = Kpi::where('tahun',$periodebisnis->tahun)->where('kwartal',$kwartalsebelum)->get();
+        $kpi = Kpi::where('perioderisikobisnis_id',$periodeidsebelum)->get();
+        // dd($kpi);
+        // $risikobisnis     = Risikobisnis::where('tahun',$periodebisnis->tahun)->where('periode',$kwartalsebelum)->get();
+        $risikobisnis     = Risikobisnis::where('perioderisikobisnis_id',$periodeidsebelum)->get();
         // dd($risikobisnis);
+        $riskbisnisdetail = Risikobisnisdetail::where('perioderisikobisnis_id',$periodeidsebelum)->get();
+
+        $sumberrisiko = Sumberrisiko::where('perioderisikobisnis_id',$periodeidsebelum)->get();
+        
         $update  = Perioderisikobisnis::where('aktif','1')->update(['aktif' => '2']);
         $periode = Perioderisikobisnis::where('id',$id)->update(['aktif' => '1']);
         
         
-        // $riskbisnisdetail = Risikobisnisdetail::get();
         
         foreach($kpi as $kpi){
             $dtkpi = new Kpi();
@@ -129,47 +138,36 @@ class PeriodebisnisController extends Controller
             $dtkpi->nama     =  $kpi->nama;
             $dtkpi->unit_id  =  $kpi->unit_id;
             $dtkpi->tahun    =  $kpi->tahun;
+            $dtkpi->level    =  $kpi->level;
+            $dtkpi->utama    =  $kpi->utama;
             $dtkpi->kwartal  =  $periodebisnis->nama;
+            $dtkpi->perioderisikobisnis_id  =  $periodebisnis->id;
+            $dtkpi->status   =  1;
             $dtkpi->save();
         }
         
         foreach($risikobisnis as $risikobisnis){
             
             $dtrisk = new Risikobisnis();
-            $dtrisk->periode             =  $periodebisnis->nama;
-            $dtrisk->tahun               =  $risikobisnis->tahun;
-            $dtrisk->unit_id             =  $risikobisnis->unit_id;
-            $dtrisk->statusrisiko_id     =  $risikobisnis->statusrisiko_id;
-            $dtrisk->creator             =  $risikobisnis->creator;
+            $dtrisk->periode                =  $periodebisnis->nama;
+            $dtrisk->tahun                  =  $risikobisnis->tahun;
+            $dtrisk->unit_id                =  $risikobisnis->unit_id;
+            $dtrisk->perioderisikobisnis_id =  $periodebisnis->id;
+            $dtrisk->statusrisiko_id        =  1;
+            $dtrisk->creator                =  $risikobisnis->creator;
             $dtrisk->save();
 
-            // $this->storeriskdetail($dtrisk->id,$riskbisnisdetail);
+            $dtemp = new Temp_riskbisnis_id();
+            $dtemp->idlama = $risikobisnis->id;
+            $dtemp->idbaru = $dtrisk->id;
+            $dtemp->save();
 
         }
-        
-        $hsl='success';
-        return $hsl;
-       
-    }
-    public function storeriskdetail($riskid,$riskbisnisdetail){
-     
         foreach($riskbisnisdetail as $riskbisnisdetail){
-            if($riskbisnisdetail->kaidah=='1'){
-                $kaidah    = $riskbisnisdetail->kaidah;
-                $tglkaidah = $riskbisnisdetail->tglkaidah;
-            }else{
-                $kaidah=0;
-                $tglkaidah='';
-            }
-            if($riskbisnisdetail->highlight=='1'){
-                $highlight    = $riskbisnisdetail->highlight;
-                $tglhighlight = $riskbisnisdetail->tglhighlight;
-            }else{
-                $highlight=0;
-                $tglhighlight='';
-            }
+                $temp = Temp_riskbisnis_id::where('idlama',$riskbisnisdetail->risikobisnis_id)->first();
+                $riskidbaru = $temp->idbaru;
                 $dtriskdetail = new Risikobisnisdetail();
-                $dtriskdetail->risikobisnis_id   =  $riskid;
+                $dtriskdetail->risikobisnis_id   =  $riskidbaru;
                 $dtriskdetail->kpi_id            =  $riskbisnisdetail->kpi_id;
                 $dtriskdetail->risiko            =  $riskbisnisdetail->risiko;
                 $dtriskdetail->akibat            =  $riskbisnisdetail->akibat;
@@ -179,15 +177,47 @@ class PeriodebisnisController extends Controller
                 $dtriskdetail->warna             =  $riskbisnisdetail->warna;
                 $dtriskdetail->indikator         =  $riskbisnisdetail->indikator;
                 $dtriskdetail->nilaiambang       =  $riskbisnisdetail->nilaiambang;
-                $dtriskdetail->kaidah            =  $kaidah;
-                $dtriskdetail->tglkaidah         =  $tglkaidah;
+                $dtriskdetail->kaidah            =  $riskbisnisdetail->kaidah;
+                $dtriskdetail->tglkaidah         =  $riskbisnisdetail->tglkaidah;
                 $dtriskdetail->creator           =  $riskbisnisdetail->creator;
                 $dtriskdetail->kategori_id       =  $riskbisnisdetail->kategori_id;
-                $dtriskdetail->highlight         =  $highlight;
-                $dtriskdetail->tglhighlight      =  $tglhighlight;
+                $dtriskdetail->highlight         =  $riskbisnisdetail->highlight;
+                $dtriskdetail->tglhighlight      =  $riskbisnisdetail->tglhighlight;
+                $dtriskdetail->perioderisikobisnis_id  =  $periodebisnis->id;
+                $dtriskdetail->jenisrisiko       =  $riskbisnisdetail->jenisrisiko;
                 $dtriskdetail->save();
+
+                $dtemp = new Temp_riskbisnisdet_id();
+                $dtemp->idlama = $riskbisnisdetail->id;
+                $dtemp->idbaru = $dtriskdetail->id;
+                $dtemp->save();
         }
+        foreach($sumberrisiko as $sumberrisiko){
+            $temp = Temp_riskbisnisdet_id::where('idlama',$sumberrisiko->risikobisnisdetail_id)->first();
+            $riskdetidbaru = $temp->idbaru;
+            $dtsumber = new Sumberrisiko();
+            $dtsumber->risikobisnisdetail_id   =  $riskdetidbaru;
+            $dtsumber->namasumber              =  $sumberrisiko->namasumber;
+            $dtsumber->mitigasi                =  $sumberrisiko->mitigasi;
+            $dtsumber->biaya                   =  $sumberrisiko->biaya;
+            $dtsumber->start_date              =  $sumberrisiko->start_date;
+            $dtsumber->end_date                =  $sumberrisiko->end_date;
+            $dtsumber->pic                     =  $sumberrisiko->pic;
+            $dtsumber->statussumber            =  $sumberrisiko->statussumber;
+            $dtsumber->creator                 =  $sumberrisiko->creator;
+            $dtsumber->modifier                =  $sumberrisiko->modifier;
+            $dtsumber->file                    =  $sumberrisiko->file;
+            $dtsumber->kpi_id                  =  $sumberrisiko->kpi_id;
+            $dtsumber->perioderisikobisnis_id  =  $periodebisnis->id;
+            $dtsumber->save();
+
     }
+        
+        $hsl='success';
+        return $hsl;
+       
+    }
+    
 
     /**
      * Update the specified resource in storage.

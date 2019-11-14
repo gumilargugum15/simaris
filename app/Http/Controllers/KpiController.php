@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Kpi;
 use App\Unitkerja;
+use App\Perioderisikobisnis;
 
 use Illuminate\Support\Facades\Auth;
 use App\Imports\KpiImport;
@@ -20,12 +21,14 @@ class KpiController extends Controller
     {
         $judul = "KPI";
         //$kpi =Kpi::tahunAktif()
+        $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         $kpi =Kpi::
         join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
-        ->select('kpi.*', 'unitkerja.nama as namaunit')
+        ->join('perioderisikobisnis', 'perioderisikobisnis.id', '=', 'kpi.perioderisikobisnis_id')
+        ->select('kpi.*', 'unitkerja.nama as namaunit','perioderisikobisnis.nama as namaperiode','perioderisikobisnis.tahun as tahunperiode')
         ->orderBy('tahun','desc')
         ->get();
-        return view('administrator.kpi.index', compact('judul', 'kpi'));
+        return view('administrator.kpi.index', compact('judul', 'kpi','periodeaktif'));
     }
 
     /**

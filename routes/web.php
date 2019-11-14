@@ -18,10 +18,11 @@ Route::group([ 'middleware' => 'auth' ], function (){
     
     Route::get('/', 'HomeController@index')->name('home'); 
 });
-Route::group(['middleware'=>['role:keyperson|verifikatur|pimpinanunit|managergcg']], function () {
+Route::group(['middleware'=>['role:keyperson|verifikatur|pimpinanunit|managergcg|superadmin']], function () {
     Route::get('/sumberrisiko/{id}','ResikobisnisController@sumberrisiko');
     Route::get('/readkomen/{id}','RiskbisnisverifController@readkomen');
     Route::get('/sumberrisikoproject/{id}','RisikoprojectController@sumberrisiko');
+    Route::post('/importkpi','KpiController@import');
     
 });
 Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
@@ -31,11 +32,12 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::post('/storeperiodbisnis','PeriodebisnisController@store');
     Route::get('/editperiodbisnis/{id?}','PeriodebisnisController@edit');
     Route::get('/aktifperiode/{id?}','PeriodebisnisController@aktifperiode');
+    Route::get('/risikokrirkap', 'RiskbisnisverifController@krirkap');
     //kpi
     Route::get('/kpi', 'KpiController@index')->name('kpi.index');
     Route::get('/addkpi','KpiController@create');
     Route::post('/storekpi','KpiController@store');
-    Route::post('/importkpi','KpiController@import');
+    
     Route::get('/editkpi/{id?}','KpiController@edit');
     Route::post('/updatekpi','KpiController@update');
     Route::get('/destroykpi/{id?}','KpiController@destroy');
@@ -87,6 +89,11 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::get('/destroyriskproject/{id?}','RisikoprojectController@destroy');
     Route::get('/validriskproject/{id}','RisikoprojectController@validriskproject');
     Route::get('/batalvalidasiproject/{id}','RisikoprojectController@batalvalidasiproject');
+    Route::post('/levelbiasa','ResikobisnisController@levelbiasa');
+    Route::post('/levelhight','ResikobisnisController@levelhight');
+    Route::post('/kpiutama','ResikobisnisController@kpiutama');
+    Route::post('/batalkpiutama','ResikobisnisController@batalkpiutama');
+    
 });
 
 Route::group(['middleware'=>['role:verifikatur']], function () {
@@ -100,6 +107,11 @@ Route::group(['middleware'=>['role:verifikatur']], function () {
     Route::post('/batalhighlight','RiskbisnisverifController@batalhighlight');
     Route::post('/kirimkomentar','RiskbisnisverifController@kirimkomentar');
     Route::get('/kpiverifikatur', 'RiskbisnisverifController@kpi')->name('kpiverifikatur.index');
+    Route::post('/kri','RiskbisnisverifController@kri');
+    Route::post('/batalkri','RiskbisnisverifController@batalkri');
+    Route::post('/rkap','RiskbisnisverifController@rkap');
+    Route::post('/batalrkap','RiskbisnisverifController@batalrkap');
+    
     
     
     //risiko project
@@ -137,4 +149,8 @@ Route::group(['middleware'=>['role:superadmin']], function () {
     Route::get('/nonaktifuser/{nik}','UsersController@nonaktifuser');
     Route::get('/aktifkanuser/{nik}','UsersController@aktifkanuser');
     Route::get('/addusers','UsersController@create');
+    Route::get('/carinik/{nik}','UsersController@carinik');
+    Route::post('/storeusers','UsersController@store');
+    Route::get('/edituser/{id?}','UsersController@edit');
+    Route::post('/updateusers','UsersController@update');
 });
