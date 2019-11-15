@@ -38,7 +38,6 @@ class KpiController extends Controller
      */
     public function import(Request $request) 
     {
-        
         $import = Excel::import(new KpiImport, request()->file('excel'));
         
         if($import){

@@ -34,7 +34,7 @@
             @endif
             @endif
             <div align="right">
-                <form action="{{ url('importkpi') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ url('importkpikeyperson') }}" method="post" enctype="multipart/form-data">
                   <input name="_token" value="{{ csrf_token() }}" type="hidden">
                   <input type="file" id="file" name="excel" required>
                   <button class="btn btn-success" type="submit" class="btn btn-primary pull-right"><i class="fa fa-file-excel-o" title=""> Import KPI</i></button>
@@ -68,7 +68,10 @@
                   $no++;
                   @endphp
                   <tr>
-                    <td><input type="checkbox" name="level[]" class="form-controll" value="{{$data->id}}"></td>
+                    <td>
+                      @if($periodeaktif->id==$data->perioderisikobisnis_id)
+                      <input type="checkbox" name="level[]" class="form-controll" value="{{$data->id}}"></td>
+                      @endif
                     <td>{{$no}}</td>
                     <td>{{$data->kode}}</td>
                     <td>{{$data->nama}}</td>
@@ -84,8 +87,10 @@
                     <td>
                       @if(isset($dataoto))
                       @if($dataoto->status=='1')
+                      @if($periodeaktif->id==$data->perioderisikobisnis_id)
                       <a href="{{url('editkpikeyperson',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
                       {{-- <a href="{{url('destroykpikeyperson',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a> --}}
+                      @endif
                       @endif
                       @endif
                     </td>

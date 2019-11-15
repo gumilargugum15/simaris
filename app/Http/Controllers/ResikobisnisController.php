@@ -51,62 +51,30 @@ class ResikobisnisController extends Controller
         $periodeall = Perioderisikobisnis::get();
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         $unituser = unitkerja::where('objectabbr',$unitid)->first();
-        
-        // $risikobisnis = Risikobisnis::byPeriod($periodeaktif->nama)
-        //     ->byYear($periodeaktif->tahun)
-        //     ->byUnit($unitid)
-        //     ->byId($periodeaktif->id)
-        //     ->first();
+       
         $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
         
         if(isset($request->periode)){
-        //    $pecahperiod = explode("-",$request->periode);
-        //    $namaperoiod = $pecahperiod[0];
-        //    $tahunperiod = $pecahperiod[1];
-        //    $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
-        //     ->byYear($tahunperiod)
-        //     ->byUnit($unitid)
-        //     ->byId($periodeaktif->id)
-        //     ->first();
+       
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($unitid)->first();
         
             
         }else{
-            // $risikobisnis = Risikobisnis::byPeriod($periodeaktif->nama)
-            // ->byYear($periodeaktif->tahun)
-            // ->byUnit($unitid)
-            // ->byId($periodeaktif->id)
-            // ->first();
+           
             $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
             
 
         }
         $status = 0;
-        // $cekkpinull = Kpi::tahunAktif($periodeaktif->tahun)
-        // ->byUnit($unitid)
-        // ->byKwartal($periodeaktif->nama)
-        // ->byStatus($status)
-        // ->byId($periodeaktif->id)
-        // ->get();
+        
 
         $cekkpinull = Kpi::byId($periodeaktif->id)->byStatus($status)->byUnit($unitid)->get();
         $jmlkpinull = count($cekkpinull);
-        // $cekkpiall = Kpi::tahunAktif($periodeaktif->tahun)
-        // ->byUnit($unitid)
-        // ->byKwartal($periodeaktif->nama)
-        // ->byId($periodeaktif->id)
-        // ->get();
-        // $cekkpiall = Kpi::tahunAktif($periodeaktif->tahun)
-        // ->byUnit($unitid)
-        // ->byKwartal($periodeaktif->nama)
-        // ->byId($periodeaktif->id)
-        // ->get();
+        
         $cekkpiall = Kpi::byId($periodeaktif->id)->byUnit($unitid)->get();
 
         $jmlkpiall = count($cekkpiall);
-        //dd($periodeaktif->tahun."-".$unitid."-".$periodeaktif->nama);
-        // dd($jmlkpinull."-".$jmlkpiall);
-        // $kpi = Kpi::tahunAktif($periodeaktif->tahun)->byId($periodeaktif->id)->get();
+        
         $kpi = Kpi::byId($periodeaktif->id)->get();
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();
@@ -131,7 +99,7 @@ class ResikobisnisController extends Controller
         }
         $hsl.='</tr></table>';
         $hasildampak = $hsl;
-        // dd($risikobisnis->risikobisnisdetail);
+      
         return view('resiko.resikobisnis.index', compact(
             'risikobisnis', 'periodeaktif', 'kpi','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser','nikuser','jmlkpinull','jmlkpiall'
         ));
@@ -867,5 +835,25 @@ class ResikobisnisController extends Controller
             $kpi = Kpi::where('id',$value)->update(['utama'=>'N']);
         }
 
+    }
+    public function importkpikeyperson(Request $request) 
+    {
+        $import = Excel::import(new KpiImport, request()->file('excel'));
+        
+        if($import){
+            return redirect()
+            ->route('kpikeyperson.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil import KPI!'
+            ]);
+        }else{
+            return redirect()
+            ->route('kpikeyperson.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'Gagal import KPI!'
+            ]);
+        }
     }
 }

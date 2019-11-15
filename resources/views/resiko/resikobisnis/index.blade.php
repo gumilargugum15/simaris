@@ -233,9 +233,12 @@
                 </td>
                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
-              <td><a href="{{url('edit',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                <td>
+                @if($periodeaktif->id==$riskdetail->perioderisikobisnis_id)
+                <a href="{{url('edit',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
                 <a href="{{url('destroy',['id'=>$riskdetail->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
                 <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($riskdetail->id)){{$riskdetail->id}}@endif,'{{$riskdetail->risiko}}')"><i class="fa fa-commenting-o" title="Komentar"></i></a>
+                @endif
               </td>
               </tr>
               @endforeach

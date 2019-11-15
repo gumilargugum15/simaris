@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Kpi extends Model
 {
     protected $table = 'kpi';
-    protected $fillable =['kode','nama','unit_id','tahun','creator','modifier','kwartal'];
+    protected $fillable =['kode','nama','unit_id','tahun','creator','modifier','kwartal','status','perioderisikobisnis_id'];
     public function risikobisnisdetail(){
         return $this->hasMany('App\Risikobisnisdetail','kpi_id');
     }
