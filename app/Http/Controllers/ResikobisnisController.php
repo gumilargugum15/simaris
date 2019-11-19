@@ -72,8 +72,11 @@ class ResikobisnisController extends Controller
         $jmlkpinull = count($cekkpinull);
         
         $cekkpiall = Kpi::byId($periodeaktif->id)->byUnit($unitid)->get();
-
         $jmlkpiall = count($cekkpiall);
+
+        $statusinput = 1;
+        $cekkpisudahinput = Kpi::byId($periodeaktif->id)->byStatus($statusinput)->byUnit($unitid)->get();
+        $jmlkpisudahinput = count($cekkpisudahinput);
         
         $kpi = Kpi::byId($periodeaktif->id)->get();
         $klasifikasi = Klasifikasi::get();
@@ -101,7 +104,8 @@ class ResikobisnisController extends Controller
         $hasildampak = $hsl;
       
         return view('resiko.resikobisnis.index', compact(
-            'risikobisnis', 'periodeaktif', 'kpi','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser','nikuser','jmlkpinull','jmlkpiall'
+            'risikobisnis', 'periodeaktif', 'kpi','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser','nikuser','jmlkpinull','jmlkpiall',
+            'jmlkpisudahinput'
         ));
     }
     public function getkriteria($dampakid,$kategoriid,$level){

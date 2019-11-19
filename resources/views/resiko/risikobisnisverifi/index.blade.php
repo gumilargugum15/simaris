@@ -326,8 +326,11 @@ function batalvalidriskbisnis(id){
                             @endphp
                             
                             <tr>
-                                <td><input type="checkbox" name="kaidah[]" class="form-controll" value="{{$riskdetail->id}}"></td>
-                                <td>{{$no}}</td>
+                                <td>
+                                    @if($periodeaktif->id==$riskdetail->perioderisikobisnis_id)
+                                    <input type="checkbox" name="kaidah[]" class="form-controll" value="{{$riskdetail->id}}"></td>
+                                    @endif
+                                    <td>{{$no}}</td>
                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td>
                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->utama }}</p>@else{{ $riskdetail->kpi->utama }}@endif</td>
                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>
@@ -351,7 +354,9 @@ function batalvalidriskbisnis(id){
                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
                                 <td>
+                                @if($periodeaktif->id==$risikobisnis->perioderisikobisnis_id)
                                 <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($riskdetail->id)){{$riskdetail->id}}@endif,'{{$riskdetail->risiko}}')"><i class="fa fa-commenting-o" title="Komentar"></i></a>      
+                                @endif
                                 </td>
                             </tr>
                         
@@ -361,9 +366,11 @@ function batalvalidriskbisnis(id){
 
                         </tbody>
                         <tfoot>
+                            
                             <tr>
                                 <th colspan="3"><input type="checkbox" id="selectall" onClick="selectAll(this)" />&nbsp;Pilih semua</th> 
                                 <th colspan="7">
+                                    
                                     <a class="btn btn-primary"  onclick="sesuaikaidah()"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
                                     <a class="btn btn-warning" onclick="tidaksesuaikaidah()"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
                                     <a class="btn btn-danger" onclick="highlight()"><i class="fa  fa-tags" title="Highlight"></i></a>
@@ -371,14 +378,14 @@ function batalvalidriskbisnis(id){
                                     <a class="btn btn-info" onclick="kri()">KRI</a>
                                     <a class="btn btn-warning" onclick="batalkri()">Batal KRI</a>
                                     <a class="btn btn-info" onclick="rkap()">RKAP</a>
-                                    <a class="btn btn-warning" onclick="batalrkap()">Batal RKAP</a>
+                                    <a class="btn btn-warning" onclick="batalrkap()">Batal RKAP</a> 
                                 </th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                
                             </tr>
+                           
                         </tfoot>
 
                     </table>

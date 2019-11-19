@@ -70,18 +70,23 @@ class KpiController extends Controller
      */
     public function store(Request $request)
     {
+
         $kode         = $request->kode;
         $nama         = $request->nama;
         $unit         = $request->unit;
         $tahun        = $request->tahun;
 
+        $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
+
         $user = Auth::user();
         $datakpi = new Kpi();
-        $datakpi->kode             = $kode;
-        $datakpi->nama             = $nama;
-        $datakpi->unit_id          = $unit;
-        $datakpi->tahun            = $tahun;
-        $datakpi->creator          = $user->nik;
+        $datakpi->kode                      = $kode;
+        $datakpi->nama                      = $nama;
+        $datakpi->unit_id                   = $unit;
+        $datakpi->tahun                     = $tahun;
+        $datakpi->creator                   = $user->nik;
+        $datakpi->perioderisikobisnis_id    = $periodeaktif->id;
+        $datakpi->status                    = 0;
         $datakpi->save();
         if($datakpi){
             return redirect()

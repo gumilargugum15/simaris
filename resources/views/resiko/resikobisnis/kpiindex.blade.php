@@ -69,6 +69,7 @@
                   @endphp
                   <tr>
                     <td>
+
                       @if($periodeaktif->id==$data->perioderisikobisnis_id)
                       <input type="checkbox" name="level[]" class="form-controll" value="{{$data->id}}"></td>
                       @endif

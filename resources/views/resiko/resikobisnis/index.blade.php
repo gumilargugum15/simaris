@@ -170,6 +170,13 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
+            <table class="table table-bordered table-striped">
+                <tr align="center"><th>Total KPI</th><th>Sudah diinput</th><th>Belum diinput</th></tr>
+                <tr align="center"><td><a class="btn btn-primary" href="#">{{$jmlkpiall}}</a></td>
+                  <td><a class="btn btn-success" href="#">{{$jmlkpisudahinput}}</a></td>
+                  <td><a class="btn btn-warning" href="#">{{$jmlkpinull}}</a></td>
+                </tr>
+                </table>
           {{-- <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addresiko"><i class="fa  fa-plus"
               title=""> Risiko Baru</i></a> --}}
           @include('layouts.flash')

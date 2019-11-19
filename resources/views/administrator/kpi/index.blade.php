@@ -71,9 +71,12 @@
                     <td>{{$data->tahun}}</td>
                     <td>{{$data->kwartal}}</td>
                     <td>{{$data->namaperiode}} ( {{$data->tahunperiode}} )</td>
-                    <td><a href="{{url('editkpi',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                    <td>
+                        @if($periodeaktif->id==$data->perioderisikobisnis_id)
+                        <a href="{{url('editkpi',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
                         <a href="{{url('destroykpi',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
-                    </td>
+                        @endif
+                      </td>
                   </tr>
                   @endforeach
                 </tbody>
