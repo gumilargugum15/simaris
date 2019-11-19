@@ -25,7 +25,7 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $judul = "Users";
-        $user =User::select('users.*','Unitkerja.nama as namaunit','roles.name as namarole')
+        $user =User::select('users.*','unitkerja.nama as namaunit','roles.name as namarole')
         ->join('Unitkerja','Unitkerja.objectabbr','=','users.unit_id')
         ->join('model_has_roles','model_has_roles.model_id','=','users.nik')
         ->join('roles','roles.id','=','model_has_roles.role_id')
