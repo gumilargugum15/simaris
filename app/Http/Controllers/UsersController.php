@@ -26,7 +26,7 @@ class UsersController extends Controller
     {
         $judul = "Users";
         $user =User::select('users.*','unitkerja.nama as namaunit','roles.name as namarole')
-        ->join('Unitkerja','Unitkerja.objectabbr','=','users.unit_id')
+        ->join('unitkerja','unitkerja.objectabbr','=','users.unit_id')
         ->join('model_has_roles','model_has_roles.model_id','=','users.nik')
         ->join('roles','roles.id','=','model_has_roles.role_id')
         ->get();
