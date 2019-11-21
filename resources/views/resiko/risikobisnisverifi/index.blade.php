@@ -289,6 +289,13 @@ function batalvalidriskbisnis(id){
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
+                        <table class="table table-bordered table-striped">
+                                <tr align="center"><th>Total KPI</th><th>Sudah diinput</th><th>Belum diinput</th></tr>
+                                <tr align="center"><td><a class="btn btn-primary" href="#">@if(isset($jmlkpiall)){{$jmlkpiall}}@endif</a></td>
+                                  <td><a class="btn btn-success" href="#">@if(isset($jmlkpisudahinput)){{$jmlkpisudahinput}}@endif</a></td>
+                                  <td><a class="btn btn-warning" href="#">@if(isset($jmlkpinull)){{$jmlkpinull}}@endif</a></td>
+                                </tr>
+                              </table>
                     <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
                     {{-- <a class="btn btn-info" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($risikobisnis->id)){{$risikobisnis->id}}@endif)"><i class="fa fa-commenting-o" title="Komentar"> Komentar</i></a> --}}
                 </div>
@@ -324,7 +331,7 @@ function batalvalidriskbisnis(id){
                             @php
                             $no++;
                             @endphp
-                            
+                            @if($riskdetail->delete!='1')
                             <tr>
                                 <td>
                                     @if($periodeaktif->id==$riskdetail->perioderisikobisnis_id)
@@ -359,7 +366,7 @@ function batalvalidriskbisnis(id){
                                 @endif
                                 </td>
                             </tr>
-                        
+                            @endif
                             @endforeach
                            
                             @endif

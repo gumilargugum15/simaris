@@ -148,6 +148,13 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
+            <table class="table table-bordered table-striped">
+                <tr align="center"><th>Total KPI</th><th>Sudah diinput</th><th>Belum diinput</th></tr>
+                <tr align="center"><td><a class="btn btn-primary" href="#">{{$jmlkpiall}}</a></td>
+                  <td><a class="btn btn-success" href="#">{{$jmlkpisudahinput}}</a></td>
+                  <td><a class="btn btn-warning" href="#">{{$jmlkpinull}}</a></td>
+                </tr>
+              </table>
             @include('layouts.flash')
             <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
         </div>
@@ -182,6 +189,7 @@
                 @php
                 $no++;
                 @endphp
+                @if($riskdetail->delete!='1')
               <tr>
                
                <td>{{$no}}</td>
@@ -206,11 +214,12 @@
                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
                 <td>
-                    @if($risikobisnis->statusrisiko_id<'3')
+                    {{-- @if($risikobisnis->statusrisiko_id<'3')
                     <a href="{{url('editatasan',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                    @endif
+                    @endif --}}
                 </td>
               </tr>
+              @endif
               @endforeach 
                 @else
                {{ 'Data belum ada' }}

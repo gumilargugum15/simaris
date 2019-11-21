@@ -24,6 +24,8 @@ use App\Komentar_detail;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use App\Otorisasi;
+use App\Imports\KpiImport;
+use Maatwebsite\Excel\Facades\Excel;
 class ResikobisnisController extends Controller
 {
     /**
@@ -57,26 +59,34 @@ class ResikobisnisController extends Controller
         if(isset($request->periode)){
        
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($unitid)->first();
-        
+            $status = 0;
+            $cekkpinull = Kpi::byId($request->periode)->byStatus($status)->byUnit($unitid)->get();
+            $jmlkpinull = count($cekkpinull);
+            
+            $cekkpiall = Kpi::byId($request->periode)->byUnit($unitid)->get();
+            $jmlkpiall = count($cekkpiall);
+
+            $statusinput = 1;
+            $cekkpisudahinput = Kpi::byId($request->periode)->byStatus($statusinput)->byUnit($unitid)->get();
+            $jmlkpisudahinput = count($cekkpisudahinput);
             
         }else{
            
             $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
+            $status = 0;
+            $cekkpinull = Kpi::byId($periodeaktif->id)->byStatus($status)->byUnit($unitid)->get();
+            $jmlkpinull = count($cekkpinull);
+            
+            $cekkpiall = Kpi::byId($periodeaktif->id)->byUnit($unitid)->get();
+            $jmlkpiall = count($cekkpiall);
+    
+            $statusinput = 1;
+            $cekkpisudahinput = Kpi::byId($periodeaktif->id)->byStatus($statusinput)->byUnit($unitid)->get();
+            $jmlkpisudahinput = count($cekkpisudahinput);
             
 
         }
-        $status = 0;
-        
-
-        $cekkpinull = Kpi::byId($periodeaktif->id)->byStatus($status)->byUnit($unitid)->get();
-        $jmlkpinull = count($cekkpinull);
-        
-        $cekkpiall = Kpi::byId($periodeaktif->id)->byUnit($unitid)->get();
-        $jmlkpiall = count($cekkpiall);
-
-        $statusinput = 1;
-        $cekkpisudahinput = Kpi::byId($periodeaktif->id)->byStatus($statusinput)->byUnit($unitid)->get();
-        $jmlkpisudahinput = count($cekkpisudahinput);
+       
         
         $kpi = Kpi::byId($periodeaktif->id)->get();
         $klasifikasi = Klasifikasi::get();
@@ -279,6 +289,7 @@ class ResikobisnisController extends Controller
         $datariskdetail->creator                    = $user->nik;
         $datariskdetail->perioderisikobisnis_id     = $periodeid;
         $datariskdetail->jenisrisiko                = '';
+        $datariskdetail->delete                     = '0';
         $datariskdetail->save();
         if($datariskdetail){
             $updatekpi = Kpi::where('id',$kpi)->update(['status'=>'1']);
@@ -305,6 +316,7 @@ class ResikobisnisController extends Controller
                     $datasumber->statussumber             = $status[$key];
                     $datasumber->file                     = $path;
                     $datasumber->perioderisikobisnis_id   = $periodeid;
+                    $datasumber->delete                     = '0';
                     $datasumber->save();
 
                     
@@ -358,6 +370,7 @@ class ResikobisnisController extends Controller
             $datariskdetail->creator            = $user->nik;
             $datariskdetail->perioderisikobisnis_id     = $periodeid;
             $datariskdetail->jenisrisiko                = '';
+            $datariskdetail->delete                     = '0';
             $datariskdetail->save();
             if($datariskdetail){
             $updatekpi = Kpi::where('id',$kpi)->update(['status'=>'1']);
@@ -385,6 +398,7 @@ class ResikobisnisController extends Controller
                     $datasumber->statussumber             = $status[$key];
                     $datasumber->file                     = $path;
                     $datasumber->perioderisikobisnis_id   = $periodeid;
+                    $datasumber->delete                   = '0';
                     $datasumber->save();
                 }
             }
@@ -655,9 +669,21 @@ class ResikobisnisController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-       $destroydetail =  Risikobisnisdetail::where('id',$id)->delete();
+        $data = ['delete'=>1];
+        $destroydetail = Risikobisnisdetail::where('id',$id)->update($data);
+       //$destroydetail =  Risikobisnisdetail::where('id',$id)->delete();
        if($destroydetail){
-        Sumberrisiko::where('risikobisnisdetail_id',$id)->delete();
+        $datasumber = ['delete'=>1];
+        Sumberrisiko::where('risikobisnisdetail_id',$id)->update($datasumber);
+        $riskdetail = Risikobisnisdetail::where('id',$id)->first();
+        $kpiid =  $riskdetail->kpi_id;
+        
+        $riskdetailkpi = Risikobisnisdetail::where('kpi_id',$kpiid)->where('delete',0)->get();
+        $jmlkpirisk = count($riskdetailkpi);
+        if($jmlkpirisk == 0){
+            $datakpi = ['status'=>0];
+            Kpi::where('id',$kpiid)->update($datakpi);
+        }
         return redirect()
             ->route('resikobisnis.index')
             ->with('flash_notification', [
@@ -678,15 +704,22 @@ class ResikobisnisController extends Controller
         $dataoto = Otorisasi::where('nik',$user->nik)->first();
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         $unitid = $user->unit_id;
+        $cekutama = Kpi::where('utama','Y')->where('deleted',0)->byId($periodeaktif->id)->byUnit($unitid)->get();
+        $jmlkpiutama = count($cekutama);
+        $cekhight = Kpi::where('level','2')->where('deleted',0)->byId($periodeaktif->id)->byUnit($unitid)->get();
+        $jmlkpihight = count($cekhight);
+        $cekbiasa = Kpi::where('level','1')->where('deleted',0)->byId($periodeaktif->id)->byUnit($unitid)->get();
+        $jmlkpibiasa = count($cekbiasa);
         $judul = "KPI";
         $kpi =Kpi::leftJoin('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
         ->leftJoin('level_kpi', 'level_kpi.id', '=', 'kpi.level')
         ->join('perioderisikobisnis', 'perioderisikobisnis.id', '=', 'kpi.perioderisikobisnis_id')
         ->select('kpi.*', 'unitkerja.nama as namaunit','level_kpi.nama as namalevel','level_kpi.warna','perioderisikobisnis.nama as namaperiode','perioderisikobisnis.tahun as tahunperiode')
         ->byUnit($unitid)
+        ->where('kpi.deleted',0)
         ->orderby('level','desc')
         ->get();
-        return view('resiko.resikobisnis.kpiindex', compact('judul', 'kpi','dataoto','periodeaktif'));
+        return view('resiko.resikobisnis.kpiindex', compact('judul', 'kpi','dataoto','periodeaktif','jmlkpiutama','jmlkpihight','jmlkpibiasa'));
     }
     public function addkpi(){
         $user = Auth::user();

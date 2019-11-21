@@ -27,12 +27,19 @@
                 Periode aktif : <b>{{$periodeaktif->nama." ".$periodeaktif->tahun}}</b> dari tanggal : <b>{{$periodeaktif->start_date}}</b> sampai tanggal <b>{{$periodeaktif->end_date}}</b>
                 <br>KPI yang diupload otomatis masuk ke periode aktif saat ini, pastikan data yang akan diimport sudah benar !
               </div>
+              <table class="table table-bordered table-striped">
+              <tr><td colspan="3" align="center">KPI {{$periodeaktif->nama." ".$periodeaktif->tahun}}</td></tr>
+              <tr align="center"><th>Utama</th><th>Hight</th><th>Biasa</th></tr>
+              <tr align="center"><td><a class="btn btn-primary" href="#">{{$jmlkpiutama}}</a></td>
+              <td><a class="btn btn-danger" href="#">{{$jmlkpihight}}</a></td>
+              <td><a class="btn btn-success" href="#">{{$jmlkpibiasa}}</a></td>
+                </tr>
+              </table>
             @include('layouts.flash')
             @if(isset($dataoto))
             @if($dataoto->status=='1')
             <a class="btn btn-primary" href="{{ url('addkpikeyperson') }}"><i class="fa  fa-plus" title=""> KPI Baru</i></a>
-            @endif
-            @endif
+            
             <div align="right">
                 <form action="{{ url('importkpikeyperson') }}" method="post" enctype="multipart/form-data">
                   <input name="_token" value="{{ csrf_token() }}" type="hidden">
@@ -40,6 +47,8 @@
                   <button class="btn btn-success" type="submit" class="btn btn-primary pull-right"><i class="fa fa-file-excel-o" title=""> Import KPI</i></button>
                 </form>
               </div>
+              @endif
+              @endif
         </div>
         <div class="box-body">
             <form id="fm-level">

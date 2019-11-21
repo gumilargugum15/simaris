@@ -174,6 +174,13 @@ function batalvalidriskbisnisgcg(id){
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
+                        <table class="table table-bordered table-striped">
+                                <tr align="center"><th>Total KPI</th><th>Sudah diinput</th><th>Belum diinput</th></tr>
+                                <tr align="center"><td><a class="btn btn-primary" href="#">@if(isset($jmlkpiall)){{$jmlkpiall}}@endif</a></td>
+                                  <td><a class="btn btn-success" href="#">@if(isset($jmlkpisudahinput)){{$jmlkpisudahinput}}@endif</a></td>
+                                  <td><a class="btn btn-warning" href="#">@if(isset($jmlkpinull)){{$jmlkpinull}}@endif</a></td>
+                                </tr>
+                              </table>
                         <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
                 </div>
                 <!-- /.box-header -->

@@ -21,7 +21,7 @@ class PeriodebisnisController extends Controller
     public function index(Request $request)
     {
         $judul = "Periode bisnis";
-        $periodbisnis =Perioderisikobisnis::get();
+        $periodbisnis =Perioderisikobisnis::where('deleted',0)->get();
         return view('administrator.periodebisnis.index', compact('judul', 'periodbisnis'));
     }
 
@@ -237,8 +237,26 @@ class PeriodebisnisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        //$delete =  Kpi::where('id',$id)->delete();
+        $dataupdate = ['deleted'=>1];
+        $delete = Perioderisikobisnis::where('id',$id)->update($dataupdate);
+        if($delete){
+            return redirect()
+            ->route('periodebisnis.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil hapus periode bisnis!'
+            ]);
+        }else{
+            return redirect()
+            ->route('periodebisnis.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'Gagal hapus periode bisnis!'
+            ]);
+        }
+
     }
 }

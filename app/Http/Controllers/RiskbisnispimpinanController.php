@@ -45,25 +45,36 @@ class RiskbisnispimpinanController extends Controller
 
         
         if(isset($request->periode)){
-        //    $pecahperiod = explode("-",$request->periode);
-        //    $namaperoiod = $pecahperiod[0];
-        //    $tahunperiod = $pecahperiod[1];
-        //    $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
-        //     ->byYear($tahunperiod)
-        //     ->byUnit($unitid)
-        //     //->byStatusrisk('2')
-        //     ->first();
+       
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($unitid)->first();
+            $status = 0;
+            $cekkpinull = Kpi::byId($request->periode)->byStatus($status)->byUnit($unitid)->get();
+            $jmlkpinull = count($cekkpinull);
+            
+            $cekkpiall = Kpi::byId($request->periode)->byUnit($unitid)->get();
+            $jmlkpiall = count($cekkpiall);
+
+            $statusinput = 1;
+            $cekkpisudahinput = Kpi::byId($request->periode)->byStatus($statusinput)->byUnit($unitid)->get();
+            $jmlkpisudahinput = count($cekkpisudahinput);
             
         }else{
-            // $risikobisnis = Risikobisnis::byPeriod($periodeaktif->nama)
-            // ->byYear($periodeaktif->tahun)
-            // ->byUnit($unitid)
-            // //->byStatusrisk('2')
-            // ->first();
+           
             $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
 
+            $status = 0;
+            $cekkpinull = Kpi::byId($periodeaktif->id)->byStatus($status)->byUnit($unitid)->get();
+            $jmlkpinull = count($cekkpinull);
+            
+            $cekkpiall = Kpi::byId($periodeaktif->id)->byUnit($unitid)->get();
+            $jmlkpiall = count($cekkpiall);
+
+            $statusinput = 1;
+            $cekkpisudahinput = Kpi::byId($periodeaktif->id)->byStatus($statusinput)->byUnit($unitid)->get();
+            $jmlkpisudahinput = count($cekkpisudahinput);
+
         }
+        
 
         $kpi = Kpi::tahunAktif($periodeaktif->tahun)->get();
         $klasifikasi = Klasifikasi::get();
@@ -73,7 +84,8 @@ class RiskbisnispimpinanController extends Controller
         
 
         return view('resiko.resikobisnisatasan.index', compact(
-            'risikobisnis', 'periodeaktif', 'kpi','klasifikasi','peluang','periodeall','periode','unitkerja','namarisiko','unituser'
+            'risikobisnis', 'periodeaktif', 'kpi','klasifikasi','peluang','periodeall','periode','unitkerja','namarisiko','unituser','jmlkpinull','jmlkpiall',
+            'jmlkpisudahinput'
         ));
     }
 
@@ -168,7 +180,8 @@ class RiskbisnispimpinanController extends Controller
         $unitid = $user->unit_id;
         $riskdetail = Risikobisnisdetail::where('id',$id)->first();
         $riskbisnis = Risikobisnis::where('id',$riskdetail->risikobisnis_id)->first();
-        $kpi = Kpi::tahunAktif()->byUnit($unitid)->get();
+        $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
+        $kpi = Kpi::tahunAktif($periodeaktif->tahun)->byUnit($unitid)->get();
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();
         $kriteria = Kriteria::where('dampak_id',$riskdetail->dampak_id)->where('kategori_id',$riskdetail->kategori_id)->first();

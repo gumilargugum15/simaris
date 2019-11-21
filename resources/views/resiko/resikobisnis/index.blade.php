@@ -176,7 +176,7 @@
                   <td><a class="btn btn-success" href="#">{{$jmlkpisudahinput}}</a></td>
                   <td><a class="btn btn-warning" href="#">{{$jmlkpinull}}</a></td>
                 </tr>
-                </table>
+              </table>
           {{-- <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addresiko"><i class="fa  fa-plus"
               title=""> Risiko Baru</i></a> --}}
           @include('layouts.flash')
@@ -217,6 +217,7 @@
                 @php
                 $no++;
                 @endphp
+                @if($riskdetail->delete!='1')
               <tr >
                 {{-- <td>{{ $risikobisnis->periode." ".$risikobisnis->tahun }}</td> --}}
                <td>{{$no}}</td>
@@ -248,6 +249,7 @@
                 @endif
               </td>
               </tr>
+              @endif
               @endforeach
                 @endif
               

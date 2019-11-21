@@ -33,6 +33,7 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::get('/editperiodbisnis/{id?}','PeriodebisnisController@edit');
     Route::get('/aktifperiode/{id?}','PeriodebisnisController@aktifperiode');
     Route::get('/risikokrirkap', 'RiskbisnisverifController@krirkap');
+    Route::get('/destroyperiodbisnis/{id?}','PeriodebisnisController@destroy');
     //kpi
     Route::get('/kpi', 'KpiController@index')->name('kpi.index');
     Route::get('/addkpi','KpiController@create');

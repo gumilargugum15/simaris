@@ -44,20 +44,24 @@ class RiskbisnisverifController extends Controller
         $periodeall = Perioderisikobisnis::get();
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         if(isset($request->periode ) && isset($request->unitkerja)){
-        //    $pecahperiod = explode("-",$request->periode);
-        //    $namaperoiod = $pecahperiod[0];
-        //    $tahunperiod = $pecahperiod[1];
-        //    $risikobisnis = Risikobisnis::byPeriod($namaperoiod)
-        //     ->byYear($tahunperiod)
-        //     ->byUnit($request->unitkerja)
-        //     // ->byStatusrisk('1')
-        //     ->first();
+      
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($request->unitkerja)->first();
             // dd($risikobisnis->risikobisnisdetail);
+            $status = 0;
+            $cekkpinull = Kpi::byId($request->periode)->byStatus($status)->byUnit($request->unitkerja)->get();
+            $jmlkpinull = count($cekkpinull);
+            
+            $cekkpiall = Kpi::byId($request->periode)->byUnit($request->unitkerja)->get();
+            $jmlkpiall = count($cekkpiall);
+
+            $statusinput = 1;
+            $cekkpisudahinput = Kpi::byId($request->periode)->byStatus($statusinput)->byUnit($request->unitkerja)->get();
+            $jmlkpisudahinput = count($cekkpisudahinput);
             
         }
     
-        return view('resiko.risikobisnisverifi.index', compact('risikobisnis','periodeall','namarisiko','unitkerja','nikuser','periodeaktif'));
+        return view('resiko.risikobisnisverifi.index', compact('risikobisnis','periodeall','namarisiko','unitkerja','nikuser','periodeaktif','jmlkpinull','jmlkpiall',
+        'jmlkpisudahinput'));
     }
     function validasibisnis(Request $request,$id){
         $risikobisnis = Risikobisnis::where('id',$id)->update(['statusrisiko_id' => '3']);    

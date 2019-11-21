@@ -75,7 +75,7 @@
         $('#tblperiodbisnis').DataTable()
       })
       function aktifperiode(id){
-        
+        if (confirm("Proses ini akan menduplikasi data sebelumnya ke periode aktif saat ini, apakah anda yakin  ?") == true) {
         $.ajax({
                 url: "{{ url('aktifperiode') }}/"+id,
                 method: 'get',
@@ -92,6 +92,7 @@
                     $("#loading").hide();
                 }
             });
+        }
       }
     </script>
 </section>
