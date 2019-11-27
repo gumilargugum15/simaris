@@ -50,6 +50,19 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::get('/editproject/{id?}','ProjectController@edit');
     Route::post('/updateproject','ProjectController@update');
     //risiko bisnis
+    Route::get('/resikobisnisverifikatur', 'RiskbisnisverifController@index');
+    Route::get('/validasibisnisverif/{id}','RiskbisnisverifController@validasibisnis');
+    Route::get('/batalvalidasibisnisverif/{id}','RiskbisnisverifController@batalvalidasibisnis');
+    Route::post('/sesuaikaidah','RiskbisnisverifController@sesuaikaidah');
+    Route::post('/tidaksesuaikaidah','RiskbisnisverifController@tidaksesuaikaidah');
+    Route::post('/highlight','RiskbisnisverifController@highlight');
+    Route::post('/batalhighlight','RiskbisnisverifController@batalhighlight');
+    Route::post('/kirimkomentar','RiskbisnisverifController@kirimkomentar');
+    Route::get('/kpiverifikatur', 'RiskbisnisverifController@kpi')->name('kpiverifikatur.index');
+    Route::post('/kri','RiskbisnisverifController@kri');
+    Route::post('/batalkri','RiskbisnisverifController@batalkri');
+    Route::post('/rkap','RiskbisnisverifController@rkap');
+    Route::post('/batalrkap','RiskbisnisverifController@batalrkap');
     Route::get('/resikobisnisadmin', 'RiskbisnisverifController@index');
     Route::get('/laprisikobisnis', 'LaprisikobisnisController@index');
     Route::get('/export', 'LaprisikobisnisController@export');
@@ -57,7 +70,15 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::get('/userkeyperson', 'UserkeypersonController@index')->name('userkeyperson.index');
     Route::get('/bukaotorisasi/{nik}','UserkeypersonController@bukaotorisasi');
     Route::get('/tutupotorisasi/{nik}','UserkeypersonController@tutupotorisasi');
-    //user
+    //users
+    Route::get('/users', 'UsersController@index')->name('users.index');
+    Route::get('/nonaktifuser/{nik}','UsersController@nonaktifuser');
+    Route::get('/aktifkanuser/{nik}','UsersController@aktifkanuser');
+    Route::get('/addusers','UsersController@create');
+    Route::get('/carinik/{nik}','UsersController@carinik');
+    Route::post('/storeusers','UsersController@store');
+    Route::get('/edituser/{id?}','UsersController@edit');
+    Route::post('/updateusers','UsersController@update');
     
 });
 
@@ -100,19 +121,19 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
 
 Route::group(['middleware'=>['role:verifikatur']], function () {
     
-    Route::get('/resikobisnisverifikatur', 'RiskbisnisverifController@index');
-    Route::get('/validasibisnisverif/{id}','RiskbisnisverifController@validasibisnis');
-    Route::get('/batalvalidasibisnisverif/{id}','RiskbisnisverifController@batalvalidasibisnis');
-    Route::post('/sesuaikaidah','RiskbisnisverifController@sesuaikaidah');
-    Route::post('/tidaksesuaikaidah','RiskbisnisverifController@tidaksesuaikaidah');
-    Route::post('/highlight','RiskbisnisverifController@highlight');
-    Route::post('/batalhighlight','RiskbisnisverifController@batalhighlight');
-    Route::post('/kirimkomentar','RiskbisnisverifController@kirimkomentar');
-    Route::get('/kpiverifikatur', 'RiskbisnisverifController@kpi')->name('kpiverifikatur.index');
-    Route::post('/kri','RiskbisnisverifController@kri');
-    Route::post('/batalkri','RiskbisnisverifController@batalkri');
-    Route::post('/rkap','RiskbisnisverifController@rkap');
-    Route::post('/batalrkap','RiskbisnisverifController@batalrkap');
+    // Route::get('/resikobisnisverifikatur', 'RiskbisnisverifController@index');
+    // Route::get('/validasibisnisverif/{id}','RiskbisnisverifController@validasibisnis');
+    // Route::get('/batalvalidasibisnisverif/{id}','RiskbisnisverifController@batalvalidasibisnis');
+    // Route::post('/sesuaikaidah','RiskbisnisverifController@sesuaikaidah');
+    // Route::post('/tidaksesuaikaidah','RiskbisnisverifController@tidaksesuaikaidah');
+    // Route::post('/highlight','RiskbisnisverifController@highlight');
+    // Route::post('/batalhighlight','RiskbisnisverifController@batalhighlight');
+    // Route::post('/kirimkomentar','RiskbisnisverifController@kirimkomentar');
+    // Route::get('/kpiverifikatur', 'RiskbisnisverifController@kpi')->name('kpiverifikatur.index');
+    // Route::post('/kri','RiskbisnisverifController@kri');
+    // Route::post('/batalkri','RiskbisnisverifController@batalkri');
+    // Route::post('/rkap','RiskbisnisverifController@rkap');
+    // Route::post('/batalrkap','RiskbisnisverifController@batalrkap');
     
     
     
@@ -146,13 +167,5 @@ Route::group(['middleware'=>['role:superadmin']], function () {
     Route::post('/storeunit','UnitController@store');
     Route::get('/destroyunit/{id?}','UnitController@destroy');
     
-    //users
-    Route::get('/users', 'UsersController@index')->name('users.index');
-    Route::get('/nonaktifuser/{nik}','UsersController@nonaktifuser');
-    Route::get('/aktifkanuser/{nik}','UsersController@aktifkanuser');
-    Route::get('/addusers','UsersController@create');
-    Route::get('/carinik/{nik}','UsersController@carinik');
-    Route::post('/storeusers','UsersController@store');
-    Route::get('/edituser/{id?}','UsersController@edit');
-    Route::post('/updateusers','UsersController@update');
+    
 });

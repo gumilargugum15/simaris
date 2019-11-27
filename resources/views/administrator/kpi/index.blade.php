@@ -31,6 +31,7 @@
             @include('layouts.flash')
             <a class="btn btn-primary" href="{{ url('addkpi') }}"><i class="fa  fa-plus" title=""> KPI Baru</i></a>
             <div align="right">
+             
             <form action="{{ url('importkpi') }}" method="post" enctype="multipart/form-data">
               <input name="_token" value="{{ csrf_token() }}" type="hidden">
               <input type="file" id="file" name="excel" required>

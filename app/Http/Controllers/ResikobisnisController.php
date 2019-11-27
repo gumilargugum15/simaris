@@ -87,7 +87,7 @@ class ResikobisnisController extends Controller
 
         }
        
-        
+    
         $kpi = Kpi::byId($periodeaktif->id)->get();
         $klasifikasi = Klasifikasi::get();
         $peluang = Peluang::get();

@@ -215,6 +215,7 @@ function batalvalidriskbisnisgcg(id){
                             @php
                             $no++;
                             @endphp
+                            @if($riskdetail->delete!='1')
                             <tr>
                
                                 <td>{{$no}}</td>
@@ -240,6 +241,7 @@ function batalvalidriskbisnisgcg(id){
                                  <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
                                  <td></td>
                                </tr>
+                               @endif
                             @endforeach
                            
                             @endif

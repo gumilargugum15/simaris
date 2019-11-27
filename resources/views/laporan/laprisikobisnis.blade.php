@@ -6,9 +6,10 @@
 @section('content')
 <script>
 function exportexcel(){
+    
     if (confirm("Apakah anda yakin ?") == true) {
             $.ajax({
-                url: "{{ url('export') }}/" + id,
+                url: "{{ url('export') }}",
                 method: 'get',
                 success: function (data) {
                     if (data == 'success') {
@@ -24,78 +25,7 @@ function exportexcel(){
             });
         }
 }
-function validriskbisnisverif(id){
-    if (confirm("Apakah anda yakin ?") == true) {
-            $.ajax({
-                url: "{{ url('validasibisnisverif') }}/" + id,
-                method: 'get',
-                success: function (data) {
-                    if (data == 'success') {
-                        alert('Validasi berhasil !');
-                        location.reload();
-                       
-                    } else {
-                        alert('Validasi gagal !');
-                    }
 
-                }
-            });
-        }
-
-}
-function batalvalidriskbisnis(id){
-    if (confirm("Apakah anda yakin ?") == true) {
-            $.ajax({
-                url: "{{ url('batalvalidasibisnisverif') }}/" + id,
-                method: 'get',
-                success: function (data) {
-                    if (data == 'success') {
-                        alert('Batal validasi berhasil !');
-                        location.reload();
-                       
-                    } else if(data == 'gagal'){
-                        alert('validasi tidak bisa dibatalkan !');
-                    }else{
-                      alert('Batal Validasi gagal !');
-                    }
-
-                }
-            });
-        }
-
-  }
-  function highlight(){
-    if (confirm("Apakah anda yakin ?") == true) {
-        var data_val = $('#fm-kaidah').serialize();
-        $.ajax({
-                url: "{{ url('highlight') }}",
-                method: 'post',
-                data	: data_val,
-                success: function (data) {
-                    location.reload();
-                }
-            });
-
-    }
-  }
-  function batalhighlight(){
-    if (confirm("Apakah anda yakin ?") == true) {
-        var data_val = $('#fm-kaidah').serialize();
-        $.ajax({
-                url: "{{ url('batalhighlight') }}",
-                method: 'post',
-                data	: data_val,
-                success: function (data) {
-                    location.reload();
-                }
-            });
-
-    }
-  }
-  function notifkomen(id){
-      alert(id);
-  }
-  
   
 </script>
 <section class="content-header">
@@ -134,16 +64,20 @@ function batalvalidriskbisnis(id){
                                             <option value="">Pilih Periode</option>
                                             @foreach ($periodeall as $period)
                                             @if(isset($risikobisnis->periode))
-                                            @if(($period->nama."-".$period->tahun)==($risikobisnis->periode."-".$risikobisnis->tahun)){
-                                            <option value="{{$period->nama}}-{{$period->tahun}}" selected>
-                                                {{$period->nama}}/{{$period->tahun}}</option>
+                                            {{-- @if(($period->nama."-".$period->tahun)==($risikobisnis->periode."-".$risikobisnis->tahun)){ --}}
+                                            @if(($period->id)==($risikobisnis->perioderisikobisnis_id)){
+                                            {{-- <option value="{{$period->nama}}-{{$period->tahun}}" selected>
+                                                {{$period->nama}}/{{$period->tahun}}</option> --}}
+                                                <option value="{{$period->id}}" selected>{{$period->nama}}/{{$period->tahun}}</option>
                                             @else
-                                            <option value="{{$period->nama}}-{{$period->tahun}}">
-                                                {{$period->nama}}/{{$period->tahun}}</option>
+                                            {{-- <option value="{{$period->nama}}-{{$period->tahun}}">
+                                                {{$period->nama}}/{{$period->tahun}}</option> --}}
+                                                <option value="{{$period->id}}">{{$period->nama}}/{{$period->tahun}}</option>
                                             @endif
                                             @else
-                                            <option value="{{$period->nama}}-{{$period->tahun}}">
-                                                {{$period->nama}}/{{$period->tahun}}</option>
+                                            {{-- <option value="{{$period->nama}}-{{$period->tahun}}">
+                                                {{$period->nama}}/{{$period->tahun}}</option> --}}
+                                                <option value="{{$period->id}}">{{$period->nama}}/{{$period->tahun}}</option>
                                             @endif
                                             @endforeach
                                         </select>

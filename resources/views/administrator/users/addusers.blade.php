@@ -80,8 +80,9 @@
                 },
             success: function(data) {
                 var data = JSON.parse(data);
+                console.log(data);
                 $("#nama").val(data.name);
-                $("#unit").val(data.old_abbr.substr(0, 5));
+                // $("#unit").val(data.old_abbr.substr(0, 5));
                 $("#namaunit").val(data.org_unit_name);
             }
         });

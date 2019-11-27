@@ -29,56 +29,66 @@ class LaprisikobisnisController extends Controller
         $periodeall = Perioderisikobisnis::get();
         $hsl='';
         if(isset($request->periode ) && isset($request->unitkerja)){
-            // dd($request->periode.'-'.$request->unitkerja);
+            $periode = Perioderisikobisnis::where('id',$request->periode)->first();
             $unit = unitkerja::where('objectabbr',$request->unitkerja)->first();
-
-            $expperiod = explode("-",$request->periode);
-
-            $risikobisnis = Risikobisnis::byPeriod($expperiod[0])
-            ->byYear($expperiod[1])
-            ->byUnit($request->unitkerja)
-            ->first();
-            $riskdetid = array();
-            $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)->orderBy('kpi_id')->get();
-            foreach($detailrisk as $key => $value){
-                array_push($riskdetid,$value->id);
-            }
-            // dd($riskdetid);
-            $riskdetail = Risikobisnisdetail:: select('kpi.nama','kpi_id') 
-            ->where('risikobisnis_id',$risikobisnis->id) ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id') 
-            // ->join('klasifikasi', 'klasifikasi.id', '=', 'risikobisnisdetail.klasifikasi_id') 
-            ->groupBy('kpi.nama','kpi_id') 
-            ->orderBy('kpi_id') ->get();
+            $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($request->unitkerja)->first();
+            $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
+            ->select('risikobisnisdetail.*', 'kpi.nama as namakpi', 'klasifikasi.nama as namaklas', 'peluang.kriteria as peluang', 'peluang.level as levelpeluang', 'kriteria.nama as dampak', 'kriteria.level as leveldampak', 'matrikrisiko.tingkat')
+            ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
+            ->join('klasifikasi', 'klasifikasi.id', '=', 'risikobisnisdetail.klasifikasi_id')
+            ->join('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
+            ->join("kriteria",function($join){
+                $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                })
+            ->join("matrikrisiko",function($join){
+                $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
+                    ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
+                })
+            ->orderBy('kpi_id','asc')->get();
+            // dd($detailrisk);
+            
+            // $riskdetid = array();
+            // $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)->orderBy('kpi_id')->get();
+            // foreach($detailrisk as $key => $value){
+            //     array_push($riskdetid,$value->id);
+            // }
+            // // dd($riskdetid);
+            // $riskdetail = Risikobisnisdetail:: select('kpi.nama','kpi_id') 
+            // ->where('risikobisnis_id',$risikobisnis->id) ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id') 
+            // // ->join('klasifikasi', 'klasifikasi.id', '=', 'risikobisnisdetail.klasifikasi_id') 
+            // ->groupBy('kpi.nama','kpi_id') 
+            // ->orderBy('kpi_id') ->get();
             
             
-            $riskdetail->map(function ($item, $key) {
-            $g = Kpi::find($item->kpi_id);
+            // $riskdetail->map(function ($item, $key) {
+            // $g = Kpi::find($item->kpi_id);
             
-            $item->risikobisnisdetail = $g->risikobisnisdetail;
-            $item->risikobisnisdetail->map(function($items,$keyes){
-            $h =Klasifikasi::find($items->klasifikasi_id);
-            $i =Peluang::find($items->peluang_id);
-            $where =array('dampak_id'=>$items->dampak_id,'kategori_id'=>$items->kategori_id);
-            $j =Kriteria::where($where)->get();
-            $k =Dampak::find($items->dampak_id);
-            $where2 =array('dampak_id'=>$items->dampak_id,'peluang_id'=>$items->peluang_id);
-            $l =Matrikrisiko::where($where2)->get();
-            $where3 =array('risikobisnisdetail_id'=>$items->id);
-            $m =Sumberrisiko::where($where3)->get();
-            $items->klas     = $h;
-            $items->peluang  = $i;
-            $items->kriteria = $j;
-            $items->dampak   = $k;
-            $items->matrik   = $l;
-            $items->sumber   = $m;
+            // $item->risikobisnisdetail = $g->risikobisnisdetail;
+            // $item->risikobisnisdetail->map(function($items,$keyes){
+            // $h =Klasifikasi::find($items->klasifikasi_id);
+            // $i =Peluang::find($items->peluang_id);
+            // $where =array('dampak_id'=>$items->dampak_id,'kategori_id'=>$items->kategori_id);
+            // $j =Kriteria::where($where)->get();
+            // $k =Dampak::find($items->dampak_id);
+            // $where2 =array('dampak_id'=>$items->dampak_id,'peluang_id'=>$items->peluang_id);
+            // $l =Matrikrisiko::where($where2)->get();
+            // $where3 =array('risikobisnisdetail_id'=>$items->id);
+            // $m =Sumberrisiko::where($where3)->get();
+            // $items->klas     = $h;
+            // $items->peluang  = $i;
+            // $items->kriteria = $j;
+            // $items->dampak   = $k;
+            // $items->matrik   = $l;
+            // $items->sumber   = $m;
             
-            });
+            // });
             
-            return $item;
-            });
-            // dd($riskdetail);
-            // dd($riskdetail[0]->risikobisnisdetail[0]->kriteria[0]->nama);
-            // dd(count($riskdetail[0]->risikobisnisdetail));
+            // return $item;
+            // });
+            // // dd($riskdetail);
+            // // dd($riskdetail[0]->risikobisnisdetail[0]->kriteria[0]->nama);
+            // // dd(count($riskdetail[0]->risikobisnisdetail));
             $hsl.='<table id="lapriskbisnis" class="table table-bordered table-striped">';
             $hsl.='<tr>';
             $hsl.='<th width="30%">Unit kerja : '.$unit->nama.'</th>';
@@ -86,7 +96,7 @@ class LaprisikobisnisController extends Controller
             // $hsl.='<td width="50%">Tujuan pokok & fungsi :</td>';
             $hsl.='</tr>';
             $hsl.='<tr>';
-            $hsl.='<th>Periode : '.$request->periode.'</th>';
+            $hsl.='<th>Periode : '.$periode->nama.' Tahun '.$periode->tahun.'</th>';
             // $hsl.='<td>(1.) Mengorganisasikan, mengkoordinasikan, merekomendasikan dan melaksanakan program dan kegiatan perencanaan strategis perusahaan; penyusunan/evaluasi study kelayakan proyek strategis (non rutin), evaluasi study kelayakan proyek non strategis (rutin), penyusunan usulan prioritas proyek untuk dimasukan ke dalam RKAP, mengevaluasi kelayakan proyrk investasi anak perush. dan perush. patungan; penyusunan RJPP baik induk maupun Konsolidasi, dan atau perusahaan patungan (PP) termasuk penyusunan formula tarif bagi KS Group, dlm rangka mengintegrasikan rencana jangka panjang korporasi (KS Group) dan meningkatkan sinergi bisnis pada fungsi pada fungsi operasioanal di PT KS dan Group</td>';
             $hsl.='</tr>';
 
@@ -102,77 +112,83 @@ class LaprisikobisnisController extends Controller
             $hsl.='<th>PIC</th><th>STATUS</th>';
             $hsl.='</tr>';
             $no =1;
-            $nox = 1;
-            foreach($riskdetail as $key=>$value ){
+            // $nox = 1;
+            foreach($detailrisk as $data ){
                 
-                $count = count($value->risikobisnisdetail);
-                foreach($value->risikobisnisdetail as $index=>$jmlsumber){
-                    $sumber = $jmlsumber->sumber;
-                }
+            //     $count = count($value->risikobisnisdetail);
+            //     foreach($value->risikobisnisdetail as $index=>$jmlsumber){
+            //         $sumber = $jmlsumber->sumber;
+            //     }
             
                 $hsl.='<tr>';
-                $hsl.='<td rowspan="'.$count.'">'.$no.'</td><td rowspan="'.$count.'">'.$value->nama.'</td>';
-                foreach($value->risikobisnisdetail as $keys=>$values){
+                $hsl.='<td>'.$no.'</td><td>'.$data->namakpi.'</td><td>'.$data->namaklas.'</td><td>'.$data->risiko.'</td>';
+                $hsl.='<td>sumber</td>';
+                
+                $hsl.='<td>'.$data->akibat.'</td><td>'.$data->indikator.'</td><td>'.$data->nilaiambang.'</td><td>'.$data->peluang.'</td><td>'.$data->levelpeluang.'</td><td>'.$data->dampak.'</td><td>'.$data->leveldampak.'</td><td>'.$data->tingkat.'</td>';
+                $hsl.='</tr>';
+                
+            //     $hsl.='<td rowspan="'.$count.'">'.$no.'</td><td rowspan="'.$count.'">'.$value->nama.'</td>';
+            //     foreach($value->risikobisnisdetail as $keys=>$values){
                     
-                    if($keys==0){
+            //         if($keys==0){
                         
-                        $hsl.='<td>'.$values->klas->nama.'</td><td>'.$values->risiko.'</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                        $hsl.='<li>'.$valuesumber->namasumber.'</li>';
-                        }
-                        $hsl.='</td><td>'.$values->akibat.'</td><td>'.$values->indikator.'</td><td>'.$values->nilaiambang.'</td><td>'.$values->peluang->kriteria.'</td><td>'.$values->peluang->level.'</td><td>'.$values->kriteria[0]->nama.'</td><td>'.$values->dampak->level.'</td><td>'.$values->matrik[0]->tingkat.'</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                        $hsl.='<li>'.$valuesumber->mitigasi.'</li>';
-                        }
-                        $hsl.='</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                            $hsl.='<li>'.$valuesumber->biaya.'</li>';
-                            }
-                        $hsl.='</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                            $hsl.='<li>'.$valuesumber->start_date.' s/d '.$valuesumber->end_date.'</li>';
-                            }
-                        $hsl.='</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                            $hsl.='<li>'.$valuesumber->pic.'</li>';
-                            }
-                            $hsl.='</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                            $hsl.='<li>'.$valuesumber->statussumber.'</li>';
-                            }
-                        $hsl.='</td>';
-                    }else{
-                        // $hsl.='<tr><td>'.$values->klas->nama.'</td><td>'.$values->risiko.' - '.count($values->sumber).'</td><td>'.$values->sumber[0]->namasumber.'</td><td>'.$values->akibat.'</td><td>'.$values->indikator.'</td><td>'.$values->nilaiambang.'</td><td>'.$values->peluang->kriteria.'</td><td>'.$values->peluang->level.'</td><td>>'.$values->kriteria[0]->nama.'</td><td>'.$values->dampak->level.'</td><td>'.$values->matrik[0]->tingkat.'</td></tr>';
-                        $hsl.='<tr><td>'.$values->klas->nama.'</td><td>'.$values->risiko.'</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                            $hsl.='<li>'.$valuesumber->namasumber.'</li>';
-                        }
-                        $hsl.='</td><td>'.$values->akibat.'</td><td>'.$values->indikator.'</td><td>'.$values->nilaiambang.'</td><td>'.$values->peluang->kriteria.'</td><td>'.$values->peluang->level.'</td><td>'.$values->kriteria[0]->nama.'</td><td>'.$values->dampak->level.'</td><td>'.$values->matrik[0]->tingkat.'</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                            $hsl.='<li>'.$valuesumber->mitigasi.'</li>';
-                        }
-                        $hsl.='</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                            $hsl.='<li>'.$valuesumber->biaya.'</li>';
-                        }
-                        $hsl.='</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                            $hsl.='<li>'.$valuesumber->start_date.' s/d '.$valuesumber->end_date.'</li>';
-                        }
-                        $hsl.='</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                            $hsl.='<li>'.$valuesumber->pic.'</li>';
-                        }
-                        $hsl.='</td><td>';
-                        foreach($values->sumber as $keysumber=>$valuesumber){
-                            $hsl.='<li>'.$valuesumber->statussumber.'</li>';
-                        }
-                        $hsl.='</td></tr>';
-                    }
-                }
+            //             $hsl.='<td>'.$values->klas->nama.'</td><td>'.$values->risiko.'</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //             $hsl.='<li>'.$valuesumber->namasumber.'</li>';
+            //             }
+            //             $hsl.='</td><td>'.$values->akibat.'</td><td>'.$values->indikator.'</td><td>'.$values->nilaiambang.'</td><td>'.$values->peluang->kriteria.'</td><td>'.$values->peluang->level.'</td><td>'.$values->kriteria[0]->nama.'</td><td>'.$values->dampak->level.'</td><td>'.$values->matrik[0]->tingkat.'</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //             $hsl.='<li>'.$valuesumber->mitigasi.'</li>';
+            //             }
+            //             $hsl.='</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //                 $hsl.='<li>'.$valuesumber->biaya.'</li>';
+            //                 }
+            //             $hsl.='</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //                 $hsl.='<li>'.$valuesumber->start_date.' s/d '.$valuesumber->end_date.'</li>';
+            //                 }
+            //             $hsl.='</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //                 $hsl.='<li>'.$valuesumber->pic.'</li>';
+            //                 }
+            //                 $hsl.='</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //                 $hsl.='<li>'.$valuesumber->statussumber.'</li>';
+            //                 }
+            //             $hsl.='</td>';
+            //         }else{
+            //             // $hsl.='<tr><td>'.$values->klas->nama.'</td><td>'.$values->risiko.' - '.count($values->sumber).'</td><td>'.$values->sumber[0]->namasumber.'</td><td>'.$values->akibat.'</td><td>'.$values->indikator.'</td><td>'.$values->nilaiambang.'</td><td>'.$values->peluang->kriteria.'</td><td>'.$values->peluang->level.'</td><td>>'.$values->kriteria[0]->nama.'</td><td>'.$values->dampak->level.'</td><td>'.$values->matrik[0]->tingkat.'</td></tr>';
+            //             $hsl.='<tr><td>'.$values->klas->nama.'</td><td>'.$values->risiko.'</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //                 $hsl.='<li>'.$valuesumber->namasumber.'</li>';
+            //             }
+            //             $hsl.='</td><td>'.$values->akibat.'</td><td>'.$values->indikator.'</td><td>'.$values->nilaiambang.'</td><td>'.$values->peluang->kriteria.'</td><td>'.$values->peluang->level.'</td><td>'.$values->kriteria[0]->nama.'</td><td>'.$values->dampak->level.'</td><td>'.$values->matrik[0]->tingkat.'</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //                 $hsl.='<li>'.$valuesumber->mitigasi.'</li>';
+            //             }
+            //             $hsl.='</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //                 $hsl.='<li>'.$valuesumber->biaya.'</li>';
+            //             }
+            //             $hsl.='</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //                 $hsl.='<li>'.$valuesumber->start_date.' s/d '.$valuesumber->end_date.'</li>';
+            //             }
+            //             $hsl.='</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //                 $hsl.='<li>'.$valuesumber->pic.'</li>';
+            //             }
+            //             $hsl.='</td><td>';
+            //             foreach($values->sumber as $keysumber=>$valuesumber){
+            //                 $hsl.='<li>'.$valuesumber->statussumber.'</li>';
+            //             }
+            //             $hsl.='</td></tr>';
+            //         }
+            //     }
                     
                
-                $hsl.='</tr>';
+                // $hsl.='</tr>';
                
             $no++;
             

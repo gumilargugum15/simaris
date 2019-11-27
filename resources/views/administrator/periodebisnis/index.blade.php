@@ -62,8 +62,10 @@
                         @endif
                     </td>
                     <td><a href="{{url('editperiodbisnis',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                      @if($data->aktif!=1)
                         <a href="{{url('destroyperiodbisnis',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
-                    </td>
+                        @endif
+                      </td>
                   </tr>
                   @endforeach
                 </tbody>
