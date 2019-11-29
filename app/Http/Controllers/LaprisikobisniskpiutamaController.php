@@ -16,7 +16,8 @@ use App\Kriteria;
 use App\Matrikrisiko;
 use App\Exports\RisikobisnisExport;
 use Maatwebsite\Excel\Facades\Excel;
-class LaprisikobisnisController extends Controller
+
+class LaprisikobisniskpiutamaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,16 +28,14 @@ class LaprisikobisnisController extends Controller
     {
         $unitkerja = Unitkerja::get();
         $periodeall = Perioderisikobisnis::get();
-        $tingkat='';
         $hsl='';
-        if(isset($request->periode ) && isset($request->unitkerja)&& isset($request->tingkat)){
+        if(isset($request->periode ) && isset($request->unitkerja)){
             $tingkat = $request->tingkat;
             $periode = Perioderisikobisnis::where('id',$request->periode)->first();
             $unit = unitkerja::where('objectabbr',$request->unitkerja)->first();
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($request->unitkerja)->first();
             if($risikobisnis){
-                if($request->tingkat=='All'){
-                    $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
+                $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
                     ->select('risikobisnisdetail.*', 'kpi.nama as namakpi', 'klasifikasi.nama as namaklas', 'peluang.kriteria as peluang', 'peluang.level as levelpeluang', 'kriteria.nama as dampak', 'kriteria.level as leveldampak', 'matrikrisiko.tingkat')
                     ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
                     ->join('klasifikasi', 'klasifikasi.id', '=', 'risikobisnisdetail.klasifikasi_id')
@@ -49,36 +48,18 @@ class LaprisikobisnisController extends Controller
                         $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
                             ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
                         })
+                    ->where('kpi.utama','Y')
                     ->orderBy('kpi_id','asc')->get();
-                }else{
-                    $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
-                    ->select('risikobisnisdetail.*', 'kpi.nama as namakpi', 'klasifikasi.nama as namaklas', 'peluang.kriteria as peluang', 'peluang.level as levelpeluang', 'kriteria.nama as dampak', 'kriteria.level as leveldampak', 'matrikrisiko.tingkat')
-                    ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
-                    ->join('klasifikasi', 'klasifikasi.id', '=', 'risikobisnisdetail.klasifikasi_id')
-                    ->join('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
-                    ->join("kriteria",function($join){
-                        $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
-                            ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
-                        })
-                    ->join("matrikrisiko",function($join){
-                        $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
-                            ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
-                        })
-                    ->where('matrikrisiko.tingkat',$request->tingkat)
-                    ->orderBy('kpi_id','asc')->get();
-                }
                 
             
             $hsl.='<table id="lapriskbisnis" class="table table-bordered table-striped">';
             $hsl.='<tr>';
             $hsl.='<th width="30%">Unit kerja : '.$unit->nama.'</th>';
             $hsl.='<th align="center" rowspan="2" valign="center"><b>Risiko Unit Kerja</b></th>';
-            $hsl.='<th width="20%">Tingkat Risiko:</th>';
             // $hsl.='<td width="50%">Tujuan pokok & fungsi :</td>';
             $hsl.='</tr>';
             $hsl.='<tr>';
             $hsl.='<th>Periode : '.$periode->nama.' Tahun '.$periode->tahun.'</th>';
-            $hsl.='<th>'.$tingkat.'</th>';
             // $hsl.='<td>(1.) Mengorganisasikan, mengkoordinasikan, merekomendasikan dan melaksanakan program dan kegiatan perencanaan strategis perusahaan; penyusunan/evaluasi study kelayakan proyek strategis (non rutin), evaluasi study kelayakan proyek non strategis (rutin), penyusunan usulan prioritas proyek untuk dimasukan ke dalam RKAP, mengevaluasi kelayakan proyrk investasi anak perush. dan perush. patungan; penyusunan RJPP baik induk maupun Konsolidasi, dan atau perusahaan patungan (PP) termasuk penyusunan formula tarif bagi KS Group, dlm rangka mengintegrasikan rencana jangka panjang korporasi (KS Group) dan meningkatkan sinergi bisnis pada fungsi pada fungsi operasioanal di PT KS dan Group</td>';
             $hsl.='</tr>';
 
@@ -129,22 +110,8 @@ class LaprisikobisnisController extends Controller
             }
             
         }
-        return view('laporan.laprisikobisnis', compact('risikobisnis','periodeall','unitkerja','hsl','tingkat'));
-    }
-    public function export(Request $request) 
-    {
-        
-        // ob_end_clean();
-        // ob_start(); 
-        $period = 'Kwartal I-2019';//$request->periode;
-        $unit   = '36000';//$request->unitkerja;
-
-        // return Excel::download(new RisikobisnisExport, 'risikobisnis.xlsx');
-        return (new RisikobisnisExport)
-            ->forPeriod($period)
-            ->forUnit($unit)
-            ->download('Risikobisnis.xlsx');
-        
+        return view('laporan.laprisikobisnisutama', compact('risikobisnis','periodeall','unitkerja','hsl','tingkat'));
+    
     }
 
     /**

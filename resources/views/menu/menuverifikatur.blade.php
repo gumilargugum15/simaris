@@ -47,7 +47,7 @@
         </a>
         <ul class="treeview-menu">
           <li><a href="{{ url('laprisikobisnis') }}"><i class="fa fa-circle-o"></i>Resiko Proses Bisnis</a></li>
-          
+          <li><a href="{{ url('laprisikobisniskpiutama') }}"><i class="fa fa-circle-o"></i>Resiko Proses Bisnis KPI Utama</a></li>
           {{-- <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i>Resiko Project</a></li>
           <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i>Resiko Assets</a></li> --}}
         </ul>

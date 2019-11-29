@@ -65,6 +65,7 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::post('/batalrkap','RiskbisnisverifController@batalrkap');
     Route::get('/resikobisnisadmin', 'RiskbisnisverifController@index');
     Route::get('/laprisikobisnis', 'LaprisikobisnisController@index');
+    Route::get('/laprisikobisniskpiutama', 'LaprisikobisniskpiutamaController@index');
     Route::get('/export', 'LaprisikobisnisController@export');
     //otorisasi kpi
     Route::get('/userkeyperson', 'UserkeypersonController@index')->name('userkeyperson.index');

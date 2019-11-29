@@ -31,7 +31,7 @@ function exportexcel(){
 <section class="content-header">
     <h1>
         Laporan
-        <small>Risiko Proses Bisnis</small>
+        <small>Risiko Proses Bisnis KPI Utama</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -47,9 +47,7 @@ function exportexcel(){
             <table class="table table-bordered">
                 <tr>
                     <th>Periode</th>
-                    {{-- <th>Periode</th> --}}
                     <th>Unit Kerja</th>
-                    <th>Tingkat risiko</th>
                     <th></th>
                 </tr>
                 <tr>
@@ -109,52 +107,7 @@ function exportexcel(){
                         </div>
                         
                     </td>
-                    <td>
-                            <div class="row">
-                                    <div class="col-xs-10">
-                                        <select class="form-control select2" style="width: 100%;" name="tingkat"
-                                            id="tingkat" required>
-                                            @if($tingkat=='All')
-                                            <option value="">Pilih</option>
-                                            <option value="All" selected>All</option>
-                                            <option value="Rendah">Rendah</option>
-                                            <option value="Tinggi">Tinggi</option>
-                                            <option value="Ekstrim">Ekstrim</option>
-                                            @endif
-                                            @if($tingkat=='Rendah')
-                                            <option value="">Pilih</option>
-                                            <option value="All">All</option>
-                                            <option value="Rendah" selected>Rendah</option>
-                                            <option value="Tinggi">Tinggi</option>
-                                            <option value="Ekstrim">Ekstrim</option>
-                                            @endif
-                                            @if($tingkat=='Tinggi')
-                                            <option value="">Pilih</option>
-                                            <option value="All">All</option>
-                                            <option value="Rendah">Rendah</option>
-                                            <option value="Tinggi" selected>Tinggi</option>
-                                            <option value="Ekstrim">Ekstrim</option>
-                                            @endif
-                                            @if($tingkat=='Ekstrim')
-                                            <option value="">Pilih</option>
-                                            <option value="All">All</option>
-                                            <option value="Rendah">Rendah</option>
-                                            <option value="Tinggi">Tinggi</option>
-                                            <option value="Ekstrim" selected>Ekstrim</option>
-                                            @endif
-                                            @if($tingkat=='')
-                                            <option value="">Pilih</option>
-                                            <option value="All">All</option>
-                                            <option value="Rendah">Rendah</option>
-                                            <option value="Tinggi">Tinggi</option>
-                                            <option value="Ekstrim" selected>Ekstrim</option>
-                                            @endif
-                                        </select>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                    </td>
+                    
                     <td>
                             <button type="submit" class="btn btn-primary pull-right">Cari</button>
                     </form>
