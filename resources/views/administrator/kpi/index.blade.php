@@ -52,7 +52,7 @@
                     <th>Unit</th>
                     <th>Tahun</th>
                     <th>Level</th>
-                    <th>KPI utama</th>
+                    {{-- <th>KPI utama</th> --}}
                     <th>Kwartal</th>
                     <th width="20%">Nama (tahun) Periode</th>
                     <th width="10%">Aksi</th>
@@ -73,11 +73,11 @@
                     <td>{{$data->namaunit}}</td>
                     <td>{{$data->tahun}}</td>
                     <td><a class="btn btn-{{$data->warna}}" href="#">{{$data->namalevel}}</a></td>
-                    <td>
+                    {{-- <td>
                       @if($data->utama=='Y')
                       <a class="btn btn-primary" href="#">{{$data->utama}}</a>
                       @endif
-                    </td>
+                    </td> --}}
                     <td>{{$data->kwartal}}</td>
                     <td>{{$data->namaperiode}} ( {{$data->tahunperiode}} )</td>
                     <td>

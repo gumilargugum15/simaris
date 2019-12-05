@@ -66,7 +66,7 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::get('/resikobisnisadmin', 'RiskbisnisverifController@index');
     Route::get('/laprisikobisnis', 'LaprisikobisnisController@index');
     Route::get('/laprisikobisniskpiutama', 'LaprisikobisniskpiutamaController@index');
-    Route::get('/export', 'LaprisikobisnisController@export');
+    Route::post('/export', 'LaprisikobisnisController@export');
     //otorisasi kpi
     Route::get('/userkeyperson', 'UserkeypersonController@index')->name('userkeyperson.index');
     Route::get('/bukaotorisasi/{nik}','UserkeypersonController@bukaotorisasi');
@@ -113,10 +113,10 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::get('/destroyriskproject/{id?}','RisikoprojectController@destroy');
     Route::get('/validriskproject/{id}','RisikoprojectController@validriskproject');
     Route::get('/batalvalidasiproject/{id}','RisikoprojectController@batalvalidasiproject');
-    Route::post('/levelbiasa','ResikobisnisController@levelbiasa');
-    Route::post('/levelhight','ResikobisnisController@levelhight');
+    Route::post('/levelpalingutama','ResikobisnisController@levelpalingutama');
+    Route::post('/levelutama','ResikobisnisController@levelutama');
     Route::post('/kpiutama','ResikobisnisController@kpiutama');
-    Route::post('/batalkpiutama','ResikobisnisController@batalkpiutama');
+    Route::post('/batalkanlevel','ResikobisnisController@batalkanlevel');
     
 });
 

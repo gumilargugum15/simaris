@@ -136,13 +136,14 @@ class LaprisikobisnisController extends Controller
         
         // ob_end_clean();
         // ob_start(); 
-        $period = 'Kwartal I-2019';//$request->periode;
-        $unit   = '36000';//$request->unitkerja;
-
+        $period = $request->periode;//'Kwartal I-2019';//
+        $unit   = $request->unitkerja;//'36000';//
+        $tingkat= $request->tingkat;
         // return Excel::download(new RisikobisnisExport, 'risikobisnis.xlsx');
         return (new RisikobisnisExport)
             ->forPeriod($period)
             ->forUnit($unit)
+            ->forTingkat($tingkat)
             ->download('Risikobisnis.xlsx');
         
     }

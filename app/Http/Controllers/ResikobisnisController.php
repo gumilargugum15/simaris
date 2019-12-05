@@ -704,12 +704,12 @@ class ResikobisnisController extends Controller
         $dataoto = Otorisasi::where('nik',$user->nik)->first();
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         $unitid = $user->unit_id;
-        $cekutama = Kpi::where('utama','Y')->where('deleted',0)->byId($periodeaktif->id)->byUnit($unitid)->get();
+        $kpi = Kpi::where('deleted',0)->byId($periodeaktif->id)->byUnit($unitid)->get();
+        $jmlkpi = count($kpi);
+        $cekpalingutama = Kpi::where('level','2')->where('deleted',0)->byId($periodeaktif->id)->byUnit($unitid)->get();
+        $jmlkpipalingutama = count($cekpalingutama);
+        $cekutama = Kpi::where('level','1')->where('deleted',0)->byId($periodeaktif->id)->byUnit($unitid)->get();
         $jmlkpiutama = count($cekutama);
-        $cekhight = Kpi::where('level','2')->where('deleted',0)->byId($periodeaktif->id)->byUnit($unitid)->get();
-        $jmlkpihight = count($cekhight);
-        $cekbiasa = Kpi::where('level','1')->where('deleted',0)->byId($periodeaktif->id)->byUnit($unitid)->get();
-        $jmlkpibiasa = count($cekbiasa);
         $judul = "KPI";
         $kpi =Kpi::leftJoin('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
         ->leftJoin('level_kpi', 'level_kpi.id', '=', 'kpi.level')
@@ -719,7 +719,7 @@ class ResikobisnisController extends Controller
         ->where('kpi.deleted',0)
         ->orderby('level','desc')
         ->get();
-        return view('resiko.resikobisnis.kpiindex', compact('judul', 'kpi','dataoto','periodeaktif','jmlkpiutama','jmlkpihight','jmlkpibiasa'));
+        return view('resiko.resikobisnis.kpiindex', compact('judul', 'kpi','dataoto','periodeaktif','jmlkpi','jmlkpipalingutama','jmlkpiutama'));
     }
     public function addkpi(){
         $user = Auth::user();
@@ -845,17 +845,17 @@ class ResikobisnisController extends Controller
 
         
     }
-    public function levelbiasa(Request $request){
-        $level         = $request->level;
-        foreach($level as $key=>$value){
-            $kpi = Kpi::where('id',$value)->update(['level'=>1]);
-        }
-
-    }
-    public function levelhight(Request $request){
+    public function levelpalingutama(Request $request){
         $level         = $request->level;
         foreach($level as $key=>$value){
             $kpi = Kpi::where('id',$value)->update(['level'=>2]);
+        }
+
+    }
+    public function levelutama(Request $request){
+        $level         = $request->level;
+        foreach($level as $key=>$value){
+            $kpi = Kpi::where('id',$value)->update(['level'=>1]);
         }
 
     }
@@ -866,10 +866,10 @@ class ResikobisnisController extends Controller
         }
 
     }
-    public function batalkpiutama(Request $request){
+    public function batalkanlevel(Request $request){
         $level         = $request->level;
         foreach($level as $key=>$value){
-            $kpi = Kpi::where('id',$value)->update(['utama'=>'N']);
+            $kpi = Kpi::where('id',$value)->update(['level'=>'0']);
         }
 
     }

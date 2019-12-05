@@ -309,8 +309,9 @@ function batalvalidriskbisnis(id){
                                 <th width="2%"></th> 
                                 <th width="2%">No</th>  
                                 <th>KPI</th>
-                                <th>Utama</th>
-                                <th>Jenis</th>
+                                {{-- <th>Utama</th>
+                                <th>Jenis</th> --}}
+                                <th>Kelompok</th>
                                 <th width="10%">Kaidah</th>
                                 <th>Risiko</th>
                                 <th>Peluang</th>
@@ -338,8 +339,10 @@ function batalvalidriskbisnis(id){
                                     <input type="checkbox" name="kaidah[]" class="form-controll" value="{{$riskdetail->id}}"></td>
                                     @endif
                                     <td>{{$no}}</td>
-                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td>
-                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->utama }}</p>@else{{ $riskdetail->kpi->utama }}@endif</td>
+                                {{-- <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td> --}}
+                                <td><b>@if($riskdetail->kpi->level=='2')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@elseif($riskdetail->kpi->level=='1')<p class="text-yellow">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</b></td>
+                                {{-- <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->utama }}</p>@else{{ $riskdetail->kpi->utama }}@endif</td>
+                                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td> --}}
                                 <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>
                                 <td align="center">
                                     @if($riskdetail->kaidah=='1')
@@ -380,10 +383,10 @@ function batalvalidriskbisnis(id){
                                     
                                     <a class="btn btn-primary"  onclick="sesuaikaidah()"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
                                     <a class="btn btn-warning" onclick="tidaksesuaikaidah()"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
-                                    <a class="btn btn-danger" onclick="highlight()"><i class="fa  fa-tags" title="Highlight"></i></a>
-                                    <a class="btn btn-success" onclick="batalhighlight()"><i class="fa  fa-tags" title="Batal highlight"></i></a>
-                                    <a class="btn btn-info" onclick="kri()">KRI</a>
-                                    <a class="btn btn-warning" onclick="batalkri()">Batal KRI</a>
+                                    <a class="btn btn-danger" onclick="highlight()"><i class="fa  fa-tags" title="KRI"></i></a>
+                                    <a class="btn btn-success" onclick="batalhighlight()"><i class="fa  fa-tags" title="Batal KRI"></i></a>
+                                    <a class="btn btn-info" onclick="kri()">CL</a>
+                                    <a class="btn btn-warning" onclick="batalkri()">Batal CL</a>
                                     <a class="btn btn-info" onclick="rkap()">RKAP</a>
                                     <a class="btn btn-warning" onclick="batalrkap()">Batal RKAP</a> 
                                 </th>

@@ -8,18 +8,21 @@
 function exportexcel(){
     
     if (confirm("Apakah anda yakin ?") == true) {
+        var data_val = $('#formcari').serializeArray();
             $.ajax({
                 url: "{{ url('export') }}",
-                method: 'get',
+                method: 'post',
+                data: data_val,
                 success: function (data) {
-                    if (data == 'success') {
-                        alert('Export berhasil !');
-                        location.reload();
+                    //location.reload();
+                    // if (data == 'success') {
+                    //     alert('Export berhasil !');
+                    //     location.reload();
                        
-                    } else {
-                        alert('Export gagal !');
-                        location.reload();
-                    }
+                    // } else {
+                    //     alert('Export gagal !');
+                    //     location.reload();
+                    // }
 
                 }
             });
@@ -157,6 +160,7 @@ function exportexcel(){
                     </td>
                     <td>
                             <button type="submit" class="btn btn-primary pull-right">Cari</button>
+                            
                     </form>
                     </td>
                 </tr>

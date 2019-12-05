@@ -113,9 +113,9 @@ function pilihdampak(krinama,dampakid,katid,level){
                         <select class="form-control select2" style="width: 100%;" name="kpi" id="kpi">
                             @foreach ($kpi as $rowkpi)
                             @if($rowkpi->status==1)
-                            <option value="{{$rowkpi->id}}" class="text-{{$rowkpi->warnatext}}">{{$rowkpi->nama}} ( {{$rowkpi->namalevel}} ) [ sudah diinput...]</option>
+                            <option value="{{$rowkpi->id}}">{{$rowkpi->nama}} ( {{$rowkpi->namalevel}} ) [ sudah diinput...]</option>
                             @else
-                            <option value="{{$rowkpi->id}}" class="text-{{$rowkpi->warnatext}}">{{$rowkpi->nama}} ( {{$rowkpi->namalevel}} )</option>
+                            <option value="{{$rowkpi->id}}">{{$rowkpi->nama}} ( {{$rowkpi->namalevel}} )</option>
                             @endif
                             @endforeach
                         </select>

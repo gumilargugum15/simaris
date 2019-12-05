@@ -29,10 +29,10 @@
               </div>
               <table class="table table-bordered table-striped">
               <tr><td colspan="3" align="center">KPI {{$periodeaktif->nama." ".$periodeaktif->tahun}}</td></tr>
-              <tr align="center"><th>Utama</th><th>Hight</th><th>Biasa</th></tr>
-              <tr align="center"><td><a class="btn btn-primary" href="#">{{$jmlkpiutama}}</a></td>
-              <td><a class="btn btn-danger" href="#">{{$jmlkpihight}}</a></td>
-              <td><a class="btn btn-success" href="#">{{$jmlkpibiasa}}</a></td>
+              <tr align="center"><th>Total KPI</th><th>Paling Utama</th><th>Utama</th></tr>
+              <tr align="center"><td><a class="btn btn-primary" href="#">{{$jmlkpi}}</a></td>
+              <td><a class="btn btn-danger" href="#">{{$jmlkpipalingutama}}</a></td>
+              <td><a class="btn btn-warning" href="#">{{$jmlkpiutama}}</a></td>
                 </tr>
               </table>
             @include('layouts.flash')
@@ -63,7 +63,7 @@
                     <th width="20%">Unit</th>
                     <th>Tahun</th>
                     <th>Level</th>
-                    <th>KPI utama</th>
+                    {{-- <th>KPI utama</th> --}}
                     <th width="15%">Nama (tahun) Periode</th>
                     <th width="10%">Aksi</th>
                   </tr>
@@ -87,12 +87,14 @@
                     <td>{{$data->nama}}</td>
                     <td>{{$data->namaunit}} ( {{$data->unit_id}} )</td>
                     <td>{{$data->tahun}}</td>
-                    <td><a class="btn btn-{{$data->warna}}" href="#">{{$data->namalevel}}</a></td>
                     <td>
-                      @if($data->utama=='Y')
-                      <a class="btn btn-primary" href="#">{{$data->utama}}</a>
-                      @endif
+                      <a class="btn btn-{{$data->warna}}" href="#">{{$data->namalevel}}</a>
                     </td>
+                    {{-- <td>
+                      @if($data->utama=='Y')
+                      <a class="btn btn-danger" href="#">{{$data->utama}}</a>
+                      @endif
+                    </td> --}}
                     <td>{{$data->namaperiode}} ( {{$data->tahunperiode}} )</td>
                     <td>
                       @if(isset($dataoto))
@@ -111,10 +113,10 @@
                     <tr>
                         <th colspan="4"><input type="checkbox" id="selectall" onClick="selectAllkpi(this)" />&nbsp;Pilih semua</th> 
                         <th>
-                            <a class="btn btn-success" onclick="levelbiasa()"><i class="fa fa-cog" title="Biasa"></i></a>
-                            <a class="btn btn-danger" onclick="levelhight()"><i class="fa fa-cog" title="Hight"></i></a>
-                            <a class="btn btn-primary" onclick="kpiutama()"><i class="fa fa-bookmark" title="kpi Utama"></i></a>
-                            <a class="btn btn-warning" onclick="batalkpiutama()"><i class="fa fa-bookmark" title="Batal kpi Utama"></i></a>
+                            <a class="btn btn-danger" onclick="levelpalingutama()"><i class="fa fa-cog" title="Paling Utama"></i></a>
+                            <a class="btn btn-warning" onclick="levelutama()"><i class="fa fa-cog" title="Utama"></i></a>
+                            <a class="btn btn-success" onclick="batalkanlevel()"><i class="fa fa-undo" title="Batal level"></i></a>
+                            {{-- <a class="btn btn-warning" onclick="batalkpiutama()"><i class="fa fa-bookmark" title="Batal kpi Utama"></i></a> --}}
                             
                         </th>
                         <th></th>
@@ -157,11 +159,11 @@
 		for(var i in checkboxes)
 			checkboxes[i].checked = source.checked;
 	  }
-    function levelbiasa(){
+    function levelpalingutama(){
       if (confirm("Apakah anda yakin ?") == true) {
         var data_val = $('#fm-level').serialize();
         $.ajax({
-                url: "{{ url('levelbiasa') }}",
+                url: "{{ url('levelpalingutama') }}",
                 method: 'post',
                 data	: data_val,
                 success: function (data) {
@@ -171,11 +173,11 @@
 
     }
     }
-    function levelhight(){
+    function levelutama(){
       if (confirm("Apakah anda yakin ?") == true) {
         var data_val = $('#fm-level').serialize();
         $.ajax({
-                url: "{{ url('levelhight') }}",
+                url: "{{ url('levelutama') }}",
                 method: 'post',
                 data	: data_val,
                 success: function (data) {
@@ -199,11 +201,11 @@
 
     }
     }
-    function batalkpiutama(){
+    function batalkanlevel(){
       if (confirm("Apakah anda yakin ?") == true) {
         var data_val = $('#fm-level').serialize();
         $.ajax({
-                url: "{{ url('batalkpiutama') }}",
+                url: "{{ url('batalkanlevel') }}",
                 method: 'post',
                 data	: data_val,
                 success: function (data) {
