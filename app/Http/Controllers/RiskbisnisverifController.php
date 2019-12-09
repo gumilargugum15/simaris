@@ -189,10 +189,24 @@ class RiskbisnisverifController extends Controller
         ->get();
         return view('resiko.risikobisnisverifi.kpiindex', compact('judul', 'kpi'));
     }
+    public function cl(Request $request){
+        $kaidah         = $request->kaidah;
+        foreach($kaidah as $key=>$value){
+            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['jenisrisiko'=>'CL']);
+        }
+
+    }
     public function kri(Request $request){
         $kaidah         = $request->kaidah;
         foreach($kaidah as $key=>$value){
             $riskdetail = Risikobisnisdetail::where('id',$value)->update(['jenisrisiko'=>'KRI']);
+        }
+
+    }
+    public function kri_rkap(Request $request){
+        $kaidah         = $request->kaidah;
+        foreach($kaidah as $key=>$value){
+            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['jenisrisiko'=>'KRI RKAP']);
         }
 
     }

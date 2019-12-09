@@ -167,8 +167,7 @@
               <tr>
                 <th>No</th>
                 <th>KPI</th>
-                <th>Utama</th>
-                <th>Jenis</th>
+                <th>Kelompok</th>
                 <th width="10%">Kaidah</th>
                 <th>Risiko</th>
                 <th>Peluang</th>
@@ -193,9 +192,11 @@
               <tr>
                
                <td>{{$no}}</td>
-               <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td>
-               <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->utama }}</p>@else{{ $riskdetail->kpi->utama }}@endif</td>
-               <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>             
+               {{-- <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td> --}}
+               <td><b>@if($riskdetail->kpi->level=='2')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@elseif($riskdetail->kpi->level=='1')<p class="text-yellow">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</b></td>
+               {{-- <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->utama }}</p>@else{{ $riskdetail->kpi->utama }}@endif</td>
+               <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>              --}}
+               <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>
                <td align="center">
                   @if($riskdetail->kaidah=='1')
                   <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
@@ -204,15 +205,15 @@
                   @endif
               </td>
                 
-                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->risiko }}</p>@else{{ $riskdetail->risiko }}@endif</td>
-                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->peluang->nama }}</p>@else{{ $riskdetail->peluang->nama }}@endif</td>
-                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->dampak->nama }}</p>@else{{ $riskdetail->dampak->nama }}@endif</td>
+                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->risiko }}</p>@else{{ $riskdetail->risiko }}@endif</td>
+                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->peluang->nama }}</p>@else{{ $riskdetail->peluang->nama }}@endif</td>
+                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->dampak->nama }}</p>@else{{ $riskdetail->dampak->nama }}@endif</td>
                 <td><button type="button" class="btn btn-{{ $riskdetail->warna }} btn-sm"></button></td>
                 <td><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-sumberresikobisnis"
                     onclick="sumberrisiko({{ $riskdetail->id }},'{{$riskdetail->risiko}}')"><i class="fa fa-reorder (alias)" title="List sumber risiko"></i></a>
                 </td>
-                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
-                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
+                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
+                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
                 <td>
                     {{-- @if($risikobisnis->statusrisiko_id<'3')
                     <a href="{{url('editatasan',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>

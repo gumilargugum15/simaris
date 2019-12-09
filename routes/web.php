@@ -63,6 +63,8 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::post('/batalkri','RiskbisnisverifController@batalkri');
     Route::post('/rkap','RiskbisnisverifController@rkap');
     Route::post('/batalrkap','RiskbisnisverifController@batalrkap');
+    Route::post('/cl','RiskbisnisverifController@cl');
+    Route::post('/kri_rkap','RiskbisnisverifController@kri_rkap');
     Route::get('/resikobisnisadmin', 'RiskbisnisverifController@index');
     Route::get('/laprisikobisnis', 'LaprisikobisnisController@index');
     Route::get('/laprisikobisniskpiutama', 'LaprisikobisniskpiutamaController@index');

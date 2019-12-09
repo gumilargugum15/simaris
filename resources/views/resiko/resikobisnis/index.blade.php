@@ -232,24 +232,24 @@
                 <p class="text-red">{{ $riskdetail->kpi->level }}</p>
                 @endif
                 @else{{ $riskdetail->kpi->level }}@endif</td> --}}
-               <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>
+               <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>
                <td align="center">
-                  @if($riskdetail->kaidah=='1')
+                  @if($riskdetail->jenisrisiko=='KRI')
                   <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
                   @else
                   <a class="btn btn-warning"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
                   @endif
               </td>
                 
-                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->risiko }}</p>@else{{ $riskdetail->risiko }}@endif</td>
-                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->peluang->nama }}</p>@else{{ $riskdetail->peluang->nama }}@endif</td>
-                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->dampak->nama }}</p>@else{{ $riskdetail->dampak->nama }}@endif</td>
+                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->risiko }}</p>@else{{ $riskdetail->risiko }}@endif</td>
+                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->peluang->nama }}</p>@else{{ $riskdetail->peluang->nama }}@endif</td>
+                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->dampak->nama }}</p>@else{{ $riskdetail->dampak->nama }}@endif</td>
                 <td><button type="button" class="btn btn-{{ $riskdetail->warna }} btn-sm"></button></td>
                 <td><a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-sumberresikobisnis"
                     onclick="sumberrisiko({{ $riskdetail->id}},'{{$riskdetail->risiko}}')"><i class="fa fa-reorder (alias)" title="List sumber risiko"></i></a>
                 </td>
-                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
-                <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
+                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
+                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
                 <td>
                 @if($periodeaktif->id==$riskdetail->perioderisikobisnis_id)
                 <a href="{{url('edit',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
