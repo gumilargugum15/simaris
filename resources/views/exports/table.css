@@ -1,0 +1,6 @@
+td {
+    height:30; 
+    width:30;
+    wrap-text:true;
+    border-bottom: 1px solid #000000;
+} 

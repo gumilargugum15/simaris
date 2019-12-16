@@ -37,7 +37,7 @@ class LaprisikobisnisController extends Controller
             if($risikobisnis){
                 if($request->tingkat=='All'){
                     $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
-                    ->select('risikobisnisdetail.*', 'kpi.nama as namakpi', 'klasifikasi.nama as namaklas', 'peluang.kriteria as peluang', 'peluang.level as levelpeluang', 'kriteria.nama as dampak', 'kriteria.level as leveldampak', 'matrikrisiko.tingkat')
+                    ->select('risikobisnisdetail.*', 'kpi.nama as namakpi', 'kpi.level as levelkpi', 'klasifikasi.nama as namaklas', 'peluang.kriteria as peluang', 'peluang.level as levelpeluang', 'kriteria.nama as dampak', 'kriteria.level as leveldampak', 'matrikrisiko.tingkat')
                     ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
                     ->join('klasifikasi', 'klasifikasi.id', '=', 'risikobisnisdetail.klasifikasi_id')
                     ->join('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
@@ -49,10 +49,10 @@ class LaprisikobisnisController extends Controller
                         $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
                             ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
                         })
-                    ->orderBy('kpi_id','asc')->get();
+                    ->orderBy('kpi.level','desc')->get();
                 }else{
                     $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
-                    ->select('risikobisnisdetail.*', 'kpi.nama as namakpi', 'klasifikasi.nama as namaklas', 'peluang.kriteria as peluang', 'peluang.level as levelpeluang', 'kriteria.nama as dampak', 'kriteria.level as leveldampak', 'matrikrisiko.tingkat')
+                    ->select('risikobisnisdetail.*', 'kpi.nama as namakpi', 'kpi.level as levelkpi', 'klasifikasi.nama as namaklas', 'peluang.kriteria as peluang', 'peluang.level as levelpeluang', 'kriteria.nama as dampak', 'kriteria.level as leveldampak', 'matrikrisiko.tingkat')
                     ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
                     ->join('klasifikasi', 'klasifikasi.id', '=', 'risikobisnisdetail.klasifikasi_id')
                     ->join('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
@@ -65,7 +65,7 @@ class LaprisikobisnisController extends Controller
                             ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
                         })
                     ->where('matrikrisiko.tingkat',$request->tingkat)
-                    ->orderBy('kpi_id','asc')->get();
+                    ->orderBy('kpi.level','desc')->get();
                 }
                 
             
@@ -134,18 +134,7 @@ class LaprisikobisnisController extends Controller
     public function export(Request $request) 
     {
         
-        // ob_end_clean();
-        // ob_start(); 
-        $period = $request->periode;//'Kwartal I-2019';//
-        $unit   = $request->unitkerja;//'36000';//
-        $tingkat= $request->tingkat;
-        // return Excel::download(new RisikobisnisExport, 'risikobisnis.xlsx');
-        return (new RisikobisnisExport)
-            ->forPeriod($period)
-            ->forUnit($unit)
-            ->forTingkat($tingkat)
-            ->download('Risikobisnis.xlsx');
-        
+        return Excel::download(new RisikobisnisExport, 'risikobisnis.xlsx');
     }
 
     /**

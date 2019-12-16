@@ -14,7 +14,7 @@ function exportexcel(){
                 method: 'post',
                 data: data_val,
                 success: function (data) {
-                    //location.reload();
+                    // location.reload();
                     // if (data == 'success') {
                     //     alert('Export berhasil !');
                     //     location.reload();
@@ -174,8 +174,9 @@ function exportexcel(){
             <div class="box">
                 <div class="box-header">
                     <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
-                    <a class="btn btn-primary" onclick="exportexcel()"><i class="fa  fa-file-excel-o" title=""> Export Excel</i></a>
-                    </div>
+                    {{-- <a class="btn btn-primary" onclick="exportexcel()"><i class="fa  fa-file-excel-o" title=""> Export Excel</i></a> --}}
+                    <a href="{{url('export')}}" class="btn btn-info my-3" target="_blank"><i class="fa  fa-file-excel-o" title=""> Export Excel</i></a>    
+                </div>
                 
                 <div class="box-body">
                     <?=$hsl;?>
