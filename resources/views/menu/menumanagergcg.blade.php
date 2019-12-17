@@ -1,6 +1,6 @@
 <li class="treeview">
     <a href="#">
-      <i class="fa fa-edit"></i> <span>Risiko ( Manajer GCG )</span>
+      <i class="fa fa-edit"></i> <span>Risiko ( Manajer LRC )</span>
       <span class="pull-right-container">
         <i class="fa fa-angle-left pull-right"></i>
       </span>

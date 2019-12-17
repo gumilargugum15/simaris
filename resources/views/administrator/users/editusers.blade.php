@@ -45,14 +45,14 @@
                             <div class="checkbox">
                               <label>
                                 <input type="checkbox" name="roles[]" value="{{$data->id}}" checked>
-                                {{$data->name}}
+                                {{$data->namalengkap}}
                               </label>
                             </div>
                             @else
                             <div class="checkbox">
                                     <label>
                                       <input type="checkbox" name="roles[]" value="{{$data->id}}">
-                                      {{$data->name}}
+                                      {{$data->namalengkap}}
                                     </label>
                                   </div>
                             @endif
