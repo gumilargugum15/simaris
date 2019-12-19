@@ -19,6 +19,7 @@ use App\Klasifikasi;
 use App\Matrikrisiko;
 use App\Komentar;
 use App\Komentar_detail;
+use App\Kelompokrisiko;
 use Illuminate\Support\Facades\Auth;
 
 class RiskbisnisverifController extends Controller
@@ -41,8 +42,10 @@ class RiskbisnisverifController extends Controller
         $nikuser = $user->nik;
         $unitkerja = Unitkerja::get();
         // dd($unitkerja);
+        $kelompokrisiko = Kelompokrisiko::get();
         $periodeall = Perioderisikobisnis::get();
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
+        $hsl='';
         if(isset($request->periode ) && isset($request->unitkerja)){
       
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($request->unitkerja)->first();
@@ -57,12 +60,117 @@ class RiskbisnisverifController extends Controller
             $statusinput = 1;
             $cekkpisudahinput = Kpi::byId($request->periode)->byStatus($statusinput)->byUnit($request->unitkerja)->get();
             $jmlkpisudahinput = count($cekkpisudahinput);
+
+            $hsl='';
+            $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
+            ->select('risikobisnisdetail.*', 'kpi.nama as namakpi', 'kpi.level as levelkpi', 'klasifikasi.nama as namaklas', 'peluang.kriteria as peluang', 'peluang.level as levelpeluang', 'kriteria.nama as dampak', 'kriteria.level as leveldampak', 'matrikrisiko.tingkat','kelompokrisiko.nama as namakelompok')
+            ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
+            ->join('klasifikasi', 'klasifikasi.id', '=', 'risikobisnisdetail.klasifikasi_id')
+            ->join('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
+            ->join('kelompokrisiko', 'kelompokrisiko.id', '=', 'risikobisnisdetail.jenisrisiko')
+            ->join("kriteria",function($join){
+                $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                })
+            ->join("matrikrisiko",function($join){
+                $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
+                    ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
+                })
+            ->orderBy('kpi.level','desc')->get();
+            // dd($detailrisk);
+            $hsl.='<table id="tblresikobisnis" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th width="2%"></th> 
+                    <th width="2%">No</th>  
+                    <th>KPI</th>
+                    <th>Kelompok</th>
+                    <th width="10%">Kaidah</th>
+                    <th>Risiko</th>
+                    <th>Peluang</th>
+                    <th>Dampak</th>
+                    <th>Warna</th>
+                    <th>Sumber risiko</th>
+                    <th>Indikator</th>
+                    <th>Nilai ambang</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>';
+            $no =1;
+            foreach($detailrisk as $key =>$data ){
+                $detailkpi = Risikobisnisdetail::where('risikobisnis_id',$data->risikobisnis_id)->where('kpi_id',$data->kpi_id)->get();
+                $jmldetailkpi = count($detailkpi);
+                if($jmldetailkpi > 1){
+                $hsl.='<tr>
+                <td><input type="checkbox" name="kaidah[]" class="form-controll" value="'.$data->id.'"></td>
+                <td>'.$no.' '.$key.' '.$jmldetailkpi.'</td>';
+                if($jmldetailkpi > 1){
+                $hsl.='<td rowspan="'.$jmldetailkpi.'">'.$data->namakpi.'</td>';
+                
+                $hsl.='</tr>';
+                }else{
+                $hsl.='';
+                
+                }
+                
+                }else{
+                    $hsl.='<tr>
+                <td><input type="checkbox" name="kaidah[]" class="form-controll" value="'.$data->id.'"></td>
+                <td>'.$no.' '.$key.' '.$jmldetailkpi.'</td>
+                <td>'.$data->namakpi.'</td>';
+                $hsl.='</tr>';
+                }
+                // $hsl.='<tr>
+                // <td><input type="checkbox" name="kaidah[]" class="form-controll" value="'.$data->id.'"></td>
+                // <td>'.$no.' '.$key.' '.$jmldetailkpi.'</td>
+                // <td>'.$data->namakpi.'</td>';
+                // $hsl.='</tr>';
+                $no++;
+
+            }
+
+            $hsl.='</tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3"><input type="checkbox" id="selectall" onClick="selectAll(this)" />&nbsp;Pilih semua</th> 
+                    <th colspan="7">    
+                        <a class="btn btn-primary"  onclick="sesuaikaidah()"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
+                        <a class="btn btn-warning" onclick="tidaksesuaikaidah()"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a> 
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th> 
+                </tr>
+            </tfoot>
+        </table>';
             
+        }else{
+            $hsl.='<table id="tblresikobisnis" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th width="2%"></th> 
+                    <th width="2%">No</th>  
+                    <th>KPI</th>
+                    <th>Kelompok</th>
+                    <th width="10%">Kaidah</th>
+                    <th>Risiko</th>
+                    <th>Peluang</th>
+                    <th>Dampak</th>
+                    <th>Warna</th>
+                    <th>Sumber risiko</th>
+                    <th>Indikator</th>
+                    <th>Nilai ambang</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody></tbody></table>';
         }
     
         return view('resiko.risikobisnisverifi.index', compact('risikobisnis','periodeall','namarisiko','unitkerja','nikuser','periodeaktif','jmlkpinull','jmlkpiall',
-        'jmlkpisudahinput'));
+        'jmlkpisudahinput','kelompokrisiko','hsl'));
     }
+    
     function validasibisnis(Request $request,$id){
         $risikobisnis = Risikobisnis::where('id',$id)->update(['statusrisiko_id' => '3']);    
         if($risikobisnis){
@@ -230,6 +338,12 @@ class RiskbisnisverifController extends Controller
             $riskdetail = Risikobisnisdetail::where('id',$value)->update(['jenisrisiko'=>'']);
         }
 
+    }
+    public function kelompokrisiko(Request $request,$id){
+        $kaidah         = $request->kaidah;
+        foreach($kaidah as $key=>$value){
+            $riskdetail = Risikobisnisdetail::where('id',$value)->update(['jenisrisiko'=>$id]);
+        }
     }
     public function krirkap(Request $request){
         $namarisiko ="Risiko Bisnis KRI/RKAP";

@@ -25,4 +25,7 @@ class Risikobisnisdetail extends Model
     public function sumberrisiko(){
         return $this->hasMany('App\Sumberrisiko','risikobisnisdetail_id');
     }
+    public function kelompokrisiko(){
+        return $this->belongsTo('App\Kelompokrisiko', 'jenisrisiko');
+    }
 }
