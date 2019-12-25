@@ -162,7 +162,10 @@
         <div class="box-body">
             <form id="fm-kaidah">
                 <input name="_token" value="{{ csrf_token() }}" type="hidden">
-          <table id="tblresikobisnis" class="table table-bordered table-striped">
+                @php
+                echo $tabel;
+                @endphp
+          {{-- <table id="tblresikobisnis" class="table table-bordered table-striped">
             <thead>
               <tr>
                 <th>No</th>
@@ -192,10 +195,7 @@
               <tr>
                
                <td>{{$no}}</td>
-               {{-- <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td> --}}
                <td><b>@if($riskdetail->kpi->level=='2')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@elseif($riskdetail->kpi->level=='1')<p class="text-yellow">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</b></td>
-               {{-- <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->utama }}</p>@else{{ $riskdetail->kpi->utama }}@endif</td>
-               <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>              --}}
                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>
                <td align="center">
                   @if($riskdetail->kaidah=='1')
@@ -215,10 +215,7 @@
                 <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
                 <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
                 <td>
-                    {{-- @if($risikobisnis->statusrisiko_id<'3')
-                    <a href="{{url('editatasan',['id'=>$riskdetail->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                    @endif --}}
-                </td>
+                  </td>
               </tr>
               @endif
               @endforeach 
@@ -228,7 +225,7 @@
               
             </tbody>
             
-          </table>
+          </table> --}}
         </form>
         </div>
         <!-- /.box-body -->

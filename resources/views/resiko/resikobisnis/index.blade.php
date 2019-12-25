@@ -187,14 +187,16 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            
-          <table id="tblresikobisnis" class="table table-bordered table-striped">
+          @php
+          echo $tabel;
+          @endphp
+          {{-- <table id="tblresikobisnis" class="table table-bordered table-striped">
             <thead>
               <tr>
-                {{-- <th>Periode</th> --}}
+  
                 <th>No</th>
                 <th>KPI</th>
-                {{-- <th>Level</th> --}}
+                
                 <th>Kelompok</th>
                 <th>Kaidah</th>
                 <th>Risiko</th>
@@ -218,20 +220,8 @@
                 $no++;
                 @endphp
                 @if($riskdetail->delete!='1')
-              <tr >
-                {{-- <td>{{ $risikobisnis->periode." ".$risikobisnis->tahun }}</td> --}}
                <td>{{$no}}</td>
-               {{-- <td>@if($riskdetail->highlight=='1')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</td> --}}
                <td><b>@if($riskdetail->kpi->level=='2')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@elseif($riskdetail->kpi->level=='1')<p class="text-yellow">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</b></td>
-               {{-- <td>@if($riskdetail->highlight=='1')
-                @if($riskdetail->kpi->level=='2')   
-                <p class="text-red">{{ $riskdetail->kpi->level }} - Paling Utama</p>
-                @elseif($riskdetail->kpi->level=='1')
-                <p class="text-red">{{ $riskdetail->kpi->level }} - Utama</p>
-                @else
-                <p class="text-red">{{ $riskdetail->kpi->level }}</p>
-                @endif
-                @else{{ $riskdetail->kpi->level }}@endif</td> --}}
                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>
                <td align="center">
                   @if($riskdetail->jenisrisiko=='KRI')
@@ -265,7 +255,7 @@
             </tbody>
            
             
-          </table>
+          </table> --}}
         </div>
         <!-- /.box-body -->
       </div>

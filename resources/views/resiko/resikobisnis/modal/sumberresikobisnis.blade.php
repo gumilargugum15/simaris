@@ -1,53 +1,4 @@
-<script>
-function sumberrisiko(id,risiko) {
-    $("#titlesumber").html('Risiko  '+risiko+' ');
-    read_sumberrisiko(id);
-  }
-  function isifile(file){
-     console.log(file);
-    // var pecah = file.split("/");
-     var isi = "storage/"+file;
-       
-    $("#preview").html('<object width="100%" height="100%" data="'+isi+'"></object>');
-    $('#modal-preview').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-    
-  }
-  function read_sumberrisiko(id) {
 
-    $('#tblsumberresikobisnis').DataTable({
-      "ajax": "{{ url('sumberrisiko') }}/" + id,
-      "bDestroy": true,
-      "columns": [
-        { "data": "namasumber" },
-        { "data": "mitigasi" },
-        { "data": "biaya" },
-        { "data": "start_date" },
-        { "data": "end_date" },
-        { "data": "pic" },
-        { "data": "statussumber" },
-        {
-          "className": 'options',
-          "data": "file",
-          "render": function(data, type, full, meta){
-           
-            if(data !=''){
-              return '<a href="#" onclick="isifile(\'' +data+ '\')"><i class="fa fa-2x fa-file-picture-o"></i></a>';
-            }else{
-              return '';
-            }
-             
-          }
-        }
-      ]
-    });
-  }
-  function previewlampiran(file){
-    alert(file);
-  }
-</script>
 <div class="modal fade" id="modal-sumberresikobisnis">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -96,3 +47,53 @@ function sumberrisiko(id,risiko) {
         <!-- /.modal-dialog -->
       </div>
       @include('resiko/resikobisnis/modal/preview')
+      <script>
+        function sumberrisiko(id,risiko) {
+            $("#titlesumber").html('Risiko  '+risiko+' ');
+            read_sumberrisiko(id);
+          }
+          function isifile(file){
+             console.log(file);
+            // var pecah = file.split("/");
+             var isi = "storage/"+file;
+               
+            $("#preview").html('<object width="100%" height="100%" data="'+isi+'"></object>');
+            $('#modal-preview').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+            
+          }
+          function read_sumberrisiko(id) {
+        
+            $('#tblsumberresikobisnis').DataTable({
+              "ajax": "{{ url('sumberrisiko') }}/" + id,
+              "bDestroy": true,
+              "columns": [
+                { "data": "namasumber" },
+                { "data": "mitigasi" },
+                { "data": "biaya" },
+                { "data": "start_date" },
+                { "data": "end_date" },
+                { "data": "pic" },
+                { "data": "statussumber" },
+                {
+                  "className": 'options',
+                  "data": "file",
+                  "render": function(data, type, full, meta){
+                   
+                    if(data !=''){
+                      return '<a href="#" onclick="isifile(\'' +data+ '\')"><i class="fa fa-2x fa-file-picture-o"></i></a>';
+                    }else{
+                      return '';
+                    }
+                     
+                  }
+                }
+              ]
+            });
+          }
+          function previewlampiran(file){
+            alert(file);
+          }
+        </script>

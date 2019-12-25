@@ -55,10 +55,152 @@ class ResikobisnisController extends Controller
         $unituser = unitkerja::where('objectabbr',$unitid)->first();
        
         $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
-        
+        $tabel='';
         if(isset($request->periode)){
-       
+            
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($unitid)->first();
+            $statusrisiko = $risikobisnis->statusrisiko_id;
+            if($risikobisnis){
+                $tabel='';
+            $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
+            ->select('risikobisnisdetail.kpi_id','kpi.nama as namakpi')
+            ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
+            ->groupBy('risikobisnisdetail.kpi_id','kpi.nama')->orderBy('kpi.level','desc')->paginate(10);
+            $detailrisk->withPath('resikobisnis?periode='.$request->periode.'&_token=cZYtqdssnfDLjJZxC8D5wfbsmCFksv1H1oNHIkPx');
+            $tabel.='<table id="tblresikobisnis" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                <th>No</th>
+                <th>KPI</th>
+                <th>Risiko</th>
+                <th>Peluang</th>
+                <th>Kelompok</th>
+                <th width="10%">Kaidah</th>
+                <th>Dampak</th>
+                <th>Warna</th>
+                <th>Sumber risiko</th>
+                <th>Indikator</th>
+                <th>Nilai ambang</th>
+                <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>';
+            foreach($detailrisk as $key =>$data ){
+                $detailkpi = Risikobisnisdetail::where('kpi_id',$data->kpi_id)
+                ->select('risikobisnisdetail.*', 'peluang.kriteria as peluang','kelompokrisiko.nama as namakelompok', 'kriteria.nama as dampak', 'matrikrisiko.tingkat')
+                ->leftjoin('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
+                ->leftjoin('kelompokrisiko', 'kelompokrisiko.id', '=', 'risikobisnisdetail.jenisrisiko')
+                ->join("matrikrisiko",function($join){
+                    $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
+                         ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
+                    })
+                ->leftjoin("kriteria",function($join){
+                $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                })
+                ->get();
+                $kpi = Kpi::where('id',$data->kpi_id)->first();
+                $jmldetailkpi = count($detailkpi);
+                
+                $tabel.='<tr>';
+                if($jmldetailkpi > 1){
+                    $tabel.='<td rowspan="'.$jmldetailkpi.'">'.($detailrisk->firstItem() + $key).'</td>';
+                    if($kpi->level=='2'){
+                        $tabel.='<td rowspan="'.$jmldetailkpi.'"><p class="text-red">'.$data->namakpi.'</p></td>';
+                    }elseif($kpi->level=='1'){
+                        $tabel.='<td rowspan="'.$jmldetailkpi.'"><p class="text-yellow">'.$data->namakpi.'</p></td>';
+                    }else{
+                        $tabel.='<td rowspan="'.$jmldetailkpi.'">'.$data->namakpi.'</td>';
+                    }
+                    
+                }else{
+                    $tabel.='<td>'.($detailrisk->firstItem() + $key).'</td>';
+                    if($kpi->level=='2'){
+                        $tabel.='<td><p class="text-red">'.$data->namakpi.'</p></td>';
+                    }elseif($kpi->level=='1'){
+                        $tabel.='<td><p class="text-yellow">'.$data->namakpi.'</p></td>';
+                    }else{
+                        $tabel.='<td>'.$data->namakpi.'</td>';
+                    }
+                    
+                }
+                foreach($detailkpi as $keys=>$values){
+                    $notif = komentar_detail::where('nik',$nikuser)->where('baca',0)->where('risikobisnisdetail_id',$values->id)->get();
+                    $jmlnotif = count($notif);
+                    if($jmlnotif > 0){
+                        $hasil = '<span class="label label-warning">'.$jmlnotif.'</span>';
+                    }else{
+                        $hasil = '';
+                    }
+                    if($keys==0){
+                        $tabel.='
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->namakelompok).'</td>';
+                        if($values->kaidah==1){
+                        $tabel.='<td><a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a></td>';
+                        }else{
+                        $tabel.='<td><a class="btn btn-warning"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a></td>';
+                        }
+                        $tabel.='<td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td><td><button type="button" class="btn btn-'.$values->warna.' btn-sm">'.$values->tingkat.'</button></td>
+                        <td><a class="btn btn-primary" href="#" data-toggle="modal"
+                        data-target="#modal-sumberresikobisnis"
+                        onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
+                            title="List sumber risiko"></i></a></td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
+                        <td>
+                        <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
+                </td>';
+                        $tabel.='</tr>';
+                    }else{
+                        $tabel.='<tr>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->namakelompok).'</td>';
+                        if($values->kaidah==1){
+                        $tabel.='<td><a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a></td>';
+                        }else{
+                        $tabel.='<td><a class="btn btn-warning"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a></td>';
+                        }
+                        $tabel.='<td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td><td><button type="button" class="btn btn-'.$values->warna.' btn-sm">'.$values->tingkat.'</button></td>
+                        <td><a class="btn btn-primary" href="#" data-toggle="modal"
+                        data-target="#modal-sumberresikobisnis"
+                        onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
+                            title="List sumber risiko"></i></a></td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
+                        <td>
+                        <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
+                        
+                        </td>';
+                        $tabel.='</tr>';
+                    }
+                }
+
+            }
+            $tabel.='</tbody></table>';
+            $tabel.=$detailrisk->links();
+            }else{
+                $tabel.='<table id="tblresikobisnis" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                    <th>No</th>
+                    <th>KPI</th>
+                    <th>Risiko</th>
+                    <th>Peluang</th>
+                    <th>Kelompok</th>
+                    <th width="10%">Kaidah</th>
+                    <th>Dampak</th>
+                    <th>Warna</th>
+                    <th>Sumber risiko</th>
+                    <th>Indikator</th>
+                    <th>Nilai ambang</th>
+                    <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody><tr><td colspan="12" align="center"><b>Tidak Ada Data</b></td></tr></tbody></table>';
+            }
             $status = 0;
             $cekkpinull = Kpi::byId($request->periode)->byStatus($status)->byUnit($unitid)->get();
             $jmlkpinull = count($cekkpinull);
@@ -69,6 +211,7 @@ class ResikobisnisController extends Controller
             $statusinput = 1;
             $cekkpisudahinput = Kpi::byId($request->periode)->byStatus($statusinput)->byUnit($unitid)->get();
             $jmlkpisudahinput = count($cekkpisudahinput);
+
             
         }else{
            
@@ -83,7 +226,123 @@ class ResikobisnisController extends Controller
             $statusinput = 1;
             $cekkpisudahinput = Kpi::byId($periodeaktif->id)->byStatus($statusinput)->byUnit($unitid)->get();
             $jmlkpisudahinput = count($cekkpisudahinput);
-            
+            $tabel='';
+            $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
+            ->select('risikobisnisdetail.kpi_id','kpi.nama as namakpi')
+            ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
+            ->groupBy('risikobisnisdetail.kpi_id','kpi.nama')->orderBy('kpi.level','desc')->paginate(10);
+            $detailrisk->withPath('resikobisnis?periode='.$request->periode.'&_token=cZYtqdssnfDLjJZxC8D5wfbsmCFksv1H1oNHIkPx');
+            $tabel.='<table id="tblresikobisnis" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                <th>No</th>
+                <th>KPI</th>
+                <th>Risiko</th>
+                <th>Peluang</th>
+                <th>Kelompok</th>
+                <th width="10%">Kaidah</th>
+                <th>Dampak</th>
+                <th>Warna</th>
+                <th>Sumber risiko</th>
+                <th>Indikator</th>
+                <th>Nilai ambang</th>
+                <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>';
+            foreach($detailrisk as $key =>$data ){
+                $detailkpi = Risikobisnisdetail::where('kpi_id',$data->kpi_id)
+                ->select('risikobisnisdetail.*', 'peluang.kriteria as peluang','kelompokrisiko.nama as namakelompok', 'kriteria.nama as dampak', 'matrikrisiko.tingkat')
+                ->leftjoin('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
+                ->leftjoin('kelompokrisiko', 'kelompokrisiko.id', '=', 'risikobisnisdetail.jenisrisiko')
+                ->join("matrikrisiko",function($join){
+                    $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
+                         ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
+                    })
+                ->leftjoin("kriteria",function($join){
+                $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                })
+                ->get();
+                $kpi = Kpi::where('id',$data->kpi_id)->first();
+                $jmldetailkpi = count($detailkpi);
+                
+                $tabel.='<tr>';
+                if($jmldetailkpi > 1){
+                    $tabel.='<td rowspan="'.$jmldetailkpi.'">'.($detailrisk->firstItem() + $key).'</td>';
+                    if($kpi->level=='2'){
+                        $tabel.='<td rowspan="'.$jmldetailkpi.'"><p class="text-red">'.$data->namakpi.'</p></td>';
+                    }elseif($kpi->level=='1'){
+                        $tabel.='<td rowspan="'.$jmldetailkpi.'"><p class="text-yellow">'.$data->namakpi.'</p></td>';
+                    }else{
+                        $tabel.='<td rowspan="'.$jmldetailkpi.'">'.$data->namakpi.'</td>';
+                    }
+                    
+                }else{
+                    $tabel.='<td>'.($detailrisk->firstItem() + $key).'</td>';
+                    if($kpi->level=='2'){
+                        $tabel.='<td><p class="text-red">'.$data->namakpi.'</p></td>';
+                    }elseif($kpi->level=='1'){
+                        $tabel.='<td><p class="text-yellow">'.$data->namakpi.'</p></td>';
+                    }else{
+                        $tabel.='<td>'.$data->namakpi.'</td>';
+                    }
+                    
+                }
+                foreach($detailkpi as $keys=>$values){
+                    $notif = komentar_detail::where('nik',$nikuser)->where('baca',0)->where('risikobisnisdetail_id',$values->id)->get();
+                    $jmlnotif = count($notif);
+                    if($jmlnotif > 0){
+                        $hasil = '<span class="label label-warning">'.$jmlnotif.'</span>';
+                    }else{
+                        $hasil = '';
+                    }
+                    if($keys==0){
+                        $tabel.='
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->namakelompok).'</td>';
+                        if($values->kaidah==1){
+                        $tabel.='<td><a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a></td>';
+                        }else{
+                        $tabel.='<td><a class="btn btn-warning"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a></td>';
+                        }
+                        $tabel.='<td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td><td><button type="button" class="btn btn-'.$values->warna.' btn-sm">'.$values->tingkat.'</button></td>
+                        <td><a class="btn btn-primary" href="#" data-toggle="modal"
+                        data-target="#modal-sumberresikobisnis"
+                        onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
+                            title="List sumber risiko"></i></a></td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
+                        <td>
+                        <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a></td>';
+                        $tabel.='</tr>';
+                    }else{
+                        $tabel.='<tr>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->namakelompok).'</td>';
+                        if($values->kaidah==1){
+                        $tabel.='<td><a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a></td>';
+                        }else{
+                        $tabel.='<td><a class="btn btn-warning"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a></td>';
+                        }
+                        $tabel.='<td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td><td><button type="button" class="btn btn-'.$values->warna.' btn-sm">'.$values->tingkat.'</button></td>
+                        <td><a class="btn btn-primary" href="#" data-toggle="modal"
+                        data-target="#modal-sumberresikobisnis"
+                        onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
+                            title="List sumber risiko"></i></a></td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
+                        <td>
+                        <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a></td>';
+                        $tabel.='</tr>';
+                    }
+                }
+
+            }
+            $tabel.='</tbody></table>';
+            $tabel.=$detailrisk->links();
 
         }
        
@@ -115,8 +374,17 @@ class ResikobisnisController extends Controller
       
         return view('resiko.resikobisnis.index', compact(
             'risikobisnis', 'periodeaktif', 'kpi','klasifikasi','peluang','hasildampak','periodeall','periode','unitkerja','namarisiko','unituser','nikuser','jmlkpinull','jmlkpiall',
-            'jmlkpisudahinput'
+            'jmlkpisudahinput','tabel'
         ));
+    }
+    function cek_kri($jenis,$param){
+        $hsl='';
+        if($jenis=='1'||$jenis=='4'||$jenis=='5'||$jenis=='7'){
+            $hsl.='<p class="text-red">'.$param.'</p>';
+        }else{
+            $hsl.=''.$param.'';
+        }
+        return $hsl;
     }
     public function getkriteria($dampakid,$kategoriid,$level){
         $hsl='';

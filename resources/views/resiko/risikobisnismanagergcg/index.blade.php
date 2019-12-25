@@ -187,7 +187,10 @@ function batalvalidriskbisnisgcg(id){
                 <div class="box-body">
                         <form id="fm-kaidah">
                             <input name="_token" value="{{ csrf_token() }}" type="hidden">
-                    <table id="tblresikobisnis" class="table table-bordered table-striped">
+                        @php
+                        echo $hsl;
+                        @endphp
+                    {{-- <table id="tblresikobisnis" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 
@@ -248,7 +251,7 @@ function batalvalidriskbisnisgcg(id){
 
                         </tbody>
                         
-                    </table>
+                    </table> --}}
                 </div>
                 <!-- /.box-body -->
             </div>

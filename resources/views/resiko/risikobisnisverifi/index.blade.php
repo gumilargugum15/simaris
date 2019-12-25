@@ -338,6 +338,9 @@ function batalvalidriskbisnis(id){
                                 </tr>
                               </table>
                     <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
+                    <a class="btn btn-primary"  onclick="sesuaikaidah()"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
+                    <a class="btn btn-warning" onclick="tidaksesuaikaidah()"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
+                          
                     <div class="btn-group">
                             <button type="button" class="btn btn-default">Kelompok risiko</button>
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -352,15 +355,18 @@ function batalvalidriskbisnis(id){
                              
                             </ul>
                           </div>
-                          <a class="btn btn-warning" onclick="batalrkap()">Batal kelompok risiko</a>
-                    {{-- <a class="btn btn-info" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($risikobisnis->id)){{$risikobisnis->id}}@endif)"><i class="fa fa-commenting-o" title="Komentar"> Komentar</i></a> --}}
+                          <a class="btn btn-danger" onclick="batalrkap()">Batal kelompok risiko</a>
+                          <input type="checkbox" id="selectall" onClick="selectAll(this)" />&nbsp;Pilih semua
+                          {{-- <a class="btn btn-info" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($risikobisnis->id)){{$risikobisnis->id}}@endif)"><i class="fa fa-commenting-o" title="Komentar"> Komentar</i></a> --}}
                 </div>
                 
                 <div class="box-body">
                     <form id="fm-kaidah">
                             <input name="_token" value="{{ csrf_token() }}" type="hidden">
-                            
-                    <table id="tblresikobisnis" class="table table-bordered table-striped">
+                            @php
+                            echo $hsl;
+                            @endphp
+                    {{-- <table id="tblresikobisnis" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th width="2%"></th> 
@@ -395,7 +401,7 @@ function batalvalidriskbisnis(id){
                                     @endif
                                     <td>{{$no}}</td>
                                  <td><b>@if($riskdetail->kpi->level=='2')<p class="text-red">{{ $riskdetail->kpi->nama }}</p>@elseif($riskdetail->kpi->level=='1')<p class="text-yellow">{{ $riskdetail->kpi->nama }}</p>@else{{ $riskdetail->kpi->nama }}@endif</b></td>
-                                <td>@if($riskdetail->jenisrisiko=='1'||$riskdetail->jenisrisiko=='4'||$riskdetail->jenisrisiko=='5'||$riskdetail->jenisrisiko=='7')<p class="text-red">{{ $riskdetail->kelompokrisiko->nama }}</p>@else{{ $riskdetail->kelompokrisiko->nama }}@endif</td>
+                                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->jenisrisiko }}</p>@else{{ $riskdetail->jenisrisiko }}@endif</td>
                                 <td align="center">
                                     @if($riskdetail->kaidah=='1')
                                     <a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
@@ -404,17 +410,17 @@ function batalvalidriskbisnis(id){
                                     @endif
                                 </td>
                                 
-                                <td>@if($riskdetail->jenisrisiko=='1'||$riskdetail->jenisrisiko=='4'||$riskdetail->jenisrisiko=='5'||$riskdetail->jenisrisiko=='7')<p class="text-red">{{ $riskdetail->risiko }}</p>@else{{ $riskdetail->risiko }}@endif</td>
-                                <td>@if($riskdetail->jenisrisiko=='1'||$riskdetail->jenisrisiko=='4'||$riskdetail->jenisrisiko=='5'||$riskdetail->jenisrisiko=='7')<p class="text-red">{{ $riskdetail->peluang->nama }}</p>@else{{ $riskdetail->peluang->nama }}@endif</td>
-                                <td>@if($riskdetail->jenisrisiko=='1'||$riskdetail->jenisrisiko=='4'||$riskdetail->jenisrisiko=='5'||$riskdetail->jenisrisiko=='7')<p class="text-red">{{ $riskdetail->dampak->nama }}</p>@else{{ $riskdetail->dampak->nama }}@endif</td>
+                                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->risiko }}</p>@else{{ $riskdetail->risiko }}@endif</td>
+                                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->peluang->nama }}</p>@else{{ $riskdetail->peluang->nama }}@endif</td>
+                                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->dampak->nama }}</p>@else{{ $riskdetail->dampak->nama }}@endif</td>
                                 <td><button type="button" class="btn btn-{{ $riskdetail->warna }} btn-sm"></button></td>
                                 <td><a class="btn btn-primary" href="#" data-toggle="modal"
                                         data-target="#modal-sumberresikobisnis"
                                         onclick="sumberrisiko({{ $riskdetail->id }},'{{$riskdetail->risiko}}')"><i class="fa fa-reorder (alias)"
                                             title="List sumber risiko"></i></a>
                                 </td>
-                                <td>@if($riskdetail->jenisrisiko=='1'||$riskdetail->jenisrisiko=='4'||$riskdetail->jenisrisiko=='5'||$riskdetail->jenisrisiko=='7')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
-                                <td>@if($riskdetail->jenisrisiko=='1'||$riskdetail->jenisrisiko=='4'||$riskdetail->jenisrisiko=='5'||$riskdetail->jenisrisiko=='7')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
+                                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->indikator }}</p>@else{{ $riskdetail->indikator }}@endif</td>
+                                <td>@if($riskdetail->jenisrisiko=='KRI')<p class="text-red">{{ $riskdetail->nilaiambang }}</p>@else{{ $riskdetail->nilaiambang }}@endif</td>
                                 <td>
                                 @if($periodeaktif->id==$risikobisnis->perioderisikobisnis_id)
                                 <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($riskdetail->id)){{$riskdetail->id}}@endif,'{{$riskdetail->risiko}}')"><i class="fa fa-commenting-o" title="Komentar"></i></a>      
@@ -445,7 +451,7 @@ function batalvalidriskbisnis(id){
                            
                         </tfoot>
 
-                    </table>
+                    </table> --}}
                 </form>
                 </div>
                 
@@ -454,7 +460,8 @@ function batalvalidriskbisnis(id){
         </div>
         
     </div>
-    @include('resiko/resikobisnis/modal/sumberresikobisnis')
+    
     @include('resiko/risikobisnisverifi/modal/komentar')
+    @include('resiko/resikobisnis/modal/sumberresikobisnis')
 </section>
 @endsection

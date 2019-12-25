@@ -45,7 +45,7 @@
           table#lapriskbisnis {border-collapse: collapse;padding:2px;}table, td, th {border: 1px solid black;font-size: 9px;padding:2px;}
           </style>
       </head>
-<body class="hold-transition skin-blue sidebar-mini fixed">
+<body class="hold-transition skin-blue sidebar-collapse sidebar-mini">
  
 <div class="wrapper">
 
@@ -483,27 +483,27 @@
     location.reload();
   }
    $(function () {
-    // $('#tblresikobisnis').DataTable()
-    $('#tblresikobisnis thead tr').clone(true).appendTo( '#tblresikobisnis thead' );
-    $('#tblresikobisnis thead tr:eq(1) th').each( function (i) {
-        var title = $(this).text();
-        $(this).html( '<input size="5" type="text" placeholder="Cari..."/>' );
+    //  $('#tblresikobisnis').DataTable()
+    // $('#tblresikobisnis thead tr').clone(true).appendTo( '#tblresikobisnis thead' );
+    // $('#tblresikobisnis thead tr:eq(1) th').each( function (i) {
+    //     var title = $(this).text();
+    //     $(this).html( '<input size="5" type="text" placeholder="Cari..."/>' );
  
-        $( 'input', this ).on( 'keyup change', function () {
-            if ( table.column(i).search() !== this.value ) {
-                table
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
-    } );
+    //     $( 'input', this ).on( 'keyup change', function () {
+    //         if ( table.column(i).search() !== this.value ) {
+    //             table
+    //                 .column(i)
+    //                 .search( this.value )
+    //                 .draw();
+    //         }
+    //     } );
+    // } );
  
-    var table = $('#tblresikobisnis').DataTable( {
-      orderCellsTop: true,
-        fixedHeader: true,
-       responsive: true
-    } );
+    // var table = $('#tblresikobisnis').DataTable( {
+    //   orderCellsTop: true,
+    //     fixedHeader: true,
+    //    responsive: true
+    // } );
     $('#tblresikoaset').DataTable()
     
     $('.select2').select2()
