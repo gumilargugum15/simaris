@@ -61,7 +61,7 @@ class ResikobisnisController extends Controller
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($unitid)->first();
             $statusrisiko = $risikobisnis->statusrisiko_id;
             if($risikobisnis){
-                $tabel='';
+            $tabel='';
             $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
             ->select('risikobisnisdetail.kpi_id','kpi.nama as namakpi')
             ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')

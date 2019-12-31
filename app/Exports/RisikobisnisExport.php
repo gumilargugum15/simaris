@@ -30,28 +30,102 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
         $risikobisnis = Risikobisnis::byId('1')->byUnit('53200')->first();
         
         $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
-        ->select('risikobisnisdetail.*', 'kpi.nama as namakpi', 'kpi.level as levelkpi', 'klasifikasi.nama as namaklas', 'peluang.kriteria as peluang', 'peluang.level as levelpeluang', 'kriteria.nama as dampak', 'kriteria.level as leveldampak', 'matrikrisiko.tingkat')
-        ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
-        ->join('klasifikasi', 'klasifikasi.id', '=', 'risikobisnisdetail.klasifikasi_id')
-        ->join('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
-        ->join("kriteria",function($join){
-            $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
-                ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
-            })
-        ->join("matrikrisiko",function($join){
-            $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
-                ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
-            })
-        ->orderBy('kpi.level','desc')->get();
-        $detailrisk          = $detailrisk->map(function($item, $key){
-            $sumber          = Sumberrisiko::where('risikobisnisdetail_id',$item->id)->get();
-            $jmlsumber       = count($sumber);
-            $item->sumber    = $sumber;
-            $item->jmlsumber = $jmlsumber;
-            return $item;
-        });
-        // dd($detailrisk);
-        return view('exports.risikobisnis', ['unit'=>$unit,'periode'=>$periode,'detailrisk'=>$detailrisk]);
+            ->select('risikobisnisdetail.kpi_id','kpi.nama as namakpi')
+            ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
+            ->groupBy('risikobisnisdetail.kpi_id','kpi.nama')->orderBy('kpi.level','desc')->get();
+        
+        $hsl='';
+        $hsl.='<table>
+                    <thead>
+                    <tr>
+                    <th colspan="2">TUJUAN</th><th  colspan="6">IDENFITIKASI RISIKO</th><th colspan="5">PENILAIAN RISIKO</th><th colspan="3">PENETAPAN RESPON RISIKO</th><th colspan="2">TINDAK LANJUT</th>
+                </tr>
+                <tr align="center">
+                    <th>NO</th><th>KPI</th><th>KLASIFIKASI</th><th>NAMA RISIKO</th><th>SUMBER RISIKO</th><th>AKIBAT</th><th>INDIKATOR</th><th>NILAI AMBANG</th>
+                    <th>PELUANG</th><th>LEVEL</th><th>DAMPAK</th><th>LEVEL</th><th>TINGKAT RISIKO</th>
+                    <th>MITIGASI</th><th>BIAYA</th><th>TARGET</th>
+                    <th>PIC</th><th>STATUS</th>
+                </tr>
+                </thead>
+                <tbody>';
+                $no = 1;
+            foreach($detailrisk as $key =>$data ){
+                $detailkpi = Risikobisnisdetail::where('kpi_id',$data->kpi_id)
+                ->select('risikobisnisdetail.*', 'peluang.kriteria as peluang','kelompokrisiko.nama as namakelompok', 'kriteria.nama as dampak', 'matrikrisiko.tingkat', 'klasifikasi.nama as namaklas')
+                ->leftjoin('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
+                ->leftjoin('kelompokrisiko', 'kelompokrisiko.id', '=', 'risikobisnisdetail.jenisrisiko')
+                ->join('klasifikasi', 'klasifikasi.id', '=', 'risikobisnisdetail.klasifikasi_id')
+                ->join("matrikrisiko",function($join){
+                    $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
+                         ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
+                    })
+                ->leftjoin("kriteria",function($join){
+                $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                })
+                ->get();
+                $kpi = Kpi::where('id',$data->kpi_id)->first();
+                $sumber = Sumberrisiko::where('kpi_id',$data->kpi_id)->get();
+                $jmlkpi = count($sumber);
+                $jmldetailkpi = count($detailkpi);
+                
+                $hsl.='<tr>';
+                if($jmldetailkpi > 1){
+                    $hsl.='<td rowspan="'.$jmldetailkpi.'">'.$no.'-'.$jmlkpi.'</td>';
+                    if($kpi->level=='2'){
+                        $hsl.='<td rowspan="'.$jmldetailkpi.'"><p class="text-red">'.$data->namakpi.'</p></td>';
+                    }elseif($kpi->level=='1'){
+                        $hsl.='<td rowspan="'.$jmldetailkpi.'"><p class="text-yellow">'.$data->namakpi.'</p></td>';
+                    }else{
+                        $hsl.='<td rowspan="'.$jmldetailkpi.'">'.$data->namakpi.'</td>';
+                    }
+                    
+                }else{
+                    $hsl.='<td>'.$no.'-'.$jmlkpi.'</td>';
+                    if($kpi->level=='2'){
+                        $hsl.='<td><p class="text-red">'.$data->namakpi.'</p></td>';
+                    }elseif($kpi->level=='1'){
+                        $hsl.='<td><p class="text-yellow">'.$data->namakpi.'</p></td>';
+                    }else{
+                        $hsl.='<td>'.$data->namakpi.'</td>';
+                    }
+                    
+                }
+                foreach($detailkpi as $keys=>$values){
+                    $sumberrisk = Sumberrisiko::where('risikobisnisdetail_id',$values->id)->get();
+                    $jmlsumberrisk= count($sumberrisk);
+                    if($keys==0){
+                        $hsl.='
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->namaklas).'-'.$jmlsumberrisk.'</td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>
+                        <td>sumber</td>
+                        ';
+                        $hsl.='</tr>';
+                    }else{
+                        $hsl.='<tr>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->namaklas).'-'.$jmlsumberrisk.'</td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>
+                        <td>sumber</td>
+                        ';
+                        $hsl.='</tr>';
+                    }
+                }
+                
+            //    $hsl.='</tr>';
+
+                $no++;
+            }
+        $hsl.='</tbody></table>';
+        return view('exports.risikobisnis', ['unit'=>$unit,'periode'=>$periode,'detailrisk'=>$detailrisk,'tabel'=>$hsl]);
+    }
+    function cek_kri($jenis,$param){
+        $hsl='';
+        if($jenis=='1'||$jenis=='4'||$jenis=='5'||$jenis=='7'){
+            $hsl.='<p class="text-red">'.$param.'</p>';
+        }else{
+            $hsl.=''.$param.'';
+        }
+        return $hsl;
     }
     public function registerEvents(): array
     {

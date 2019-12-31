@@ -5,6 +5,9 @@
    
 </head>
 <body>
+@php
+echo $tabel;
+@endphp
 {{-- <table id="lapriskbisnis" class="table table-bordered table-striped">
     <tr>
         <th>Unit kerja : {{$unit->nama}}</th>
@@ -15,7 +18,7 @@
         <th>Periode : {{$periode->nama}} Tahun {{$periode->tahun}}</th>
     </tr>
 </table> --}}
-<table border="1">
+{{-- <table border="1">
     <tr>
         <th colspan="2">TUJUAN</th><th  colspan="6">IDENFITIKASI RISIKO</th><th colspan="5">PENILAIAN RISIKO</th><th colspan="3">PENETAPAN RESPON RISIKO</th><th colspan="2">TINDAK LANJUT</th>
     </tr>
@@ -51,6 +54,6 @@
     
     @endforeach
     <tr><td colspan="12">-</td></tr>
-  </table>
+  </table> --}}
 </body>
 </html>
