@@ -66,22 +66,22 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                 ->get();
                 $kpi = Kpi::where('id',$data->kpi_id)->first();
                 $sumber = Sumberrisiko::where('kpi_id',$data->kpi_id)->get();
-                $jmlkpi = count($sumber);
+                $jmldetailsumber = count($sumber);
                 $jmldetailkpi = count($detailkpi);
                 
                 $hsl.='<tr>';
                 if($jmldetailkpi > 1){
-                    $hsl.='<td rowspan="'.$jmldetailkpi.'">'.$no.'-'.$jmlkpi.'</td>';
+                    $hsl.='<td rowspan="'.$jmldetailsumber.'">'.$no.'-'.$jmldetailsumber.'</td>';
                     if($kpi->level=='2'){
-                        $hsl.='<td rowspan="'.$jmldetailkpi.'"><p class="text-red">'.$data->namakpi.'</p></td>';
+                        $hsl.='<td rowspan="'.$jmldetailsumber.'"><p class="text-red">'.$data->namakpi.'</p></td>';
                     }elseif($kpi->level=='1'){
-                        $hsl.='<td rowspan="'.$jmldetailkpi.'"><p class="text-yellow">'.$data->namakpi.'</p></td>';
+                        $hsl.='<td rowspan="'.$jmldetailsumber.'"><p class="text-yellow">'.$data->namakpi.'</p></td>';
                     }else{
-                        $hsl.='<td rowspan="'.$jmldetailkpi.'">'.$data->namakpi.'</td>';
+                        $hsl.='<td rowspan="'.$jmldetailsumber.'">'.$data->namakpi.'</td>';
                     }
                     
                 }else{
-                    $hsl.='<td>'.$no.'-'.$jmlkpi.'</td>';
+                    $hsl.='<td>'.$no.'-'.$jmldetailsumber.'</td>';
                     if($kpi->level=='2'){
                         $hsl.='<td><p class="text-red">'.$data->namakpi.'</p></td>';
                     }elseif($kpi->level=='1'){
@@ -95,19 +95,71 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                     $sumberrisk = Sumberrisiko::where('risikobisnisdetail_id',$values->id)->get();
                     $jmlsumberrisk= count($sumberrisk);
                     if($keys==0){
-                        $hsl.='
+                        if($jmlsumberrisk >1){
+                            $hsl.='
+                        <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->namaklas).'-'.$jmlsumberrisk.'</td>
+                        <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>';
+                        foreach($sumberrisk as $keysumber=>$valuesumber){
+                            if($keysumber==0){
+                                $hsl.='<td>sumber</td>';
+                                $hsl.='</tr>';
+                            }else{
+                                $hsl.='<tr>';
+                                $hsl.='<td>sumber</td>';
+                                $hsl.='</tr>';
+                            }
+                        }
+                        // $hsl.='</tr>';
+                        }else{
+                            $hsl.='
                         <td>'.$this->cek_kri($values->jenisrisiko,$values->namaklas).'-'.$jmlsumberrisk.'</td>
-                        <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>
-                        <td>sumber</td>
-                        ';
-                        $hsl.='</tr>';
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>';
+                        foreach($sumberrisk as $keysumber=>$valuesumber){
+                            if($keysumber==0){
+                                $hsl.='<td>sumber</td>';
+                                $hsl.='</tr>';
+                            }else{
+                                $hsl.='<tr>';
+                                $hsl.='<td>sumber</td>';
+                                $hsl.='</tr>';
+                            }
+                        }
+                        // $hsl.='</tr>';
+                        }
+                        
                     }else{
-                        $hsl.='<tr>
+                        if($jmlsumberrisk >1){
+                            $hsl.='<tr>
+                        <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->namaklas).'-'.$jmlsumberrisk.'</td>
+                        <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>';
+                        foreach($sumberrisk as $keysumber=>$valuesumber){
+                            if($keysumber==0){
+                                $hsl.='<td>sumber</td>';
+                                $hsl.='</tr>';
+                            }else{
+                                $hsl.='<tr>';
+                                $hsl.='<td>sumber</td>';
+                                $hsl.='</tr>';
+                            }
+                        }
+                        // $hsl.='</tr>';
+                        }else{
+                            $hsl.='<tr>
                         <td>'.$this->cek_kri($values->jenisrisiko,$values->namaklas).'-'.$jmlsumberrisk.'</td>
-                        <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>
-                        <td>sumber</td>
-                        ';
-                        $hsl.='</tr>';
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>';
+                        foreach($sumberrisk as $keysumber=>$valuesumber){
+                            if($keysumber==0){
+                                $hsl.='<td>sumber</td>';
+                                $hsl.='</tr>';
+                            }else{
+                                $hsl.='<tr>';
+                                $hsl.='<td>sumber</td>';
+                                $hsl.='</tr>';
+                            }
+                        }
+                        // $hsl.='</tr>';
+                        }
+                        
                     }
                 }
                 
