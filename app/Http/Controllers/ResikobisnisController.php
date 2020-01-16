@@ -584,7 +584,10 @@ class ResikobisnisController extends Controller
                     $datasumber->statussumber             = $status[$key];
                     $datasumber->file                     = $path;
                     $datasumber->perioderisikobisnis_id   = $periodeid;
-                    $datasumber->delete                     = '0';
+                    $datasumber->peluang_id               = $peluang;
+                    $datasumber->dampak_id                = $iddampak;
+                    $datasumber->kpi_id                   = $kpi;
+                    $datasumber->delete                   = '0';
                     $datasumber->save();
 
                     
@@ -666,6 +669,9 @@ class ResikobisnisController extends Controller
                     $datasumber->statussumber             = $status[$key];
                     $datasumber->file                     = $path;
                     $datasumber->perioderisikobisnis_id   = $periodeid;
+                    $datasumber->peluang_id               = $peluang;
+                    $datasumber->dampak_id                = $iddampak;
+                    $datasumber->kpi_id                   = $kpi;
                     $datasumber->delete                   = '0';
                     $datasumber->save();
                 }
@@ -884,6 +890,9 @@ class ResikobisnisController extends Controller
                     $datasumber->pic                      = $pic[$key];
                     $datasumber->statussumber             = $status[$key];
                     $datasumber->file                     = $path;
+                    $datasumber->peluang_id               = $peluang;
+                    $datasumber->dampak_id                = $iddampak;
+                    $datasumber->kpi_id                   = $kpi;
                     $datasumber->perioderisikobisnis_id   = $periodeid;
                     $datasumber->save();
                     }else{
@@ -893,7 +902,8 @@ class ResikobisnisController extends Controller
                         $path = $gambar[$key]->store('risikobisnis');
                         $datasumber = [
                             'namasumber'=>$value,'mitigasi'=>$mitigasi[$key],'biaya'=>$biaya[$key],
-                            'start_date'=>$startdate[$key],'end_date'=>$enddate[$key],'pic'=>$pic[$key],'statussumber'=>$status[$key],'file'=>$path
+                            'start_date'=>$startdate[$key],'end_date'=>$enddate[$key],'pic'=>$pic[$key],'statussumber'=>$status[$key],'file'=>$path,
+                            'peluang_id'=>$peluang,'dampak_id'=>$iddampak,'kpi_id'=>$kpi
                         ];
                     $sumberrisk = Sumberrisiko::where('id',$sumberid[$key])->update($datasumber);
 
@@ -901,7 +911,8 @@ class ResikobisnisController extends Controller
                         
                         $datasumber = [
                             'namasumber'=>$value,'mitigasi'=>$mitigasi[$key],'biaya'=>$biaya[$key],
-                            'start_date'=>$startdate[$key],'end_date'=>$enddate[$key],'pic'=>$pic[$key],'statussumber'=>$status[$key]
+                            'start_date'=>$startdate[$key],'end_date'=>$enddate[$key],'pic'=>$pic[$key],'statussumber'=>$status[$key],
+                            'peluang_id'=>$peluang,'dampak_id'=>$iddampak,'kpi_id'=>$kpi
                         ];
                     $sumberrisk = Sumberrisiko::where('id',$sumberid[$key])->update($datasumber);
 
