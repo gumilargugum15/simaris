@@ -4,13 +4,15 @@
 @endsection
 @section('content')
 <script>
-function pilihdampak(krinama,dampakid,katid,level){
+function pilihdampak(krinama,tipe,dampakid,katid,level){
+    
     //alert(dmapakid+'-'+katid+'-'+level+'-'+krinama);
     var peluangid = $("#peluang").val();
     getmatrix(peluangid,dampakid);
     $("#idkategori").val(katid);
     $("#iddampak").val(dampakid);
     $("#dampak").val(krinama);
+    $("#tipekriteria").val(tipe);
     $('#modal-dampakrisiko').modal('toggle');
   }
   function getmatrix(peluangid,dampakid){
@@ -150,6 +152,7 @@ function pilihdampak(krinama,dampakid,katid,level){
                         <input type="hidden" class="form-control" name="iddampak" id="iddampak" value="{{ old('iddampak') }}" readonly>
                         <input type="hidden" class="form-control" name="idkategori" id="idkategori" value="{{ old('idkategori') }}"  readonly>
                         <input type="text" class="form-control" name="dampak" id="dampak" value="{{ old('dampak') }}" placeholder="Dampak ..." readonly required>
+                        <input type="hidden" class="form-control" name="tipekriteria" id="tipekriteria" value="{{ old('tipekriteria') }}" placeholder="tipekriteria ..." readonly required>
                         </div>
                         <div class="form-group">
                         <label>Warna</label>

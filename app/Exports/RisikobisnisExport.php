@@ -7,6 +7,7 @@ use App\Unitkerja;
 use App\Perioderisikobisnis;
 use App\Risikobisnisdetail;
 use App\Sumberrisiko;
+use App\validasibisnis;
 // use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Contracts\View\View; 
 use Maatwebsite\Excel\Concerns\FromView;
@@ -42,17 +43,26 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
     // public function collection()
     public function view(): View
     {
+        $gcgnama='';
+        $keynama='';
+        $pimpnama='';
         $unit = unitkerja::where('objectabbr',$this->unit)->first();
+        
         $periode = Perioderisikobisnis::where('id',$this->periode)->first();
         $risikobisnis = Risikobisnis::byId($this->periode)->byUnit($this->unit)->first();
-        
-
+        // $gcg = validasibisnis::where('risikobisnis_id',$this->periode)->where('aktorvalidasi_id','4')->first();
+        // $gcgnama = $gcg->nama;
+        // $key = validasibisnis::where('risikobisnis_id',$this->periode)->where('aktorvalidasi_id','1')->first();
+        // $keynama = $key->nama;
+        // $pimp = validasibisnis::where('risikobisnis_id',$this->periode)->where('aktorvalidasi_id','3')->first();
+        // $pimpnama = $pimp->nama;
         if($this->tingkat=='All'){
             $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
             ->select('risikobisnisdetail.kpi_id','kpi.nama as namakpi')
             ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
             ->groupBy('risikobisnisdetail.kpi_id','kpi.nama')->orderBy('kpi.level','desc')->get();
         }else{
+            
             $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
             ->select('risikobisnisdetail.kpi_id','kpi.nama as namakpi')
             ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
@@ -64,7 +74,6 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
             ->groupBy('risikobisnisdetail.kpi_id','kpi.nama')->orderBy('kpi.level','desc')->get();
         }
         // dd($detailrisk);
-        
         $hsl='';
         
         $hsl.='<table>';
@@ -75,7 +84,7 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
         $hsl.='<tr>';
         $hsl.='<td></td><td colspan="6">Periode : '.$periode->nama.'</td><td colspan="4"> (1.) Mengorganisasikan, mengkoordinasikan dan mengadministrasikan serta mengendalikan masalah-masalah yang timbul dari transaksi penerimaan dan pengeluaran dana perusahaan meliputi ; transaksi pembukaan dan pembayaran L/C impor, menerbitkan laporan-laporan pokok operasi pendanaan				
         </td>';
-        $hsl.='</tr>';
+        $hsl.='</tr><tr><th></th><th colspan="15"></th></tr>';
         $hsl.='<tr>
                     <th></th><th colspan="2">TUJUAN</th><th  colspan="6">IDENFITIKASI RISIKO</th><th colspan="5">PENILAIAN RISIKO</th><th>PENETAPAN RESPON RISIKO</th><th>TINDAK LANJUT</th>
                 </tr>
@@ -101,7 +110,8 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                     })
                 ->leftjoin("kriteria",function($join){
                 $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
-                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id")
+                    ->on("kriteria.tipe","=","risikobisnisdetail.kriteriatipe");
                 })
                 ->get();
                 }else{
@@ -117,7 +127,8 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                 ->where('matrikrisiko.tingkat',$this->tingkat)
                 ->leftjoin("kriteria",function($join){
                 $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
-                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id")
+                    ->on("kriteria.tipe","=","risikobisnisdetail.kriteriatipe");
                 })
                 ->get();
                 }
@@ -309,6 +320,11 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
 
                 $no++;
             }
+        $hsl.='<tr><td></td><td colspan="9">Catatan :</td><td colspan="2">Manager Legal, Risk Dan Compliance</td><td colspan="2">KEY PERSON</td><td colspan="2">'.$unit->nama.'</td></tr>';
+        $hsl.='<tr><td></td><td colspan="9" rowspan="4"></td><td colspan="2" rowspan="3"></td><td colspan="2" rowspan="3"></td><td colspan="2" rowspan="3"></td></tr>';
+        $hsl.='<tr><td></td>></tr>';
+        $hsl.='<tr><td></td>></tr>';
+        $hsl.='<tr><td></td><td colspan="2">'.$gcgnama.'</td><td colspan="2">'.$keynama.'</td><td colspan="2">'.$pimpnama.'</td></tr>';
         $hsl.='</table>';
         return view('exports.risikobisnis', ['unit'=>$unit,'periode'=>$periode,'detailrisk'=>$detailrisk,'tabel'=>$hsl]);
     }
@@ -336,7 +352,7 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                 $drawing->setWorksheet($event->sheet->getDelegate());
 
                 $sheet = $event->sheet;
-                $event->sheet->getStyle('B6:P27')->applyFromArray([
+                $event->sheet->getStyle('B6:P'. $sheet->getHighestRow())->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -345,16 +361,13 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                     ]
                 ]);
                 // $sheet->getParent()->getDefaultStyle()->getAlignment()->setWrapText(true);
-                $sheet->getStyle('A10:O18')->applyFromArray(
+                $sheet->getStyle('A11:P'. $sheet->getHighestRow())->applyFromArray(
                     array(
                         'font' => array(
                             'name' => 'Calibri',
                             'size' => 10,
 
-                        ),
-                        'alignment' => [
-                                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP,
-                                    ],
+                        )
                     )
                 );
                 $sheet->getStyle('B6:P7')->applyFromArray([
@@ -363,28 +376,88 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                         'size'      =>  10,
                         'bold'      =>  true
                     ),
+                    'alignment' => [
+                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+                    ],
                 ]);
-                $sheet->getStyle('B8:P8')->applyFromArray([
+                $sheet->getStyle('B9:P9')->applyFromArray([
                     'font' => array(
                         'name'      =>  'Calibri',
                         'size'      =>  15,
                         'bold'      =>  true
                     ),
                 ]);
-                $sheet->getStyle('B9:P9')->applyFromArray([
+                
+                $sheet->getStyle('G'. $sheet->getHighestRow().':P' . $sheet->getHighestRow())->applyFromArray([
+                    'alignment' => [
+                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    ]
+                ]);
+                $sheet->getStyle('B9:P10')->applyFromArray([
+                    'alignment' => [
+                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    ],
                     'font' => array(
                         'name'      =>  'Calibri',
                         'size'      =>  13,
                         'bold'      =>  true
                     ),
                 ]);
-                $sheet->getStyle('B8:P9')->applyFromArray([
+                $sheet->getStyle('H6:K7')->applyFromArray([
                     'alignment' => [
                         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                     ],
+                    'font' => array(
+                        'name'      =>  'Calibri',
+                        'size'      =>  15,
+                        'bold'      =>  true
+                    ),
                 ]);
-                
-                
+                $sheet->getStyle('B11:P'. $sheet->getHighestRow())->applyFromArray([
+                    'alignment' => [
+                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP
+                    ]
+                ]);
+                $event->sheet->getColumnDimension('B')->setAutoSize(false);
+                $event->sheet->getColumnDimension('C')->setAutoSize(false);
+                $event->sheet->getColumnDimension('D')->setAutoSize(false);
+                $event->sheet->getColumnDimension('E')->setAutoSize(false);
+                $event->sheet->getColumnDimension('F')->setAutoSize(false);
+                $event->sheet->getColumnDimension('G')->setAutoSize(false);
+                $event->sheet->getColumnDimension('H')->setAutoSize(false);
+                $event->sheet->getColumnDimension('I')->setAutoSize(false);
+                $event->sheet->getColumnDimension('J')->setAutoSize(false);
+                $event->sheet->getColumnDimension('K')->setAutoSize(false);
+                $event->sheet->getColumnDimension('L')->setAutoSize(false);
+                $event->sheet->getColumnDimension('M')->setAutoSize(false);
+                $event->sheet->getColumnDimension('N')->setAutoSize(false);
+                $event->sheet->getColumnDimension('O')->setAutoSize(false);
+                $event->sheet->getColumnDimension('P')->setAutoSize(false);
+                $event->sheet->getColumnDimension('B')->setWidth(5);
+                $event->sheet->getColumnDimension('C')->setWidth(35);
+                $event->sheet->getColumnDimension('D')->setWidth(25);
+                $event->sheet->getColumnDimension('E')->setWidth(25);
+                $event->sheet->getColumnDimension('F')->setWidth(25);
+                $event->sheet->getColumnDimension('G')->setWidth(25);
+                $event->sheet->getColumnDimension('H')->setWidth(25);
+                $event->sheet->getColumnDimension('I')->setWidth(25);
+                $event->sheet->getColumnDimension('J')->setWidth(25);
+                $event->sheet->getColumnDimension('K')->setWidth(7);
+                $event->sheet->getColumnDimension('L')->setWidth(25);
+                $event->sheet->getColumnDimension('M')->setWidth(7);
+                $event->sheet->getColumnDimension('N')->setWidth(25);
+                $event->sheet->getColumnDimension('O')->setWidth(30);
+                $event->sheet->getColumnDimension('P')->setWidth(20);
+                $sheet->getRowDimension(7)->setRowHeight(50);
+                $sheet->getRowDimension(8)->setRowHeight(7);
+                $sheet->getStyle('B6:P' . $sheet->getHighestRow())
+                ->getAlignment()->setWrapText(true);
+                $sheet->getStyle('L7:O7')
+                ->getAlignment()->setWrapText(true);
+
             },
         ];
     }

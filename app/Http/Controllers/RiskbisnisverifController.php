@@ -49,8 +49,9 @@ class RiskbisnisverifController extends Controller
         if(isset($request->periode ) && isset($request->unitkerja)){
       
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($request->unitkerja)->first();
+            if($risikobisnis!=null){
             $statusrisiko = $risikobisnis->statusrisiko_id;
-            if($risikobisnis){
+            
                 $hsl='';
                 $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
                 ->select('risikobisnisdetail.kpi_id','kpi.nama as namakpi')
@@ -77,6 +78,20 @@ class RiskbisnisverifController extends Controller
                 </thead>
                 <tbody>';
                 $no =0;
+                // $detailkpi = Risikobisnisdetail::where('kpi_id','603')
+                //     ->select('risikobisnisdetail.*', 'peluang.kriteria as peluang','kelompokrisiko.nama as namakelompok', 'kriteria.nama as dampak', 'matrikrisiko.tingkat')
+                //     ->leftjoin('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
+                //     ->leftjoin('kelompokrisiko', 'kelompokrisiko.id', '=', 'risikobisnisdetail.jenisrisiko')
+                //     ->join("matrikrisiko",function($join){
+                //         $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
+                //              ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
+                //         })
+                //     ->join("kriteria",function($join){
+                //     $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
+                //         ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                //     })
+                //     ->get();
+                //     dd($detailkpi);
                 foreach($detailrisk as $key =>$data ){
                     $detailkpi = Risikobisnisdetail::where('kpi_id',$data->kpi_id)
                     ->select('risikobisnisdetail.*', 'peluang.kriteria as peluang','kelompokrisiko.nama as namakelompok', 'kriteria.nama as dampak', 'matrikrisiko.tingkat')
@@ -86,9 +101,10 @@ class RiskbisnisverifController extends Controller
                         $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
                              ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
                         })
-                    ->leftjoin("kriteria",function($join){
+                    ->join("kriteria",function($join){
                     $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
-                        ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                        ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id")
+                        ->on("kriteria.tipe","=","risikobisnisdetail.kriteriatipe");
                     })
                     ->get();
                     $kpi = Kpi::where('id',$data->kpi_id)->first();

@@ -95,6 +95,7 @@
                         <input type="hidden" class="form-control" name="iddampak" id="iddampak" value="{{$kriteria->dampak_id}}" readonly>
                         <input type="hidden" class="form-control" name="idkategori" id="idkategori" value="{{$kriteria->kategori_id}}" readonly>
                         <input type="text" class="form-control" name="dampak" id="dampak" placeholder="Dampak ..." value="{{$kriteria->nama}}" disabled>
+                        <input type="hidden" class="form-control" name="tipekriteria" id="tipekriteria" value="{{ old('tipekriteria') }}" placeholder="tipekriteria ..." readonly required>    
                         </div>
                         <div class="form-group">
                         <label>Warna</label>
@@ -175,12 +176,13 @@
             });
         
     }
-        function pilihdampak(krinama,dampakid,katid,level){
+        function pilihdampak(krinama,tipe,dampakid,katid,level){
             var peluangid = $("#peluang").val();
             getmatrix(peluangid,dampakid);
             $("#idkategori").val(katid);
             $("#iddampak").val(dampakid);
             $("#dampak").val(krinama);
+            $("#tipekriteria").val(tipe);
             $('#modal-dampakrisiko').modal('toggle');
           }
           function getmatrix(peluangid,dampakid){

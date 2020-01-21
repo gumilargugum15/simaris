@@ -34,6 +34,9 @@ class RiskbisnispimpinanController extends Controller
       );
     public function index(Request $request)
     {
+        $jmlkpiall = 0;
+        $jmlkpisudahinput = 0;
+        $jmlkpinull = 0;
         $namarisiko ="Risiko Bisnis";
         $user = Auth::user();
         $unitid = $user->unit_id;
@@ -83,7 +86,8 @@ class RiskbisnispimpinanController extends Controller
                     })
                 ->leftjoin("kriteria",function($join){
                 $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
-                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id")
+                    ->on("kriteria.tipe","=","risikobisnisdetail.kriteriatipe");
                 })
                 ->get();
                 $kpi = Kpi::where('id',$data->kpi_id)->first();
@@ -194,8 +198,28 @@ class RiskbisnispimpinanController extends Controller
         }else{
            
             $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
-            
-            $status = 0;
+            if($risikobisnis==null){
+                $tabel.='<table id="tblresikobisnis" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                <th>No</th>
+                <th>KPI</th>
+                <th>Risiko</th>
+                <th>Peluang</th>
+                <th>Kelompok</th>
+                <th width="10%">Kaidah</th>
+                <th>Dampak</th>
+                <th>Warna</th>
+                <th>Sumber risiko</th>
+                <th>Indikator</th>
+                <th>Nilai ambang</th>
+                <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>';
+            $tabel.='</tbody></table>';
+            }else{
+                $status = 0;
             $cekkpinull = Kpi::byId($periodeaktif->id)->byStatus($status)->byUnit($unitid)->get();
             $jmlkpinull = count($cekkpinull);
             
@@ -240,7 +264,8 @@ class RiskbisnispimpinanController extends Controller
                     })
                 ->leftjoin("kriteria",function($join){
                 $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
-                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id")
+                    ->on("kriteria.tipe","=","risikobisnisdetail.kriteriatipe");
                 })
                 ->get();
                 $kpi = Kpi::where('id',$data->kpi_id)->first();
@@ -313,6 +338,8 @@ class RiskbisnispimpinanController extends Controller
             }
             $tabel.='</tbody></table>';
             $tabel.=$detailrisk->links();
+            }
+            
 
         }
         

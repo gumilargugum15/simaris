@@ -81,7 +81,8 @@ class RiskbisnismanagController extends Controller
                     })
                 ->leftjoin("kriteria",function($join){
                 $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
-                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id")
+                    ->on("kriteria.tipe","=","risikobisnisdetail.kriteriatipe");
                 })
                 ->get();
                 $kpi = Kpi::where('id',$data->kpi_id)->first();

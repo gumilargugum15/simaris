@@ -42,6 +42,9 @@ class ResikobisnisController extends Controller
     
     public function index(Request $request)
     {
+        $jmlkpiall = 0;
+        $jmlkpisudahinput = 0;
+        $jmlkpinull = 0;
         $namarisiko ="Risiko Bisnis";
         $user = Auth::user();
         $role = Role::findByName('verifikatur');
@@ -59,7 +62,27 @@ class ResikobisnisController extends Controller
         if(isset($request->periode)){
             
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($unitid)->first();
-            $statusrisiko = $risikobisnis->statusrisiko_id;
+            if($risikobisnis==null){
+                $tabel.='<table id="tblresikobisnis" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                    <th>No</th>
+                    <th>KPI</th>
+                    <th>Risiko</th>
+                    <th>Peluang</th>
+                    <th>Kelompok</th>
+                    <th width="10%">Kaidah</th>
+                    <th>Dampak</th>
+                    <th>Warna</th>
+                    <th>Sumber risiko</th>
+                    <th>Indikator</th>
+                    <th>Nilai ambang</th>
+                    <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody><tr><td colspan="12" align="center"><b>Tidak Ada Data</b></td></tr></tbody></table>';
+            }else{
+                $statusrisiko = $risikobisnis->statusrisiko_id;
             if($risikobisnis){
             $tabel='';
             $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
@@ -96,7 +119,8 @@ class ResikobisnisController extends Controller
                     })
                 ->leftjoin("kriteria",function($join){
                 $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
-                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id")
+                    ->on("kriteria.tipe","=","risikobisnisdetail.kriteriatipe");;
                 })
                 ->get();
                 $kpi = Kpi::where('id',$data->kpi_id)->first();
@@ -211,12 +235,35 @@ class ResikobisnisController extends Controller
             $statusinput = 1;
             $cekkpisudahinput = Kpi::byId($request->periode)->byStatus($statusinput)->byUnit($unitid)->get();
             $jmlkpisudahinput = count($cekkpisudahinput);
+            }
+            
 
             
         }else{
            
             $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
-            $status = 0;
+            if($risikobisnis==null){
+                $tabel.='<table id="tblresikobisnis" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                <th>No</th>
+                <th>KPI</th>
+                <th>Risiko</th>
+                <th>Peluang</th>
+                <th>Kelompok</th>
+                <th width="10%">Kaidah</th>
+                <th>Dampak</th>
+                <th>Warna</th>
+                <th>Sumber risiko</th>
+                <th>Indikator</th>
+                <th>Nilai ambang</th>
+                <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>';
+            $tabel.='</tbody></table>';
+            }else{
+                $status = 0;
             $cekkpinull = Kpi::byId($periodeaktif->id)->byStatus($status)->byUnit($unitid)->get();
             $jmlkpinull = count($cekkpinull);
             
@@ -261,7 +308,8 @@ class ResikobisnisController extends Controller
                     })
                 ->leftjoin("kriteria",function($join){
                 $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
-                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id");
+                    ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id")
+                    ->on("kriteria.tipe","=","risikobisnisdetail.kriteriatipe");;
                 })
                 ->get();
                 $kpi = Kpi::where('id',$data->kpi_id)->first();
@@ -343,6 +391,8 @@ class ResikobisnisController extends Controller
             }
             $tabel.='</tbody></table>';
             $tabel.=$detailrisk->links();
+            }
+            
 
         }
        
@@ -394,9 +444,9 @@ class ResikobisnisController extends Controller
             foreach($kriteria as $rkri){
                 $no++;
                 if(count($kriteria)>1){
-                    $hsl.='<a href="#" onclick="pilihdampak(\'' .$rkri->nama. '\','.$dampakid.','.$kategoriid.','.$level.')">'.$no.')'.$rkri->nama.'</a><hr><br>';
+                    $hsl.='<a href="#" onclick="pilihdampak(\'' .$rkri->nama. '\',\'' .$rkri->tipe. '\','.$dampakid.','.$kategoriid.','.$level.')">'.$no.')'.$rkri->nama.'</a><hr><br>';
                 }else{
-                    $hsl.='<a href="#" onclick="pilihdampak(\'' .$rkri->nama. '\','.$dampakid.','.$kategoriid.','.$level.')">'.$rkri->nama.'</a><br>';
+                    $hsl.='<a href="#" onclick="pilihdampak(\'' .$rkri->nama. '\',\'' .$rkri->tipe. '\','.$dampakid.','.$kategoriid.','.$level.')">'.$rkri->nama.'</a><br>';
                 }
                 
             }
@@ -511,6 +561,7 @@ class ResikobisnisController extends Controller
         $peluang        = $request->peluang;
         $iddampak       = $request->iddampak;
         $idkategori     = $request->idkategori;
+        $tipekriteria   = $request->tipekriteria;
         $warna          = $request->warna;
         $sumberrisiko   = $request->sumberrisiko;
         $mitigasi       = $request->mitigasi;
@@ -551,6 +602,7 @@ class ResikobisnisController extends Controller
         $datariskdetail->peluang_id                 = $peluang;
         $datariskdetail->dampak_id                  = $iddampak;
         $datariskdetail->kategori_id                = $idkategori;
+        $datariskdetail->kriteriatipe               = $tipekriteria;
         $datariskdetail->warna                      = $warna;
         $datariskdetail->indikator                  = $indikator;
         $datariskdetail->nilaiambang                = $nilaiambang;
@@ -635,6 +687,7 @@ class ResikobisnisController extends Controller
             $datariskdetail->peluang_id         = $peluang;
             $datariskdetail->dampak_id          = $iddampak;
             $datariskdetail->kategori_id        = $idkategori;
+            $datariskdetail->kriteriatipe       = $tipekriteria;
             $datariskdetail->warna              = $warna;
             $datariskdetail->indikator          = $indikator;
             $datariskdetail->nilaiambang        = $nilaiambang;
@@ -847,6 +900,7 @@ class ResikobisnisController extends Controller
         $peluang        = $request->peluang;
         $iddampak       = $request->iddampak;
         $idkategori     = $request->idkategori;
+        $tipekriteria   = $request->tipekriteria;
         $warna          = $request->warna;
         $sumberrisiko   = $request->sumberrisiko;
         $mitigasi       = $request->mitigasi;
@@ -865,7 +919,7 @@ class ResikobisnisController extends Controller
 
         $dataupdate = ['kpi_id'=>$kpi,'risiko'=>$risiko,'akibat'=>$akibat,'klasifikasi_id'=>$klasifikasi,
         'peluang_id'=>$peluang,'dampak_id'=>$iddampak,'warna'=>$warna,'indikator'=>$indikator,'nilaiambang'=>$nilaiambang,
-        'modifier'=>$user->nik,'perioderisikobisnis_id'=>$periodeid
+        'modifier'=>$user->nik,'perioderisikobisnis_id'=>$periodeid,'kriteriatipe'=>$tipekriteria
         ];
 
         $riskdetail = Risikobisnisdetail::where('id',$idriskdetail)
