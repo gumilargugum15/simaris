@@ -115,7 +115,7 @@
                         <th>
                             <a class="btn btn-danger" onclick="levelpalingutama()"><i class="fa fa-cog" title="Paling Utama"></i></a>
                             <a class="btn btn-warning" onclick="levelutama()"><i class="fa fa-cog" title="Utama"></i></a>
-                            <a class="btn btn-success" onclick="batalkanlevel()"><i class="fa fa-undo" title="Batal level"></i></a>
+                            <a class="btn btn-primary" onclick="batalkanlevel()"><i class="fa fa-remove (alias)" title="Batal level"></i></a>
                             {{-- <a class="btn btn-warning" onclick="batalkpiutama()"><i class="fa fa-bookmark" title="Batal kpi Utama"></i></a> --}}
                             
                         </th>
