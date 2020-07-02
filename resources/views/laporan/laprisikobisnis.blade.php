@@ -181,7 +181,9 @@ function exportexcel(){
                 </div>
                 
                 <div class="box-body">
-                    <?=$hsl;?>
+                    @php
+                    echo $hsl;
+                    @endphp
                 </div>
                 
             </div>
