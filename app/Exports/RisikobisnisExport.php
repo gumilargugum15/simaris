@@ -196,7 +196,7 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                                 <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                 <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                 <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                <td rowspan="'.$jmlsumberrisk.'">dampak</td>
+                                <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                 <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                 <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                 <td>'.$valuesumber->mitigasi.'</td>
@@ -223,7 +223,7 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                <td>dampak</td>
+                                <td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                 <td>'.$valuesumber->namasumber.'</td>
@@ -237,7 +237,7 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                <td>dampak</td>
+                                <td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                 <td>'.$valuesumber->namasumber.'</td>
@@ -261,7 +261,7 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                                 <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                 <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                 <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                <td rowspan="'.$jmlsumberrisk.'">dampak</td>
+                                <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                 <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                 <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                 <td>'.$valuesumber->namasumber.'</td>
@@ -288,7 +288,7 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                <td>dampak</td>
+                                <td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                 <td>'.$valuesumber->namasumber.'</td>
@@ -302,7 +302,7 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                <td>dampak</td>
+                                <td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                 <td>'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                 <td>'.$valuesumber->namasumber.'</td>
@@ -329,9 +329,11 @@ class RisikobisnisExport implements FromView,  ShouldAutoSize, WithEvents
         return view('exports.risikobisnis', ['unit'=>$unit,'periode'=>$periode,'detailrisk'=>$detailrisk,'tabel'=>$hsl]);
     }
     function cek_kri($jenis,$param){
+        
         $hsl='';
         if($jenis=='1'||$jenis=='4'||$jenis=='5'||$jenis=='7'){
             $hsl.='<p class="text-red">'.$param.'</p>';
+            
         }else{
             $hsl.=''.$param.'';
         }

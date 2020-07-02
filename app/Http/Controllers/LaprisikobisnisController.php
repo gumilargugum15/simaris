@@ -175,7 +175,7 @@ class LaprisikobisnisController extends Controller
                                         <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                         <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                         <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                        <td rowspan="'.$jmlsumberrisk.'">dampak</td>
+                                        <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                         <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                         <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                         <td>'.$valuesumber->mitigasi.'</td>
@@ -202,7 +202,7 @@ class LaprisikobisnisController extends Controller
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                        <td>dampak</td>
+                                        <td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                         <td>'.$valuesumber->namasumber.'</td>
@@ -216,7 +216,7 @@ class LaprisikobisnisController extends Controller
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                        <td>dampak</td>
+                                        <td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                         <td>'.$valuesumber->namasumber.'</td>
@@ -240,7 +240,7 @@ class LaprisikobisnisController extends Controller
                                         <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                         <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                         <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                        <td rowspan="'.$jmlsumberrisk.'">dampak</td>
+                                        <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                         <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                         <td rowspan="'.$jmlsumberrisk.'">'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                         <td>'.$valuesumber->namasumber.'</td>
@@ -267,7 +267,7 @@ class LaprisikobisnisController extends Controller
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                        <td>dampak</td>
+                                        <td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                         <td>'.$valuesumber->namasumber.'</td>
@@ -281,7 +281,7 @@ class LaprisikobisnisController extends Controller
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->levelpeluang).'</td>
-                                        <td>dampak</td>
+                                        <td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->leveldampak).'</td>
                                         <td>'.$this->cek_kri($values->jenisrisiko,$values->tingkat).'</td>
                                         <td>'.$valuesumber->namasumber.'</td>
