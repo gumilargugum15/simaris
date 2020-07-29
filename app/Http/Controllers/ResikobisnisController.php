@@ -1066,6 +1066,8 @@ class ResikobisnisController extends Controller
         $unit         = $request->unit;
         $tahun        = $request->tahun;
 
+        $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
+
         $user = Auth::user();
         $datakpi = new Kpi();
         $datakpi->kode             = $kode;
@@ -1073,6 +1075,9 @@ class ResikobisnisController extends Controller
         $datakpi->unit_id          = $unit;
         $datakpi->tahun            = $tahun;
         $datakpi->creator          = $user->nik;
+        $datakpi->perioderisikobisnis_id    = $periodeaktif->id;
+        $datakpi->status           = 0;
+        $datakpi->deleted          = 0;
         $datakpi->save();
         if($datakpi){
             return redirect()

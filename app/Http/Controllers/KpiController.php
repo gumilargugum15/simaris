@@ -89,6 +89,7 @@ class KpiController extends Controller
         $datakpi->creator                   = $user->nik;
         $datakpi->perioderisikobisnis_id    = $periodeaktif->id;
         $datakpi->status                    = 0;
+        $datakpi->deleted                    = 0;
         $datakpi->save();
         if($datakpi){
             return redirect()
