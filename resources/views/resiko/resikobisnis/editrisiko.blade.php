@@ -95,7 +95,7 @@
                         <input type="hidden" class="form-control" name="iddampak" id="iddampak" value="{{$kriteria->dampak_id}}" readonly>
                         <input type="hidden" class="form-control" name="idkategori" id="idkategori" value="{{$kriteria->kategori_id}}" readonly>
                         <input type="text" class="form-control" name="dampak" id="dampak" placeholder="Dampak ..." value="{{$kriteria->nama}}" disabled>
-                        <input type="hidden" class="form-control" name="tipekriteria" id="tipekriteria" value="{{ old('tipekriteria') }}" placeholder="tipekriteria ..." readonly required>    
+                        <input type="hidden" class="form-control" name="tipekriteria" id="tipekriteria" value="{{$riskdetail->kriteriatipe}}" placeholder="tipekriteria ..." readonly required>    
                         </div>
                         <div class="form-group">
                         <label>Warna</label>

@@ -131,10 +131,15 @@ class RiskbisnispimpinanController extends Controller
                         data-target="#modal-sumberresikobisnis"
                         onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
                             title="List sumber risiko"></i></a></td>
-                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
-                        <td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>';
+                        if($risikobisnis->statusrisiko_id <=1){
+                            $tabel.='<td>
                         <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i></a></td>';
+                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
+                        </td>';
+                        }else{
+                            $tabel.='<td></td>';
+                        }
                         $tabel.='</tr>';
                     }else{
                         $tabel.='<tr>
@@ -151,10 +156,15 @@ class RiskbisnispimpinanController extends Controller
                         data-target="#modal-sumberresikobisnis"
                         onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
                             title="List sumber risiko"></i></a></td>
-                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
-                        <td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>';
+                        if($risikobisnis->statusrisiko_id <=1){
+                            $tabel.='<td>
                         <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i></a></td>';
+                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
+                        </td>';
+                        }else{
+                            $tabel.='<td></td>';
+                        }
                         $tabel.='</tr>';
                     }
                 }

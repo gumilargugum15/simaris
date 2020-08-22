@@ -58,10 +58,12 @@ class ResikobisnisController extends Controller
         $unituser = unitkerja::where('objectabbr',$unitid)->first();
        
         $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
+        // dd($risikobisnis->statusrisiko_id);
         $tabel='';
         if(isset($request->periode)){
             
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($unitid)->first();
+            
             if($risikobisnis==null){
                 $tabel.='<table id="tblresikobisnis" class="table table-bordered table-striped">
                 <thead>
@@ -171,11 +173,17 @@ class ResikobisnisController extends Controller
                         data-target="#modal-sumberresikobisnis"
                         onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
                             title="List sumber risiko"></i></a></td>
-                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
-                        <td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>';
+                        
+                        if($risikobisnis->statusrisiko_id <=1){
+                            $tabel.='<td>
                         <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
                         <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
-                </td>';
+                        </td>';
+                        }else{
+                            $tabel.='<td></td>';
+                        }
+                        
                         $tabel.='</tr>';
                     }else{
                         $tabel.='<tr>
@@ -192,12 +200,15 @@ class ResikobisnisController extends Controller
                         data-target="#modal-sumberresikobisnis"
                         onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
                             title="List sumber risiko"></i></a></td>
-                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
-                        <td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>';
+                        if($risikobisnis->statusrisiko_id<=1){
+                            $tabel.='<td>
                         <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
                         <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
-                        
                         </td>';
+                        }else{
+                            $tabel.='<td></td>';
+                        }
                         $tabel.='</tr>';
                     }
                 }
@@ -242,6 +253,7 @@ class ResikobisnisController extends Controller
         }else{
            
             $risikobisnis = Risikobisnis::byId($periodeaktif->id)->byUnit($unitid)->first();
+           
             if($risikobisnis==null){
                 $tabel.='<table id="tblresikobisnis" class="table table-bordered table-striped">
             <thead>
@@ -263,6 +275,7 @@ class ResikobisnisController extends Controller
             <tbody>';
             $tabel.='</tbody></table>';
             }else{
+                 
                 $status = 0;
             $cekkpinull = Kpi::byId($periodeaktif->id)->byStatus($status)->byUnit($unitid)->get();
             $jmlkpinull = count($cekkpinull);
@@ -312,6 +325,7 @@ class ResikobisnisController extends Controller
                     ->on("kriteria.tipe","=","risikobisnisdetail.kriteriatipe");;
                 })
                 ->get();
+                // dd($detailkpi);
                 $kpi = Kpi::where('id',$data->kpi_id)->first();
                 $jmldetailkpi = count($detailkpi);
                 
@@ -360,10 +374,16 @@ class ResikobisnisController extends Controller
                         data-target="#modal-sumberresikobisnis"
                         onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
                             title="List sumber risiko"></i></a></td>
-                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
-                        <td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>';
+                        // dd($risikobisnis->statusrisiko_id);
+                        if($risikobisnis->statusrisiko_id <=1){
+                            $tabel.='<td>
                         <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a></td>';
+                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
+                        </td>';
+                        }else{
+                            $tabel.='<td></td>';
+                        }
                         $tabel.='</tr>';
                     }else{
                         $tabel.='<tr>
@@ -380,10 +400,15 @@ class ResikobisnisController extends Controller
                         data-target="#modal-sumberresikobisnis"
                         onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
                             title="List sumber risiko"></i></a></td>
-                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
-                        <td>
+                        <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>';
+                        if($risikobisnis->statusrisiko_id<=1){
+                            $tabel.='<td>
                         <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a></td>';
+                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
+                        </td>';
+                        }else{
+                            $tabel.='<td></td>';
+                        }
                         $tabel.='</tr>';
                     }
                 }
@@ -921,7 +946,7 @@ class ResikobisnisController extends Controller
         'peluang_id'=>$peluang,'dampak_id'=>$iddampak,'warna'=>$warna,'indikator'=>$indikator,'nilaiambang'=>$nilaiambang,
         'modifier'=>$user->nik,'perioderisikobisnis_id'=>$periodeid,'kriteriatipe'=>$tipekriteria
         ];
-
+        // dd($dataupdate);
         $riskdetail = Risikobisnisdetail::where('id',$idriskdetail)
         ->update($dataupdate);
         if($riskdetail){
