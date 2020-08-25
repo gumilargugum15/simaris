@@ -438,14 +438,14 @@ class RiskbisnisverifController extends Controller
                 <tbody><tr><td colspan="12" align="center"><b>Tidak Ada Data</b></td></tr></tbody></table>';
             }
             $status = 0;
-            $cekkpinull = Kpi::byId($request->periode)->byStatus($status)->byUnit($unitid)->get();
+            $cekkpinull = Kpi::byId($request->periode)->byStatus($status)->byUnit($request->unitkerja)->get();
             $jmlkpinull = count($cekkpinull);
             
-            $cekkpiall = Kpi::byId($request->periode)->byUnit($unitid)->get();
+            $cekkpiall = Kpi::byId($request->periode)->byUnit($request->unitkerja)->get();
             $jmlkpiall = count($cekkpiall);
 
             $statusinput = 1;
-            $cekkpisudahinput = Kpi::byId($request->periode)->byStatus($statusinput)->byUnit($unitid)->get();
+            $cekkpisudahinput = Kpi::byId($request->periode)->byStatus($statusinput)->byUnit($request->unitkerja)->get();
             $jmlkpisudahinput = count($cekkpisudahinput);
             }
             
