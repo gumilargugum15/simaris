@@ -151,13 +151,13 @@
     for (i = 0; i < sumberrisiko.length; i++) {
       $("#sumberresikobisnis tbody").append(`<tr id="input_${no}">
         <td><input type="hidden" name="sumberid[]" value="${sumberrisiko[i].id}"></td>
-        <td><textarea class="form-control" rows="2" name="sumberrisiko[]" id="sumberrisiko[]">${sumberrisiko[i].namasumber}</textarea></td>
-        <td><textarea class="form-control" rows="2" name="mitigasi[]" id="mitigasi[]">${sumberrisiko[i].mitigasi}</textarea></td>
-        <td><input  class="form-control" type="number" name="biaya[]" id="biaya[]" value="${sumberrisiko[i].biaya}"></td>
-        <td><input size="5" type="date" class="form-control" id="startdate[]" name="startdate[]" placeholder="yyyy-m-d" value="${sumberrisiko[i].start_date}"></td>
-        <td><input size="5" type="date" class="form-control" id="enddate[]" name="enddate[]" placeholder="yyyy-m-d" value="${sumberrisiko[i].end_date}"></td>
-        <td><textarea class="form-control" rows="2" name="pic[]" id="pic[]">${sumberrisiko[i].pic}</textarea></td>
-        <td><textarea class="form-control" rows="2" name="status[]" id="status[]">${sumberrisiko[i].statussumber}</textarea></td>
+        <td><textarea class="form-control" rows="2" name="sumberrisiko[]" id="sumberrisiko[]" required>${sumberrisiko[i].namasumber}</textarea></td>
+        <td><textarea class="form-control" rows="2" name="mitigasi[]" id="mitigasi[]" required>${sumberrisiko[i].mitigasi}</textarea></td>
+        <td><input  class="form-control" type="number" name="biaya[]" id="biaya[]" value="${sumberrisiko[i].biaya}" required></td>
+        <td><input size="5" type="date" class="form-control" id="startdate[]" name="startdate[]" placeholder="yyyy-m-d" value="${sumberrisiko[i].start_date}" required></td>
+        <td><input size="5" type="date" class="form-control" id="enddate[]" name="enddate[]" placeholder="yyyy-m-d" value="${sumberrisiko[i].end_date}" required></td>
+        <td><textarea class="form-control" rows="2" name="pic[]" id="pic[]" required>${sumberrisiko[i].pic}</textarea></td>
+        <td><textarea class="form-control" rows="2" name="status[]" id="status[]" required>${sumberrisiko[i].statussumber}</textarea></td>
         <td><button type="button" class="btn btn-warning" onclick="hapustempsumber(${no})"><i class="fa fa-trash"></i></button></td>
         </tr><tr id="file_${no}"><td><input type="hidden" name="gambarfile[]" value="${sumberrisiko[i].filex}"></td><td colspan="8">Lampiran dokumen mitigasi :<br><a onclick="isifile(\'${sumberrisiko[i].file}\')"><i class="fa fa-2x fa-file-picture-o"></i></a><input type="file" id="gambar[]" name="gambar[]" value="0">
         </td></tr>`);
