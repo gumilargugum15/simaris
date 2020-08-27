@@ -8,6 +8,7 @@
               <h4 class="modal-title" id="titlesumber"></h4>
             </div>
             <div class="modal-body">
+                <div class="table-responsive">
                     <table id="tblsumberresikobisnis" class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -37,6 +38,7 @@
                                     </tr>
                             </tfoot>
                           </table>
+                </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
@@ -69,6 +71,8 @@
             $('#tblsumberresikobisnis').DataTable({
               "ajax": "{{ url('sumberrisiko') }}/" + id,
               "bDestroy": true,
+              "scrollX":        true,
+              "scrollY":        100,
               "columns": [
                 { "data": "namasumber" },
                 { "data": "mitigasi" },

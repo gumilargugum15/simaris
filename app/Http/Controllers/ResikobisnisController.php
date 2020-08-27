@@ -526,6 +526,7 @@ class ResikobisnisController extends Controller
         ->select('kpi.*','level_kpi.nama as namalevel','level_kpi.warnatext')
         ->byUnit($unitid)
         ->byId($periodeaktif->id)
+        ->byDeleted(0)
         ->orderby('level','desc')->get();
         // dd($kpi);
         $klasifikasi = Klasifikasi::get();

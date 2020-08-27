@@ -36,4 +36,8 @@ class Kpi extends Model
     {
         return $query->where('perioderisikobisnis_id', $u);
     }
+    public function scopeByDeleted($query, $u)
+    {
+        return $query->where('deleted', $u);
+    }
 }
