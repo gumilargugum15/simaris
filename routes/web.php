@@ -31,6 +31,7 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::get('/addperiodbisnis','PeriodebisnisController@create');
     Route::post('/storeperiodbisnis','PeriodebisnisController@store');
     Route::get('/editperiodbisnis/{id?}','PeriodebisnisController@edit');
+    Route::post('/updateperiodbisnis','PeriodebisnisController@update');
     Route::get('/aktifperiode/{id?}','PeriodebisnisController@aktifperiode');
     Route::get('/risikokrirkap', 'RiskbisnisverifController@krirkap');
     Route::get('/destroyperiodbisnis/{id?}','PeriodebisnisController@destroy');

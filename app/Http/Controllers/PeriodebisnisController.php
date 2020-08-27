@@ -61,6 +61,7 @@ class PeriodebisnisController extends Controller
         $dataperiod->tahun         = $tahun;
         $dataperiod->aktif         = 0;
         $dataperiod->creator       = $user->nik;
+        $dataperiod->deleted       = 0;
         $dataperiod->save();
         if($dataperiod){
             return redirect()
@@ -77,6 +78,39 @@ class PeriodebisnisController extends Controller
                 'message' => 'Gagal menyimpan periode bisnis!'
             ]);
         }
+    }
+    public function update(Request $request)
+    {
+        $id           = $request->id;
+        $nama                 = $request->nama;
+        $startenddate         = $request->startenddate;
+        $pecah                = explode("-",$startenddate);
+        $arrstdate            = explode("/",$pecah[0]);
+        $arrendate            = explode("/",$pecah[1]);
+        $startdate            = trim($arrstdate[2]).'-'.trim($arrstdate[0]).'-'.trim($arrstdate[1]);
+        $enddate              = trim($arrendate[2]).'-'.trim($arrendate[0]).'-'.trim($arrendate[1]);
+        $tahun                = $request->tahun;
+        $user         = Auth::user();
+
+        $dataupdate = ['nama'=>$nama,'start_date'=>$startdate,'end_date'=>$enddate,'tahun'=>$tahun,'modifier'=>$user->nik];
+
+        $Perioderisikobisnis = Perioderisikobisnis::where('id',$id)->update($dataupdate);
+        if($Perioderisikobisnis){
+            return redirect()
+            ->route('periodebisnis.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil update Periode bisnis!'
+            ]);
+        }else{
+            return redirect()
+            ->route('periodebisnis.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'Gagal update Periode bisnis!'
+            ]);
+        }
+
     }
 
     /**
@@ -226,10 +260,7 @@ class PeriodebisnisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    
 
     /**
      * Remove the specified resource from storage.
