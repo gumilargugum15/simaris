@@ -177,6 +177,7 @@ class PeriodebisnisController extends Controller
             $dtkpi->kwartal  =  $periodebisnis->nama;
             $dtkpi->perioderisikobisnis_id  =  $periodebisnis->id;
             $dtkpi->status   =  1;
+            $dtkpi->deleted   =  0;
             $dtkpi->save();
         }
         
@@ -189,6 +190,7 @@ class PeriodebisnisController extends Controller
             $dtrisk->perioderisikobisnis_id =  $periodebisnis->id;
             $dtrisk->statusrisiko_id        =  1;
             $dtrisk->creator                =  $risikobisnis->creator;
+            $dtrisk->delete        =  0;
             $dtrisk->save();
 
             $dtemp = new Temp_riskbisnis_id();
@@ -219,6 +221,7 @@ class PeriodebisnisController extends Controller
                 $dtriskdetail->tglhighlight      =  $riskbisnisdetail->tglhighlight;
                 $dtriskdetail->perioderisikobisnis_id  =  $periodebisnis->id;
                 $dtriskdetail->jenisrisiko       =  $riskbisnisdetail->jenisrisiko;
+                $dtriskdetail->delete        =  0;
                 $dtriskdetail->save();
 
                 $dtemp = new Temp_riskbisnisdet_id();
@@ -243,6 +246,7 @@ class PeriodebisnisController extends Controller
             $dtsumber->file                    =  $sumberrisiko->file;
             $dtsumber->kpi_id                  =  $sumberrisiko->kpi_id;
             $dtsumber->perioderisikobisnis_id  =  $periodebisnis->id;
+            $dtsumber->delete        =  0;
             $dtsumber->save();
 
     }
