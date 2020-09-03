@@ -1076,6 +1076,7 @@ class ResikobisnisController extends Controller
         ->select('kpi.*', 'unitkerja.nama as namaunit','level_kpi.nama as namalevel','level_kpi.warna','perioderisikobisnis.nama as namaperiode','perioderisikobisnis.tahun as tahunperiode')
         ->byUnit($unitid)
         ->where('kpi.deleted',0)
+        ->where('kpi.perioderisikobisnis_id',$periodeaktif->id)
         ->orderby('level','desc')
         ->get();
         return view('resiko.resikobisnis.kpiindex', compact('judul', 'kpi','dataoto','periodeaktif','jmlkpi','jmlkpipalingutama','jmlkpiutama'));
