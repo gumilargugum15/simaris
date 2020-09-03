@@ -164,7 +164,7 @@
                             @php
                             $no++;
                             @endphp
-                            @if($riskdetail->jenisrisiko=='KRI'||$riskdetail->jenisrisiko=='RKAP')
+                            @if($riskdetail->jenisrisiko=='1'||$riskdetail->jenisrisiko=='3'||$riskdetail->jenisrisiko=='5')
                             <tr>
                                 {{-- <td><input type="checkbox" name="kaidah[]" class="form-controll" value="{{$riskdetail->id}}"></td> --}}
                                 <td>{{$no}}</td>

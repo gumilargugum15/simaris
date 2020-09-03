@@ -60,7 +60,8 @@
                       <a class="btn btn-danger" onclick="aktifkanuser({{$data->nik}});"><i class="fa fa-power-off" title="Aktifkan"></i></a>
                       @endif
                   </td>
-                  <td><a href="{{url('edituser',['id'=>$data->nik])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a></td>
+                  <td><a href="{{url('edituser',['id'=>$data->nik])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                    <a href="{{url('destroyuser',['id'=>$data->nik])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a></td>
                   </tr>
                   @endforeach
                 </tbody>

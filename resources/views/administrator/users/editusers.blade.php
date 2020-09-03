@@ -30,9 +30,9 @@
                         <label>Nama</label>
                         <input type="text" class="form-control" name="nama" id="nama" readonly required value="{{$user->name}}">
                         <label>Kode unit</label>
-                        <input type="text" class="form-control" name="unit" id="unit" readonly required value="{{$user->unit_id}}">
+                        <input type="text" class="form-control" name="unit" id="unit"  required value="{{$user->unit_id}}">
                         <label>Nama unit</label>
-                        <input type="text" class="form-control" name="namaunit" id="namaunit" readonly required value="{{$user->nama_unit}}">
+                        <input type="text" class="form-control" name="namaunit" id="namaunit"  required value="{{$user->nama_unit}}">
                         </div>
                         <div class="form-group">
                             <label>Email</label>

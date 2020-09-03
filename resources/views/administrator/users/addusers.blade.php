@@ -30,9 +30,9 @@
                         <label>Nama</label>
                         <input type="text" class="form-control" name="nama" id="nama" readonly required>
                         <label>Kode unit</label>
-                        <input type="text" class="form-control" name="unit" id="unit" readonly required>
+                        <input type="text" class="form-control" name="unit" id="unit"  required>
                         <label>Nama unit</label>
-                        <input type="text" class="form-control" name="namaunit" id="namaunit" readonly required>
+                        <input type="text" class="form-control" name="namaunit" id="namaunit"  required>
                         </div>
                         <div class="form-group">
                             <label>Email</label>

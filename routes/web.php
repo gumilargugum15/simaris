@@ -84,6 +84,7 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::post('/storeusers','UsersController@store');
     Route::get('/edituser/{id?}','UsersController@edit');
     Route::post('/updateusers','UsersController@update');
+    Route::get('/destroyuser/{id?}','UsersController@destroy');
     
 });
 

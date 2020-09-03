@@ -234,8 +234,27 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+         $delete =  User::where('nik',$id)->delete();
+        // $dataupdate = ['deleted'=>1];
+        // $delete = Kpi::where('id',$id)->update($dataupdate);
+        if($delete){
+            $delete =  Model_has_roles::where('model_id',$id)->delete();
+            return redirect()
+            ->route('users.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil hapus user!'
+            ]);
+        }else{
+            return redirect()
+            ->route('users.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'Gagal hapus user!'
+            ]);
+        }
+
     }
 }
