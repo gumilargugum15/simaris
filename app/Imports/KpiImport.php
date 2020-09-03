@@ -19,6 +19,7 @@ class KpiImport implements ToModel
         $this->periodeaktif = Perioderisikobisnis::periodeAktif()->first();
         $this->period = $this->periodeaktif->id;
         $this->status = 0;
+        $this->deleted = 0;
     }
     
     public function model(array $row)
@@ -32,6 +33,8 @@ class KpiImport implements ToModel
             'kwartal' =>$row[4],
             'status'  =>$this->status,
             'perioderisikobisnis_id'=>$this->period,
+            'level'=>$this->deleted,
+            'deleted'=>$this->deleted
         ]);
     }
 }
