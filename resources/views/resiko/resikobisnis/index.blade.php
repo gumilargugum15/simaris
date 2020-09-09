@@ -180,8 +180,10 @@
           {{-- <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modal-addresiko"><i class="fa  fa-plus"
               title=""> Risiko Baru</i></a> --}}
           @include('layouts.flash')
+          @if($periodeaktifid==$perioderequest)
           <a class="btn btn-primary" href="{{ url('addrisikobisnis') }}"><i class="fa  fa-plus"
                 title=""> Risiko Baru</i></a>
+          @endif
                 <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
                 
         </div>

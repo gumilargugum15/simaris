@@ -133,6 +133,7 @@ function pilihdampak(krinama,tipe,dampakid,katid,level){
                         <div class="form-group">
                         <label>Klasifikasi</label>
                         <select class="form-control select2" style="width: 100%;" name="klasifikasi" id="klasifikasi" required>
+                            <option value="">Pilih Klasifikasi...</option>
                             @foreach ($klasifikasi as $rowklasifikasi)
                             <option value="{{$rowklasifikasi->id}}">{{$rowklasifikasi->nama}}</option>
                             @endforeach
@@ -141,6 +142,7 @@ function pilihdampak(krinama,tipe,dampakid,katid,level){
                         <div class="form-group">
                         <label>Peluang</label>
                         <select class="form-control select2" style="width: 100%;" name="peluang" id="peluang">
+                            <option value="">Pilih Peluang...</option>
                             @foreach ($peluang as $rowpeluang)
                             <option value="{{$rowpeluang->id}}">{{$rowpeluang->level}}-{{$rowpeluang->nama}}-{{$rowpeluang->kriteria}}</option>
                             @endforeach
@@ -185,11 +187,11 @@ function pilihdampak(krinama,tipe,dampakid,katid,level){
                         </div>
                     <div class="form-group">
                         <label>Indikator</label>
-                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="indikator" id="indikator" required>{{ old('indikator') }}</textarea>
+                        <textarea class="form-control" rows="3" placeholder="Enter ..." name="indikator" id="indikator" >{{ old('indikator') }}</textarea>
                     </div>
                     <div class="form-group">
                     <label>Nilai ambang</label>
-                    <input type="text" class="form-control" name="nilaiambang" id="nilaiambang" value="{{ old('nilaiambang') }}" required>
+                    <input type="text" class="form-control" name="nilaiambang" id="nilaiambang" value="{{ old('nilaiambang') }}" >
                     </div>
                     <a type="button" href="{{ url('resikobisnis') }}" class="btn btn-default pull-left">Batal</a>
                     <button type="submit" class="btn btn-primary pull-right">Simpan</button>

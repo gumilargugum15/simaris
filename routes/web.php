@@ -106,6 +106,7 @@ Route::group(['middleware'=>['role:verifikatur|superadmin|']], function () {
     Route::get('/destroykpikeyperson/{id?}','ResikobisnisController@destroykpi');
     Route::post('/kirimkomentarkeyperson','ResikobisnisController@kirimkomentarkeyperson');
     Route::post('/importkpikeyperson','ResikobisnisController@importkpikeyperson');
+    Route::get('/destroyrisiko/{id?}','ResikobisnisController@destroy');
     //risiko aset
     Route::get('/risikoaset', 'RisikoasetController@index')->name('risikoaset.index');
     Route::get('/addrisikoaset','RisikoasetController@create');

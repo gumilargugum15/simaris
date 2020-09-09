@@ -101,7 +101,7 @@
                       @if($dataoto->status=='1')
                       @if($periodeaktif->id==$data->perioderisikobisnis_id)
                       <a href="{{url('editkpikeyperson',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                      {{-- <a href="{{url('destroykpikeyperson',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a> --}}
+                      <a href="{{url('destroykpikeyperson',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
                       @endif
                       @endif
                       @endif

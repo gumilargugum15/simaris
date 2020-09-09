@@ -52,7 +52,7 @@ class RiskbisnispimpinanController extends Controller
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($unitid)->first();
             if($risikobisnis){
                 $tabel='';
-            $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
+            $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)->where('delete',0)
             ->select('risikobisnisdetail.kpi_id','kpi.nama as namakpi')
             ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
             ->groupBy('risikobisnisdetail.kpi_id','kpi.nama')->orderBy('kpi.level','desc')->paginate(10);
@@ -76,7 +76,7 @@ class RiskbisnispimpinanController extends Controller
             </thead>
             <tbody>';
             foreach($detailrisk as $key =>$data ){
-                $detailkpi = Risikobisnisdetail::where('kpi_id',$data->kpi_id)
+                $detailkpi = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)->where('kpi_id',$data->kpi_id)->where('delete',0)
                 ->select('risikobisnisdetail.*', 'peluang.kriteria as peluang','kelompokrisiko.nama as namakelompok', 'kriteria.nama as dampak', 'matrikrisiko.tingkat')
                 ->leftjoin('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
                 ->leftjoin('kelompokrisiko', 'kelompokrisiko.id', '=', 'risikobisnisdetail.jenisrisiko')
@@ -116,6 +116,7 @@ class RiskbisnispimpinanController extends Controller
                     
                 }
                 foreach($detailkpi as $keys=>$values){
+                    $hasil='';
                     if($keys==0){
                         $tabel.='
                         <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>
@@ -133,10 +134,10 @@ class RiskbisnispimpinanController extends Controller
                             title="List sumber risiko"></i></a></td>
                         <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>';
                         if($risikobisnis->statusrisiko_id <=1){
-                            $tabel.='<td>
-                        <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
-                        </td>';
+                        //     $tabel.='<td>
+                        // <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                        // <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
+                        // </td>';
                         }else{
                             $tabel.='<td></td>';
                         }
@@ -158,10 +159,10 @@ class RiskbisnispimpinanController extends Controller
                             title="List sumber risiko"></i></a></td>
                         <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>';
                         if($risikobisnis->statusrisiko_id <=1){
-                            $tabel.='<td>
-                        <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
-                        <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
-                        </td>';
+                        //     $tabel.='<td>
+                        // <a href="'.url('edit',['id'=>$values->id]).'" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                        // <a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>
+                        // </td>';
                         }else{
                             $tabel.='<td></td>';
                         }
@@ -240,7 +241,7 @@ class RiskbisnispimpinanController extends Controller
             $cekkpisudahinput = Kpi::byId($periodeaktif->id)->byStatus($statusinput)->byUnit($unitid)->get();
             $jmlkpisudahinput = count($cekkpisudahinput);
             $tabel='';
-            $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
+            $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)->where('delete',0)
             ->select('risikobisnisdetail.kpi_id','kpi.nama as namakpi')
             ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
             ->groupBy('risikobisnisdetail.kpi_id','kpi.nama')->orderBy('kpi.level','desc')->paginate(10);
@@ -264,7 +265,7 @@ class RiskbisnispimpinanController extends Controller
             </thead>
             <tbody>';
             foreach($detailrisk as $key =>$data ){
-                $detailkpi = Risikobisnisdetail::where('kpi_id',$data->kpi_id)
+                $detailkpi = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)->where('kpi_id',$data->kpi_id)->where('delete',0)
                 ->select('risikobisnisdetail.*', 'peluang.kriteria as peluang','kelompokrisiko.nama as namakelompok', 'kriteria.nama as dampak', 'matrikrisiko.tingkat')
                 ->leftjoin('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
                 ->leftjoin('kelompokrisiko', 'kelompokrisiko.id', '=', 'risikobisnisdetail.jenisrisiko')

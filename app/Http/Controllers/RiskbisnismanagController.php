@@ -46,7 +46,7 @@ class RiskbisnismanagController extends Controller
             $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($request->unitkerja)->first();
             if($risikobisnis){
                 $hsl='';
-            $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
+            $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)->where('delete',0)
             ->select('risikobisnisdetail.kpi_id','kpi.nama as namakpi')
             ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
             ->groupBy('risikobisnisdetail.kpi_id','kpi.nama')->orderBy('kpi.level','desc')->paginate(10);
@@ -71,7 +71,7 @@ class RiskbisnismanagController extends Controller
             <tbody>';
             $no =0;
             foreach($detailrisk as $key =>$data ){
-                $detailkpi = Risikobisnisdetail::where('kpi_id',$data->kpi_id)
+                $detailkpi = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)->where('kpi_id',$data->kpi_id)->where('delete',0)
                 ->select('risikobisnisdetail.*', 'peluang.kriteria as peluang','kelompokrisiko.nama as namakelompok', 'kriteria.nama as dampak', 'matrikrisiko.tingkat')
                 ->leftjoin('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
                 ->leftjoin('kelompokrisiko', 'kelompokrisiko.id', '=', 'risikobisnisdetail.jenisrisiko')

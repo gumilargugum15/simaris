@@ -42,6 +42,34 @@
         </div>
         
         <div class="box-body">
+            <form id="formcari" method="GET">
+                <input name="_token" value="{{ csrf_token() }}" type="hidden">
+            <table class="table table-bordered" >
+                <tr>
+                    <th width="80%">Unit Kerja</th><th></th>
+                </tr>
+                <tr>
+                  <td><select class="form-control select2" style="width: 100%;" name="unitkerja"
+                    id="unitkerja" required>
+                    <option value="">Pilih Unit</option>
+                    
+                    @foreach($unitkerja as $runit)
+                    @if(isset($requnit))
+                    @if($requnit==$runit->objectabbr)
+                    <option value="{{$runit->objectabbr}}" selected>{{$runit->nama}}</option>
+                    @else
+                    <option value="{{$runit->objectabbr}}">{{$runit->nama}}</option>
+                    @endif
+                    @else
+                    <option value="{{$runit->objectabbr}}">{{$runit->nama}}</option>
+                    @endif
+                    @endforeach
+                   
+                </select></td>
+                <td><button type="submit" class="btn btn-primary pull-right">Cari</button></td>
+                </tr>
+            </table>
+          </form>
             <table id="tblkpi" class="table table-bordered table-striped">
                 <thead>
                   <tr>

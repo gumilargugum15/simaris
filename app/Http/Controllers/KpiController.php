@@ -22,8 +22,23 @@ class KpiController extends Controller
         $judul = "KPI";
         //$kpi =Kpi::tahunAktif()
         $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
+        $unitkerja = Unitkerja::get();
         // dd($periodeaktif->id);
-        $kpi =Kpi::
+        $requnit = $request->unitkerja;
+        // dd($requnit);
+        if(isset($request->unitkerja)){
+            $kpi =Kpi::
+        join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
+        ->leftJoin('level_kpi', 'level_kpi.id', '=', 'kpi.level')
+        ->join('perioderisikobisnis', 'perioderisikobisnis.id', '=', 'kpi.perioderisikobisnis_id')
+        ->select('kpi.*', 'unitkerja.nama as namaunit','perioderisikobisnis.nama as namaperiode','perioderisikobisnis.tahun as tahunperiode','level_kpi.nama as namalevel','level_kpi.warna')
+        ->where('kpi.deleted',0)
+        ->where('kpi.unit_id',$request->unitkerja)
+        ->where('kpi.perioderisikobisnis_id',$periodeaktif->id)
+        ->orderBy('tahun','desc')
+        ->get();
+        }else{
+            $kpi =Kpi::
         join('unitkerja', 'kpi.unit_id', '=', 'unitkerja.objectabbr')
         ->leftJoin('level_kpi', 'level_kpi.id', '=', 'kpi.level')
         ->join('perioderisikobisnis', 'perioderisikobisnis.id', '=', 'kpi.perioderisikobisnis_id')
@@ -32,7 +47,10 @@ class KpiController extends Controller
         ->where('kpi.perioderisikobisnis_id',$periodeaktif->id)
         ->orderBy('tahun','desc')
         ->get();
-        return view('administrator.kpi.index', compact('judul', 'kpi','periodeaktif'));
+        }
+        
+        
+        return view('administrator.kpi.index', compact('judul', 'kpi','periodeaktif','unitkerja','requnit'));
     }
 
     /**

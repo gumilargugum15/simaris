@@ -338,10 +338,11 @@ function batalvalidriskbisnis(id){
                                 </tr>
                               </table>
                     <a class="btn btn-success" onclick="reload()"><i class="fa  fa-refresh" title=""> Refresh</i></a>
+                    @if($periodeaktifid==$perioderequest)
                     <a class="btn btn-primary"  onclick="sesuaikaidah()"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a>
                     <a class="btn btn-warning" onclick="tidaksesuaikaidah()"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a>
-                          
-                    <div class="btn-group">
+                    
+                            <div class="btn-group">
                             <button type="button" class="btn btn-default">Kelompok risiko</button>
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                               <span class="caret"></span>
@@ -358,7 +359,8 @@ function batalvalidriskbisnis(id){
                           <a class="btn btn-danger" onclick="batalrkap()">Batal kelompok risiko</a>
                           <input type="checkbox" id="selectall" onClick="selectAll(this)" />&nbsp;Pilih semua
                           {{-- <a class="btn btn-info" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(@if(isset($risikobisnis->id)){{$risikobisnis->id}}@endif)"><i class="fa fa-commenting-o" title="Komentar"> Komentar</i></a> --}}
-                </div>
+                    @endif
+                        </div>
                 
                 <div class="box-body">
                     <form id="fm-kaidah">
