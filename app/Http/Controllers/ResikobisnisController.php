@@ -247,7 +247,8 @@ class ResikobisnisController extends Controller
                 <tbody><tr><td colspan="12" align="center"><b>Tidak Ada Data</b></td></tr></tbody></table>';
             }
             $status = 0;
-            $cekkpinull = Kpi::byId($request->periode)->byStatus($status)->byUnit($unitid)->get();
+            $deleted =0;
+            $cekkpinull = Kpi::byId($request->periode)->byDeleted($deleted)->byStatus($status)->byUnit($unitid)->get();
             $jmlkpinull = count($cekkpinull);
             
             $cekkpiall = Kpi::byId($request->periode)->byUnit($unitid)->get();
@@ -287,7 +288,8 @@ class ResikobisnisController extends Controller
             }else{
                  
                 $status = 0;
-            $cekkpinull = Kpi::byId($periodeaktif->id)->byStatus($status)->byUnit($unitid)->get();
+                $deleted =0;
+            $cekkpinull = Kpi::byId($periodeaktif->id)->byDeleted($deleted)->byStatus($status)->byUnit($unitid)->get();
             $jmlkpinull = count($cekkpinull);
             
             $cekkpiall = Kpi::byId($periodeaktif->id)->byUnit($unitid)->get();
