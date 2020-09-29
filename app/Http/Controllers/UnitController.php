@@ -118,7 +118,8 @@ class UnitController extends Controller
      */
     public function edit($id)
     {
-        //
+        $unitkerja = Unitkerja::where('id',$id)->first();
+        return view('administrator.unit.editunit', compact('unitkerja'));
     }
 
     /**
@@ -128,9 +129,32 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateunitkerja(Request $request)
     {
-        //
+        $id           = $request->id;
+        $kode         = $request->kode;
+        $nama         = $request->nama;
+        $objectabbr   = $request->objectabbr;
+        $user         = Auth::user();
+
+        $dataupdate = ['kode'=>$kode,'nama'=>$nama,'objectabbr'=>$objectabbr,'modifier'=>$user->nik];
+
+        $Unitkerja = Unitkerja::where('id',$id)->update($dataupdate);
+        if($Unitkerja){
+            return redirect()
+            ->route('unit.index')
+            ->with('flash_notification', [
+                'level' => 'info',
+                'message' => 'Berhasil update unit!'
+            ]);
+        }else{
+            return redirect()
+            ->route('unit.index')
+            ->with('flash_notification', [
+                'level' => 'warning',
+                'message' => 'Gagal update unit!'
+            ]);
+        }
     }
 
     /**

@@ -49,7 +49,7 @@
                     <td>{{$data->kode}}</td>
                     <td>{{$data->objectabbr}}</td>
                     <td>{{$data->nama}}</td>
-                    <td><a href="{{url('edit',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
+                    <td><a href="{{url('editunit',['id'=>$data->id])}}" class="btn btn-small" title="Edit"><i class="fa fa-edit"></i></a>
                         <a href="{{url('destroyunit',['id'=>$data->id])}}" class="btn btn-small"><i class="fa fa-trash" title="Hapus"></i></a>
                     </td>
                   </tr>

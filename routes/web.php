@@ -169,10 +169,11 @@ Route::group(['middleware'=>['role:superadmin']], function () {
     
     //unit
     Route::get('/unit', 'UnitController@index')->name('unit.index');
-    Route::get('/updateunit','UnitController@updateunit');
+    Route::post('/updateunitkerja','UnitController@updateunitkerja');
     Route::get('/addunit','UnitController@create');
     Route::post('/storeunit','UnitController@store');
     Route::get('/destroyunit/{id?}','UnitController@destroy');
+    Route::get('/editunit/{id?}','UnitController@edit');
     
     
 });
