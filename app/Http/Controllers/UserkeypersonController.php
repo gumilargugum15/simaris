@@ -17,8 +17,8 @@ class UserkeypersonController extends Controller
     {
         $judul = "Otorisasi KPI";
         $user =user::select('users.*','unitkerja.nama as namaunit','otorisasi.status')
-        ->join('unitkerja','unitkerja.objectabbr','=','users.unit_id')
-        ->join('model_has_roles','model_has_roles.model_id','=','users.nik')
+        ->leftJoin('unitkerja','unitkerja.objectabbr','=','users.unit_id')
+        ->leftJoin('model_has_roles','model_has_roles.model_id','=','users.nik')
         ->leftJoin('otorisasi','otorisasi.nik','=','users.nik')
         ->where('model_has_roles.role_id','1')
         ->get();

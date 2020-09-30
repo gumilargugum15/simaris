@@ -35,6 +35,7 @@
               <td><a class="btn btn-warning" href="#">{{$jmlkpiutama}}</a></td>
                 </tr>
               </table>
+              
             @include('layouts.flash')
             @if(isset($dataoto))
             @if($dataoto->status=='1')

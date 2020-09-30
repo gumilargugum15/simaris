@@ -36,210 +36,7 @@ class RiskbisnisverifController extends Controller
         ),
       );
 
-    // public function index(Request $request)
-    // {
-    //     $namarisiko ="Risiko Bisnis";
-    //     $user = Auth::user();
-    //     $nikuser = $user->nik;
-    //     $unitkerja = Unitkerja::get();
-    //     // dd($unitkerja);
-    //     $kelompokrisiko = Kelompokrisiko::get();
-    //     $periodeall = Perioderisikobisnis::get();
-    //     $periodeaktif = Perioderisikobisnis::periodeAktif()->first();
-    //     $hsl='';
-    //     if(isset($request->periode ) && isset($request->unitkerja)){
-      
-    //         $risikobisnis = Risikobisnis::byId($request->periode)->byUnit($request->unitkerja)->first();
-    //         if($risikobisnis!=null){
-    //         $statusrisiko = $risikobisnis->statusrisiko_id;
-            
-    //             $hsl='';
-    //             $detailrisk = Risikobisnisdetail::where('risikobisnis_id',$risikobisnis->id)
-    //             ->select('risikobisnisdetail.kpi_id','kpi.nama as namakpi')
-    //             ->join('kpi', 'kpi.id', '=', 'risikobisnisdetail.kpi_id')
-    //             ->groupBy('risikobisnisdetail.kpi_id','kpi.nama')->orderBy('kpi.level','desc')->paginate(10);
-    //             $detailrisk->withPath('resikobisnisverifikatur?periode='.$request->periode.'&_token=fW4QxaWL7FS0nrPa0bXOXPsi2EgeHMrR1vFpplZb&unitkerja='.$request->unitkerja.'');
-    //             $hsl.='<table id="tblresikobisnis" class="table table-bordered table-striped">
-    //             <thead>
-    //                 <tr>
-    //                 <th>No</th>
-    //                 <th>KPI</th>
-    //                 <th>Pilih</th>
-    //                 <th>Risiko</th>
-    //                 <th>Peluang</th>
-    //                 <th>Kelompok</th>
-    //                 <th width="10%">Kaidah</th>
-    //                 <th>Dampak</th>
-    //                 <th>Warna</th>
-    //                 <th>Sumber risiko</th>
-    //                 <th>Indikator</th>
-    //                 <th>Nilai ambang</th>
-    //                 <th>Aksi</th>
-    //                 </tr>
-    //             </thead>
-    //             <tbody>';
-    //             $no =0;
-               
-    //             foreach($detailrisk as $key =>$data ){
-    //                 $detailkpi = Risikobisnisdetail::where('kpi_id',$data->kpi_id)
-    //                 ->select('risikobisnisdetail.*', 'peluang.kriteria as peluang','kelompokrisiko.nama as namakelompok', 'kriteria.nama as dampak', 'matrikrisiko.tingkat')
-    //                 ->leftjoin('peluang', 'peluang.id', '=', 'risikobisnisdetail.peluang_id')
-    //                 ->leftjoin('kelompokrisiko', 'kelompokrisiko.id', '=', 'risikobisnisdetail.jenisrisiko')
-    //                 ->join("matrikrisiko",function($join){
-    //                     $join->on("matrikrisiko.dampak_id","=","risikobisnisdetail.dampak_id")
-    //                          ->on("matrikrisiko.peluang_id","=","risikobisnisdetail.peluang_id");
-    //                     })
-    //                 ->join("kriteria",function($join){
-    //                 $join->on("kriteria.dampak_id","=","risikobisnisdetail.dampak_id")
-    //                     ->on("kriteria.kategori_id","=","risikobisnisdetail.kategori_id")
-    //                     ->on("kriteria.tipe","=","risikobisnisdetail.kriteriatipe");
-    //                 })
-    //                 ->get();
-    //                 $kpi = Kpi::where('id',$data->kpi_id)->first();
-    //                 $jmldetailkpi = count($detailkpi);
-    //                 $no++;
-    //                 $hsl.='<tr>';
-    //                 if($jmldetailkpi > 1){
-    //                     $hsl.='<td rowspan="'.$jmldetailkpi.'">'.($detailrisk->firstItem() + $key).'</td>';
-    //                     if($kpi->level=='2'){
-    //                         $hsl.='<td rowspan="'.$jmldetailkpi.'"><p class="text-red">'.$data->namakpi.'</p></td>';
-    //                     }elseif($kpi->level=='1'){
-    //                         $hsl.='<td rowspan="'.$jmldetailkpi.'"><p class="text-yellow">'.$data->namakpi.'</p></td>';
-    //                     }else{
-    //                         $hsl.='<td rowspan="'.$jmldetailkpi.'">'.$data->namakpi.'</td>';
-    //                     }
-                        
-    //                 }else{
-    //                     $hsl.='<td>'.($detailrisk->firstItem() + $key).'</td>';
-    //                     if($kpi->level=='2'){
-    //                         $hsl.='<td><p class="text-red">'.$data->namakpi.'</p></td>';
-    //                     }elseif($kpi->level=='1'){
-    //                         $hsl.='<td><p class="text-yellow">'.$data->namakpi.'</p></td>';
-    //                     }else{
-    //                         $hsl.='<td>'.$data->namakpi.'</td>';
-    //                     }
-                        
-    //                 }
-                    
-    //                 foreach($detailkpi as $keys=>$values){
-    //                     $notif = komentar_detail::where('nik',$nikuser)->where('baca',0)->where('risikobisnisdetail_id',$values->id)->get();
-    //                     $jmlnotif = count($notif);
-    //                     if($jmlnotif > 0){
-    //                         $hasil = '<span class="label label-warning">'.$jmlnotif.'</span>';
-    //                     }else{
-    //                         $hasil = '';
-    //                     }
-    //                     if($keys==0){
-    //                         $hsl.='<td><input type="checkbox" name="kaidah[]" class="form-controll" value="'.$values->id.'"></td>
-    //                         <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>
-    //                         <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
-    //                         <td>'.$this->cek_kri($values->jenisrisiko,$values->namakelompok).'</td>';
-    //                         if($values->kaidah==1){
-    //                         $hsl.='<td><a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a></td>';
-    //                         }else{
-    //                         $hsl.='<td><a class="btn btn-warning"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a></td>';
-    //                         }
-    //                         $hsl.='<td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td><td><button type="button" class="btn btn-'.$values->warna.' btn-sm">'.$values->tingkat.'</button></td>
-    //                         <td><a class="btn btn-primary" href="#" data-toggle="modal"
-    //                         data-target="#modal-sumberresikobisnis"
-    //                         onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
-    //                             title="List sumber risiko"></i></a></td>
-    //                         <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
-    //                         <td>';
-    //                         if($statusrisiko <=2){
-    //                             $hsl.='<a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>';
-    //                         }
-    //                         $hsl.='</td>';
-    //                         $hsl.='</tr>';
-    //                     }else{
-    //                         $hsl.='<tr><td><input type="checkbox" name="kaidah[]" class="form-controll" value="'.$values->id.'"></td>
-    //                         <td>'.$this->cek_kri($values->jenisrisiko,$values->risiko).'</td>
-    //                         <td>'.$this->cek_kri($values->jenisrisiko,$values->peluang).'</td>
-    //                         <td>'.$this->cek_kri($values->jenisrisiko,$values->namakelompok).'</td>';
-    //                         if($values->kaidah==1){
-    //                         $hsl.='<td><a class="btn btn-primary"><i class="fa fa-thumbs-up" title="Sesuai kaidah"></i></a></td>';
-    //                         }else{
-    //                         $hsl.='<td><a class="btn btn-warning"><i class="fa fa-thumbs-down" title="Tidak sesuai kaidah"></i></a></td>';
-    //                         }
-    //                         $hsl.='<td>'.$this->cek_kri($values->jenisrisiko,$values->dampak).'</td><td><button type="button" class="btn btn-'.$values->warna.' btn-sm">'.$values->tingkat.'</button></td>
-    //                         <td><a class="btn btn-primary" href="#" data-toggle="modal"
-    //                         data-target="#modal-sumberresikobisnis"
-    //                         onclick="sumberrisiko(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-reorder (alias)"
-    //                             title="List sumber risiko"></i></a></td>
-    //                         <td>'.$this->cek_kri($values->jenisrisiko,$values->indikator).'</td><td>'.$this->cek_kri($values->jenisrisiko,$values->nilaiambang).'</td>
-    //                         <td>';
-    //                         if($statusrisiko <=2){
-    //                             $hsl.='<a class="btn btn-small" href="#" data-toggle="modal" data-target="#modal-komentar" onclick="readkomen(\''.$values->id. '\',\'' .$values->risiko. '\')"><i class="fa fa-commenting-o" title="Komentar"></i>'.$hasil.'</a>';
-    //                         }
-    //                         $hsl.='</td>';
-    //                         $hsl.='</tr>';
-    //                     }
-    //                 }
-                    
-    //             }
-               
-    //             $hsl.='</tbody></table>';
-    //             $hsl.=$detailrisk->links();
-    //         }else{
-    //             $hsl.='<table id="tblresikobisnis" class="table table-bordered table-striped">
-    //         <thead>
-    //             <tr>
-    //             <th>No</th>
-    //             <th>KPI</th>
-    //             <th>Pilih</th>
-    //             <th>Risiko</th>
-    //             <th>Peluang</th>
-    //             <th>Kelompok</th>
-    //             <th width="10%">Kaidah</th>
-    //             <th>Dampak</th>
-    //             <th>Warna</th>
-    //             <th>Sumber risiko</th>
-    //             <th>Indikator</th>
-    //             <th>Nilai ambang</th>
-    //             <th>Aksi</th>
-    //             </tr>
-    //         </thead>
-    //         <tbody><tr><td colspan="13" align="center"><b>Tidak Ada Data</b></td></tr></tbody></table>';
-    //         }
-    //         $status = 0;
-    //         $cekkpinull = Kpi::byId($request->periode)->byStatus($status)->byUnit($request->unitkerja)->get();
-    //         $jmlkpinull = count($cekkpinull);
-            
-    //         $cekkpiall = Kpi::byId($request->periode)->byUnit($request->unitkerja)->get();
-    //         $jmlkpiall = count($cekkpiall);
-
-    //         $statusinput = 1;
-    //         $cekkpisudahinput = Kpi::byId($request->periode)->byStatus($statusinput)->byUnit($request->unitkerja)->get();
-    //         $jmlkpisudahinput = count($cekkpisudahinput);
-
-            
-            
-            
-    //     }else{
-    //         $hsl.='<table id="tblresikobisnis" class="table table-bordered table-striped">
-    //         <thead>
-    //             <tr>
-    //             <th>No</th>
-    //             <th>KPI</th>
-    //             <th>Pilih</th>
-    //             <th>Risiko</th>
-    //             <th>Peluang</th>
-    //             <th>Kelompok</th>
-    //             <th width="10%">Kaidah</th>
-    //             <th>Dampak</th>
-    //             <th>Warna</th>
-    //             <th>Sumber risiko</th>
-    //             <th>Indikator</th>
-    //             <th>Nilai ambang</th>
-    //             <th>Aksi</th>
-    //             </tr>
-    //         </thead>
-    //         <tbody></tbody></table>';
-    //     }
     
-        // return view('resiko.risikobisnisverifi.index', compact('risikobisnis','periodeall','namarisiko','unitkerja','nikuser','periodeaktif','jmlkpinull','jmlkpiall',
-        // 'jmlkpisudahinput','kelompokrisiko','hsl'));
-    // }
     public function index(Request $request)
     {
         $jmlkpiall = 0;
@@ -270,8 +67,8 @@ class RiskbisnisverifController extends Controller
                     <tr>
                     <th>No</th>
                     <th>KPI</th>
-                    <th>Pilih</th>
                     <th>Risiko</th>
+                    <th>Pilih</th>
                     <th>Peluang</th>
                     <th>Kelompok</th>
                     <th width="10%">Kaidah</th>
@@ -298,8 +95,8 @@ class RiskbisnisverifController extends Controller
                 <tr>
                 <th>No</th>
                 <th>KPI</th>
-                <th>Pilih</th>
                 <th>Risiko</th>
+                <th>Pilih</th>
                 <th>Peluang</th>
                 <th>Kelompok</th>
                 <th width="10%">Kaidah</th>
@@ -428,8 +225,8 @@ class RiskbisnisverifController extends Controller
                     <tr>
                     <th>No</th>
                     <th>KPI</th>
-                    <th>Pilih</th>
                     <th>Risiko</th>
+                    <th>Pilih</th>
                     <th>Peluang</th>
                     <th>Kelompok</th>
                     <th width="10%">Kaidah</th>
@@ -466,8 +263,8 @@ class RiskbisnisverifController extends Controller
                 <tr>
                 <th>No</th>
                 <th>KPI</th>
-                <th>Pilih</th>
                 <th>Risiko</th>
+                <th>Pilih</th>
                 <th>Peluang</th>
                 <th>Kelompok</th>
                 <th width="10%">Kaidah</th>
@@ -503,8 +300,8 @@ class RiskbisnisverifController extends Controller
                 <tr>
                 <th>No</th>
                 <th>KPI</th>
-                <th>Pilih</th>
                 <th>Risiko</th>
+                <th>Pilih</th>
                 <th>Peluang</th>
                 <th>Kelompok</th>
                 <th width="10%">Kaidah</th>
